@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fighting.Service", "Fightin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Road.Service", "Road.Service\Road.Service.csproj", "{58211306-342E-4D67-9BA3-977F658B7CCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Road.Flash", "Road.Flash\Road.Flash.csproj", "{3B4E6E73-F737-421E-8D74-A2F02FC2ED62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tank.Web", "Tank.Web\Tank.Web.csproj", "{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,5 +76,13 @@ Global
 		{58211306-342E-4D67-9BA3-977F658B7CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58211306-342E-4D67-9BA3-977F658B7CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58211306-342E-4D67-9BA3-977F658B7CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B4E6E73-F737-421E-8D74-A2F02FC2ED62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B4E6E73-F737-421E-8D74-A2F02FC2ED62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B4E6E73-F737-421E-8D74-A2F02FC2ED62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B4E6E73-F737-421E-8D74-A2F02FC2ED62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

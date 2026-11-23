@@ -1,0 +1,173 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <!--
+    Linux/.NET 8 host for the legacy web sites:
+      /          Tank.Flash   (login page, game page)
+      /Request/  Tank.Request (the HTTP API the Flash client calls)
+      /flash/    the Flash client (Source Flash/FlashSV1)
+      /resource/ the game resource pack (not in this repo)
+    The original IHttpHandler (.ashx) code is compiled unchanged on top of
+    Microsoft.AspNetCore.SystemWebAdapters. The few .aspx pages needed for
+    login are ported in LegacyPages/.
+  -->
+  <PropertyGroup>
+    <AssemblyName>Tank.Web</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS0618;CS0612;CS0168;CS0219;CS0414;CS0649;CS0169;CS0162;CS0108;CS0114;CS1998;SYSLIB0011;SYSLIB0014;SYSLIB0021;SYSLIB0023;CA1416</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SystemWebAdapters.CoreServices" Version="2.3.0" />
+    <PackageReference Include="log4net" Version="3.6.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bussiness\Bussiness.csproj" />
+    <ProjectReference Include="..\Game.Base\Game.Base.csproj" />
+    <ProjectReference Include="..\Road.Flash\Road.Flash.csproj" />
+    <ProjectReference Include="..\SqlDataProvider\SqlDataProvider.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- legacy handler sources, list taken from Tank.Request.csproj / Tank.Flash.Single.csproj -->
+    <Compile Include="..\Tank.Flash\auth\forgotpass.ashx.cs" />
+    <Compile Include="..\Tank.Flash\auth\register.ashx.cs" />
+    <Compile Include="..\Tank.Flash\auth\validatecode.ashx.cs" />
+    <Compile Include="..\Tank.Flash\checkuser.ashx.cs" />
+    <Compile Include="..\Tank.Flash\CreatShortCut.ashx.cs" />
+    <Compile Include="..\Tank.Flash\LoadingManager.cs" />
+    <Compile Include="..\Tank.Request\AccountRegister.ashx.cs" />
+    <Compile Include="..\Tank.Request\achievementlist.ashx.cs" />
+    <Compile Include="..\Tank.Request\ActiveList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ActivePullDown.ashx.cs" />
+    <Compile Include="..\Tank.Request\activitysystemitems.ashx.cs" />
+    <Compile Include="..\Tank.Request\AdvanceQuestionRead.ashx.cs" />
+    <Compile Include="..\Tank.Request\AdvanceQuestTime.ashx.cs" />
+    <Compile Include="..\Tank.Request\ApprenticeshipClubList.ashx.cs" />
+    <Compile Include="..\Tank.Request\AuctionPageList.ashx.cs" />
+    <Compile Include="..\Tank.Request\BallList.ashx.cs" />
+    <Compile Include="..\Tank.Request\bombconfig.ashx.cs" />
+    <Compile Include="..\Tank.Request\CardUpdateCondition.ashx.cs" />
+    <Compile Include="..\Tank.Request\CardUpdateInfo.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaDayHonor.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaDayRiches.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\celebbyconsortiafightpower.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaHonor.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaLevel.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaRiches.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaWeekHonor.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByConsortiaWeekRiches.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByDayBestEquip.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByDayFightPowerList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByDayGPList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByDayOfferList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByGpList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByOfferList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByWeekGPList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CelebByWeekOfferList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\CreateAllCeleb.ashx.cs" />
+    <Compile Include="..\Tank.Request\CelebList\UserRankDate.ashx.cs" />
+    <Compile Include="..\Tank.Request\ChargeTest.ashx.cs" />
+    <Compile Include="..\Tank.Request\CheckRegistration.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaAllyList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaApplyAllyList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaApplyUsersList.ashx.cs" />
+    <Compile Include="..\Tank.Request\consortiabuffertemp.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaDutyList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaEquipControl.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaEquipControlList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaEventList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaIMList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaInviteUsersList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaLevelList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaNameCheck.ashx.cs" />
+    <Compile Include="..\Tank.Request\ConsortiaUsersList.ashx.cs" />
+    <Compile Include="..\Tank.Request\CreateAllXml.ashx.cs" />
+    <Compile Include="..\Tank.Request\CreatShortCut.ashx.cs" />
+    <Compile Include="..\Tank.Request\csFunction.cs" />
+    <Compile Include="..\Tank.Request\DailyAwardList.ashx.cs" />
+    <Compile Include="..\Tank.Request\DailyLeagueAwardList.ashx.cs" />
+    <Compile Include="..\Tank.Request\DailyLeagueLevelList.ashx.cs" />
+    <Compile Include="..\Tank.Request\dailyloglist.ashx.cs" />
+    <Compile Include="..\Tank.Request\elitematchplayerlist.ashx.cs" />
+    <Compile Include="..\Tank.Request\eServerUpdateType.cs" />
+    <Compile Include="..\Tank.Request\eventrewarditemlist.ashx.cs" />
+    <Compile Include="..\Tank.Request\ExitGameTransit.ashx.cs" />
+    <Compile Include="..\Tank.Request\FarmGetUserFieldInfos.ashx.cs" />
+    <Compile Include="..\Tank.Request\FarmGetUserFieldInfosSingle.ashx.cs" />
+    <Compile Include="..\Tank.Request\FavoriteTransit.ashx.cs" />
+    <Compile Include="..\Tank.Request\fightlabdropitemlist.ashx.cs" />
+    <Compile Include="..\Tank.Request\GetSID.ashx.cs" />
+    <Compile Include="..\Tank.Request\GiftRecieveLog.ashx.cs" />
+    <Compile Include="..\Tank.Request\giftsendlog.ashx.cs" />
+    <Compile Include="..\Tank.Request\gmtipallbyids.ashx.cs" />
+    <Compile Include="..\Tank.Request\Illegalcharacters\FileSystem.cs" />
+    <Compile Include="..\Tank.Request\IMFriendsBbs.ashx.cs" />
+    <Compile Include="..\Tank.Request\IMFriendsGood.ashx.cs" />
+    <Compile Include="..\Tank.Request\IMListLoad.ashx.cs" />
+    <Compile Include="..\Tank.Request\IMRecentContactsList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ItemStrengthenList.ashx.cs" />
+    <Compile Include="..\Tank.Request\KeyGenerator.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadBoxTemp.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadItemsCategory.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadMapsItems.ashx.cs" />
+    <Compile Include="..\Tank.Request\loadpetfightproperty.ashx.cs" />
+    <Compile Include="..\Tank.Request\loadpetmoeproperty.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadPVEItems.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadUserBox.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadUserEquip.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadUserItems.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadUserMail.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoadUsersSort.ashx.cs" />
+    <Compile Include="..\Tank.Request\Login.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoginAwardItemTemplate.ashx.cs" />
+    <Compile Include="..\Tank.Request\LoginSelectList.ashx.cs" />
+    <Compile Include="..\Tank.Request\LogTime.ashx.cs" />
+    <Compile Include="..\Tank.Request\luckstaractivityrank.ashx.cs" />
+    <Compile Include="..\Tank.Request\MailSenderList.ashx.cs" />
+    <Compile Include="..\Tank.Request\MapServerList.ashx.cs" />
+    <Compile Include="..\Tank.Request\MapWeekList.ashx.cs" />
+    <Compile Include="..\Tank.Request\MarryInfoPageList.ashx.cs" />
+    <Compile Include="..\Tank.Request\newtitle.ashx.cs" />
+    <Compile Include="..\Tank.Request\NickNameCheck.ashx.cs" />
+    <Compile Include="..\Tank.Request\NPCInfoList.ashx.cs" />
+    <Compile Include="..\Tank.Request\PayTransit.ashx.cs" />
+    <Compile Include="..\Tank.Request\petskillelementinfo.ashx.cs" />
+    <Compile Include="..\Tank.Request\petskillinfo.ashx.cs" />
+    <Compile Include="..\Tank.Request\petskilltemplateinfo.ashx.cs" />
+    <Compile Include="..\Tank.Request\pettemplateinfo.ashx.cs" />
+    <Compile Include="..\Tank.Request\PlayerManager.cs" />
+    <Compile Include="..\Tank.Request\QuestList.ashx.cs" />
+    <Compile Include="..\Tank.Request\RenameConsortiaName.ashx.cs" />
+    <Compile Include="..\Tank.Request\RenameNick.ashx.cs" />
+    <Compile Include="..\Tank.Request\runetemplatelist.ashx.cs" />
+    <Compile Include="..\Tank.Request\SentReward.ashx.cs" />
+    <Compile Include="..\Tank.Request\serverconfig.ashx.cs" />
+    <Compile Include="..\Tank.Request\ServerList.ashx.cs" />
+    <Compile Include="..\Tank.Request\shopcheapitemlist.ashx.cs" />
+    <Compile Include="..\Tank.Request\ShopGoodsShowList.ashx.cs" />
+    <Compile Include="..\Tank.Request\ShopItemList.ashx.cs" />
+    <Compile Include="..\Tank.Request\StaticFunction.cs" />
+    <Compile Include="..\Tank.Request\StaticsMgr.cs" />
+    <Compile Include="..\Tank.Request\suitpartequipinfolist.ashx.cs" />
+    <Compile Include="..\Tank.Request\suittemplateinfolist.ashx.cs" />
+    <Compile Include="..\Tank.Request\TemplateAllList.ashx.cs" />
+    <Compile Include="..\Tank.Request\totemhonortemplate.ashx.cs" />
+    <Compile Include="..\Tank.Request\UserApprenticeshipInfoList.ashx.cs" />
+    <Compile Include="..\Tank.Request\UserGoodsInfo.ashx.cs" />
+    <Compile Include="..\Tank.Request\UserQuestList.ashx.cs" />
+    <Compile Include="..\Tank.Request\VisualizeItemLoad.ashx.cs" />
+    <Compile Include="..\Tank.Request\VisualizeRegister.ashx.cs" />
+    <Compile Include="..\Tank.Request\WebsResponse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="logconfig.xml" CopyToOutputDirectory="PreserveNewest" />
+    <!-- local overrides (connection strings), generated by deploy/configure-local.sh -->
+    <None Include="appSettings.local.config" Condition="Exists('appSettings.local.config')" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="zlib.net"><HintPath>..\libdll\zlib.net.dll</HintPath></Reference>
+  </ItemGroup>
+</Project>
