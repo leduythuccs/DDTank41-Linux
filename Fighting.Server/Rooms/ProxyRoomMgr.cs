@@ -1,4 +1,4 @@
-using Fighting.Server.Games;
+﻿using Fighting.Server.Games;
 using Fighting.Server.Guild;
 using Game.Logic;
 using log4net;
@@ -17,6 +17,12 @@ namespace Fighting.Server.Rooms
         public static readonly int THREAD_INTERVAL = 20;
 
         public static readonly int PICK_UP_INTERVAL = 5000;
+
+        /// <summary>
+        /// Matchmaking ticks a Match room waits for a human opponent before an AutoBot is requested.
+        /// appSettings "AutoBotWaitSeconds" (0 = request a bot on the first tick); default 4 ticks (~20s).
+        /// </summary>
+        public static readonly int AUTO_BOT_WAIT_TICKS = ReadAutoBotWaitTicks();
 
         public static readonly int CLEAR_ROOM_INTERVAL = 250;
 
@@ -211,11 +217,9 @@ namespace Fighting.Server.Rooms
                 }
                 if (!red.IsCrossZone)
                 {
-                    if (red.PickUpCount >= 4 && !red.startWithNpc && !red.isAutoBot && red.RoomType == eRoomType.Match && red.NpcId > 0 && red.GameType != eGameType.Guild)// && red.PlayerCount == 1)
+                    if (red.PickUpCount >= AUTO_BOT_WAIT_TICKS && CanRequestAutoBot(red))
                     {
-                        red.startWithNpc = true;
-                        red.Client.SendBeginFightNpc(red.selfId, (int)red.RoomType, (int)red.GameType, red.NpcId, red.PlayerCount);
-                        Console.WriteLine("Call AutoBot No.{0}", red.NpcId);
+                        RequestAutoBotUnsafe(red);
                     }
                     else if (red.startWithNpc && !red.isAutoBot)
                     {
@@ -355,6 +359,54 @@ namespace Fighting.Server.Rooms
                 {
                     Console.WriteLine("Start fight with AutoBot or VPlayer No.{0} ", npcId);
                     StartMatchGame(roomUnsafe, proxyRoom_1);
+                }
+            }
+        }
+
+        private static bool CanRequestAutoBot(ProxyRoom room)
+        {
+            return !room.startWithNpc && !room.isAutoBot && !room.IsCrossZone && room.RoomType == eRoomType.Match && room.NpcId > 0 && room.GameType != eGameType.Guild;
+        }
+
+        /// <summary>Asks the game server to create an AutoBot room for <paramref name="red"/> to fight.</summary>
+        private static void RequestAutoBotUnsafe(ProxyRoom red)
+        {
+            red.startWithNpc = true;
+            red.Client.SendBeginFightNpc(red.selfId, (int)red.RoomType, (int)red.GameType, red.NpcId, red.PlayerCount);
+            Console.WriteLine("Call AutoBot No.{0}", red.NpcId);
+        }
+
+        /// <summary>With AutoBotWaitSeconds = 0, a room that starts searching gets its bot requested immediately.</summary>
+        public static void RequestAutoBotIfNoWaitUnsafe(ProxyRoom room)
+        {
+            if (AUTO_BOT_WAIT_TICKS == 0 && CanRequestAutoBot(room))
+            {
+                RequestAutoBotUnsafe(room);
+            }
+        }
+
+        private static int ReadAutoBotWaitTicks()
+        {
+            if (!int.TryParse(System.Configuration.ConfigurationManager.AppSettings["AutoBotWaitSeconds"], out int seconds))
+            {
+                return 4;
+            }
+            return seconds <= 0 ? 0 : (seconds * 1000 + PICK_UP_INTERVAL - 1) / PICK_UP_INTERVAL;
+        }
+
+        /// <summary>
+        /// A requested AutoBot room just arrived: start it against the room waiting for it right away,
+        /// instead of on the next matchmaking tick (up to PICK_UP_INTERVAL later).
+        /// </summary>
+        public static void StartBotWithWaitingRoomUnsafe(ProxyRoom bot)
+        {
+            foreach (ProxyRoom red in GetWaitMatchRoomUnsafe())
+            {
+                if (red != bot && !red.isAutoBot && red.startWithNpc && !red.IsPlaying && red.NpcId == bot.NpcId && red.PlayerCount == bot.PlayerCount)
+                {
+                    Console.WriteLine("Start fight with AutoBot No.{0}. RoomType: {1}, GameType: {2}", red.NpcId, red.RoomType, red.GameType);
+                    StartMatchGame(red, bot);
+                    return;
                 }
             }
         }

@@ -1,4 +1,4 @@
-namespace Fighting.Server.Rooms
+﻿namespace Fighting.Server.Rooms
 {
     public class AddRoomAction : IAction
     {
@@ -15,6 +15,14 @@ namespace Fighting.Server.Rooms
 			if (m_room.startWithNpc)
 			{
 				ProxyRoomMgr.StartWithNpcUnsafe(m_room);
+			}
+			else if (m_room.isAutoBot)
+			{
+				ProxyRoomMgr.StartBotWithWaitingRoomUnsafe(m_room);
+			}
+			else
+			{
+				ProxyRoomMgr.RequestAutoBotIfNoWaitUnsafe(m_room);
 			}
         }
     }
