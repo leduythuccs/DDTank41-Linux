@@ -39,3 +39,6 @@ if [ -n "${DDTANK_DB_PASSWORD:-}" ]; then
   done
   echo "login ddtank ready"
 fi
+
+# Make the (newer) stored procedures accept the calls this repo's (older) C# code makes.
+python3 -I ./patch-procedures.py
