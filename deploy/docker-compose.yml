@@ -1,0 +1,25 @@
+# SQL Server for the DDTank Linux port.
+#   cd deploy && docker compose up -d && ./restore-databases.sh
+# The SA password is read from deploy/.env (MSSQL_SA_PASSWORD=...), which is not committed.
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ddtank-mssql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in deploy/.env}"
+      MSSQL_COLLATION: "SQL_Latin1_General_CP1_CI_AS"
+    ports:
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+      - ../Database:/backups:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+volumes:
+  mssql-data:
