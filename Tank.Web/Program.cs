@@ -35,7 +35,7 @@ namespace Tank.Web
             log.InfoFormat("Request root: {0}", settings.RequestRoot);
             log.InfoFormat("Site root:    {0}", settings.SiteRoot);
             log.InfoFormat("Flash root:   {0}", settings.FlashRoot);
-            log.InfoFormat("Resources:    {0}{1}", settings.ResourceRoot, Directory.Exists(settings.ResourceRoot) ? "" : " (missing: /resource/ requests will 404)");
+            log.InfoFormat("Resources:    {0}{1}", settings.ResourceRoot, Directory.Exists(settings.ResourceRoot) ? "" : " (folder missing)");
 
             InitLegacyApplication(settings);
 
@@ -89,6 +89,19 @@ namespace Tank.Web
             ServeStatic(app, "/resource", settings.ResourceRoot, contentTypes);
             ServeStatic(app, "/Request", settings.RequestRoot, contentTypes);
             ServeStatic(app, "", settings.SiteRoot, contentTypes);
+
+            // Optionally fetch /resource/ files that are not available locally from an upstream site.
+            if (!string.IsNullOrEmpty(settings.ResourceUpstream))
+            {
+                ResourceProxy resourceProxy = new ResourceProxy(settings.ResourceUpstream);
+                app.Use(async (context, next) =>
+                {
+                    if (context.GetEndpoint() != null || !await resourceProxy.TryHandle(context))
+                    {
+                        await next();
+                    }
+                });
+            }
 
             // Flash asks for crossdomain.xml on every host/folder it loads from; answer the ones that do not exist.
             app.Use(async (context, next) =>

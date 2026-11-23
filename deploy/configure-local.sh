@@ -2,7 +2,8 @@
 # Writes <Service>/appSettings.local.config (git-ignored) with connection strings for the
 # local docker SQL Server. App.config merges it via <appSettings file="appSettings.local.config">,
 # so these values override the committed ones. Re-run after changing deploy/.env, then rebuild.
-# Optional in deploy/.env: DDTANK_RUFFLE_URL (Ruffle build for the game page), DDTANK_PUBLIC_IP.
+# Optional in deploy/.env: DDTANK_RUFFLE_URL (Ruffle build for the game page), DDTANK_PUBLIC_IP,
+# DDTANK_RESOURCE_UPSTREAM (site to fetch /resource/ files from when they are not in ../resource/).
 set -euo pipefail
 cd "$(dirname "$0")"
 set -a; . ./.env; set +a
@@ -18,6 +19,7 @@ for svc in Road.Service Center.Service Fighting.Service Tank.Web; do
 	<add key="crosszoneString" value="$(cs Project_Game34)" />
 	<add key="membershipDb" value="$(cs Db_Membership)" />
 $( [ -n "${DDTANK_RUFFLE_URL:-}" ] && echo "	<add key=\"Web.RuffleUrl\" value=\"$DDTANK_RUFFLE_URL\" />" )
+$( [ -n "${DDTANK_RESOURCE_UPSTREAM:-}" ] && echo "	<add key=\"Web.ResourceUpstream\" value=\"$DDTANK_RESOURCE_UPSTREAM\" />" )
 </appSettings>
 XML
   echo "wrote $svc/appSettings.local.config"
