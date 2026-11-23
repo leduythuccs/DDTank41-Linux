@@ -14,108 +14,108 @@ namespace Bussiness
 		public static int BeginAuction;
 
         [ConfigProperty("BigExp", "µ±Ç°ÓÎÏ·°æ±¾", "11906|99")]
-		public static readonly string BigExp;
+		public static string BigExp;
 
         [ConfigProperty("BoxAppearCondition", "Ïä×ÓÎïÆ·ÌáÊ¾µÄµÈ¼¶", 4)]
-		public static readonly int BOX_APPEAR_CONDITION;
+		public static int BOX_APPEAR_CONDITION;
 
         [ConfigProperty("Cess", "½»Ò×¿ÛË°", 0.1)]
-		public static readonly double Cess;
+		public static double Cess;
 
         [ConfigProperty("CustomLimit", "sendattackmail|addaution|PresentGoods|PresentMoney|unknow", "20|20|20|20|20")]
-		public static readonly string CustomLimit;
+		public static string CustomLimit;
 
         [ConfigProperty("CheckCount", "×î\u00b4óÑéÖ¤ÂëÊ§°Ü\u00b4ÎÊý", 2)]
-		public static readonly int CHECK_MAX_FAILED_COUNT;
+		public static int CHECK_MAX_FAILED_COUNT;
 
         [ConfigProperty("WarriorFamRaidPriceBig", "WarriorFamRaidPriceBig ", 40000)]
-		public static readonly int WarriorFamRaidPriceBig;
+		public static int WarriorFamRaidPriceBig;
 
         [ConfigProperty("WarriorFamRaidDDTPrice", "WarriorFamRaidDDTPrice", 5000)]
-		public static readonly int WarriorFamRaidDDTPrice;
+		public static int WarriorFamRaidDDTPrice;
 
         [ConfigProperty("WarriorFamRaidTimeRemain", "WarriorFamRaidTimeRemain", 120)]
-		public static readonly int WarriorFamRaidTimeRemain;
+		public static int WarriorFamRaidTimeRemain;
 
         [ConfigProperty("WarriorFamRaidPriceSmall", "WarriorFamRaidPriceSmall", 30000)]
-		public static readonly int WarriorFamRaidPriceSmall;
+		public static int WarriorFamRaidPriceSmall;
 
         [ConfigProperty("WarriorFamRaidPricePerMin", "WarriorFamRaidPricePerMin", 10)]
-		public static readonly int WarriorFamRaidPricePerMin;
+		public static int WarriorFamRaidPricePerMin;
 
         [ConfigProperty("Edition", "µ±Ç°ÓÎÏ·°æ±¾", "2612558")]
-		public static readonly string EDITION;
+		public static string EDITION;
 
         [ConfigProperty("EndAuction", "ÅÄÂòÊ±½áÊøËæ»úÊ±¼ä", 40)]
 		public static int EndAuction;
 
         [ConfigProperty("FreeExp", "µ±Ç°ÓÎÏ·°æ±¾", "11901|1")]
-		public static readonly string FreeExp;
+		public static string FreeExp;
 
         [ConfigProperty("FreeMoney", "µ±Ç°ÓÎÏ·°æ±¾", 9990000)]
-		public static readonly int FreeMoney;
+		public static int FreeMoney;
 
         [ConfigProperty("HoleLevelUpExpList", "HoleLevelUpExpList", "400|600|700|800|800")]
 		public static string HoleLevelUpExpList;
 
         [ConfigProperty("HotSpringExp", "Kinh nghiệm Spa", "1|2")]
-		public static readonly string HotSpringExp;
+		public static string HotSpringExp;
 
         [ConfigProperty("IsLimitCount", "IsLimitCount", false)]
-		public static readonly bool IsLimitCount;
+		public static bool IsLimitCount;
 
         [ConfigProperty("IsLimitMail", "IsLimitMail", false)]
-		public static readonly bool IsLimitMail;
+		public static bool IsLimitMail;
 
         [ConfigProperty("IsLimitMoney", "IsLimitMoney", false)]
-		public static readonly bool IsLimitMoney;
+		public static bool IsLimitMoney;
 
         [ConfigProperty("WishBeadLimitLv", "WishBeadLimitLv", 12)]
-		public static readonly int WishBeadLimitLv;
+		public static int WishBeadLimitLv;
 
         [ConfigProperty("IsWishBeadLimit", "IsWishBeadLimit", false)]
-		public static readonly bool IsWishBeadLimit;
+		public static bool IsWishBeadLimit;
 
         [ConfigProperty("LimitCount", "LimitCount", 10)]
-		public static readonly int LimitCount;
+		public static int LimitCount;
 
         [ConfigProperty("LimitMail", "LimitMail", 3)]
-		public static readonly int LimitMail;
+		public static int LimitMail;
 
         [ConfigProperty("LimitMoney", "LimitMoney", 999000)]
-		public static readonly int LimitMoney;
+		public static int LimitMoney;
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         [ConfigProperty("NewChickenBeginTime", "NewChickenBeginTime", "2013/12/17 0:00:00")]
-		public static readonly string NewChickenBeginTime;
+		public static string NewChickenBeginTime;
 
         [ConfigProperty("NewChickenEagleEyePrice", "NewChickenEagleEyePrice", "3000, 2000, 1000")]
-		public static readonly string NewChickenEagleEyePrice;
+		public static string NewChickenEagleEyePrice;
 
         [ConfigProperty("NewChickenEndTime", "NewChickenEndTime", "2013/12/25 0:00:00")]
-		public static readonly string NewChickenEndTime;
+		public static string NewChickenEndTime;
 
         [ConfigProperty("NewChickenFlushPrice", "NewChickenFlushPrice", 10000)]
-		public static readonly int NewChickenFlushPrice;
+		public static int NewChickenFlushPrice;
 
         [ConfigProperty("NewChickenOpenCardPrice", "NewChickenOpenCardPrice", "2500, 2000, 1500, 1000, 500")]
-		public static readonly string NewChickenOpenCardPrice;
+		public static string NewChickenOpenCardPrice;
 
         [ConfigProperty("PetExp", "µ±Ç°ÓÎÏ·°æ±¾", "334103|999")]
-		public static readonly string PetExp;
+		public static string PetExp;
 
         [ConfigProperty("DivorcedMoney", "Àë»éµÄ¼Û\u00b8ñ", 1499)]
-		public static readonly int PRICE_DIVORCED;
+		public static int PRICE_DIVORCED;
 
         [ConfigProperty("DivorcedDiscountMoney", "Àë»éµÄ¼Û\u00b8ñ", 999)]
-		public static readonly int PRICE_DIVORCED_DISCOUNT;
+		public static int PRICE_DIVORCED_DISCOUNT;
 
         [ConfigProperty("MarryRoomCreateMoney", "½á»é·¿¼äµÄ¼Û\u00b8ñ,2Ð¡Ê±¡¢3Ð¡Ê±¡¢4Ð¡Ê±ÓÃ¶ººÅ·Ö\u00b8ô", "2000,2700,3400")]
-		public static readonly string PRICE_MARRY_ROOM;
+		public static string PRICE_MARRY_ROOM;
 
         [ConfigProperty("HymenealMoney", "Çó»éµÄ¼Û\u00b8ñ", 300)]
-		public static readonly int PRICE_PROPOSE;
+		public static int PRICE_PROPOSE;
 
         public static int SpaAddictionMoneyNeeded = 1299;
 
@@ -126,19 +126,19 @@ namespace Bussiness
 		public static string SpaPubRoomLoginPay;
 
         [ConfigProperty("TestActive", "TestActive", false)]
-		public static readonly bool TestActive;
+		public static bool TestActive;
 
         [ConfigProperty("VIPExpForEachLv", "VIPExpForEachLv", "1|2")]
-		public static readonly string VIPExpForEachLv;
+		public static string VIPExpForEachLv;
 
         [ConfigProperty("VirtualName", "VirtualName", "Doreamon,Nobita,Xuneo,Xuka")]
-		public static readonly string VirtualName;
+		public static string VirtualName;
 
         [ConfigProperty("TimeForLeague", "TimeForLeague", "19:30|21:30")]
-		public static readonly string TimeForLeague;
+		public static string TimeForLeague;
 
         [ConfigProperty("GoldTimes", "GoldTimes", "20:00|21:00")]
-		public static readonly string GoldTimes;
+		public static string GoldTimes;
 
         [ConfigProperty("AcademyMasterFreezeHours", "AcademyMasterFreezeHours", 48)]
 		public static int AcademyMasterFreezeHours;
@@ -174,13 +174,13 @@ namespace Bussiness
 		public static int InlayGoldPrice;
 
         [ConfigProperty("IsOpenPetScore", "IsOpenPetScore", true)]
-		public static readonly bool IsOpenPetScore;
+		public static bool IsOpenPetScore;
 
         [ConfigProperty("FastGrowNeedMoney", "FastGrowNeedMoney", 30)]
-		public static readonly int FastGrowNeedMoney;
+		public static int FastGrowNeedMoney;
 
         [ConfigProperty("FastGrowSubTime", "FastGrowSubTime", 30)]
-		public static readonly int FastGrowSubTime;
+		public static int FastGrowSubTime;
 
         [ConfigProperty("LittleGameBoguConfig", "LittleGameBoguConfig", "200,1,1|100,4,1|5000,80,3|10000,125,5")]
 		public static string LittleGameBoguConfig;
@@ -198,10 +198,10 @@ namespace Bussiness
 		public static bool DebugMode;
 
         [ConfigProperty("VIPStrengthenEx", "VIPStrengthenEx", "25|25|25|35|35|50|50|50|50|50|50|50")]
-        public static readonly string VIPStrengthenEx;
+        public static string VIPStrengthenEx;
 
         [ConfigProperty("MissionRiches", "MissionRiches", "3000|3000|5000|5000|8000|8000|10000|10000|12000|12000")]
-        public static readonly string MissionRiches;
+        public static string MissionRiches;
 
         [ConfigProperty("EventStartDate", "EventStartDate", "2021-01-01 20:55:27.270")]
         public static string EventStartDate;
@@ -240,31 +240,31 @@ namespace Bussiness
         public static int CountIPLimit;
 
         [ConfigPropertyAttribute("LuckStarActivityBeginDate", "LuckStarActivityBeginDate", "2013/12/1 0:00:00")]
-        public static readonly string LuckStarActivityBeginDate;
+        public static string LuckStarActivityBeginDate;
 
         [ConfigPropertyAttribute("LuckStarActivityEndDate", "LuckStarActivityEndDate", "2014/12/24 0:00:00")]
-        public static readonly string LuckStarActivityEndDate;
+        public static string LuckStarActivityEndDate;
 
         [ConfigPropertyAttribute("MinUseNum", "MinUseNum", 1000)]
-        public static readonly int MinUseNum;
+        public static int MinUseNum;
 
         [ConfigPropertyAttribute("IsActiveMoney", "IsActiveMoney", true)]
-        public static readonly bool IsActiveMoney;
+        public static bool IsActiveMoney;
 
         [ConfigProperty("FightSpiritLevelAddDamage", "FightSpiritLevelAddDamage", "6|2")]
-        public readonly static string FightSpiritLevelAddDamage;
+        public static string FightSpiritLevelAddDamage;
 
         [ConfigPropertyAttribute("FightSpiritMaxLevel", "FightSpiritMaxLevel", 5)]
-        public static readonly int FightSpiritMaxLevel;
+        public static int FightSpiritMaxLevel;
         
         [ConfigPropertyAttribute("PRICE_COMPOSE_GOLD", "PRICE_COMPOSE_GOLD", 1600)]
-        public static readonly int PRICE_COMPOSE_GOLD;
+        public static int PRICE_COMPOSE_GOLD;
 
         [ConfigPropertyAttribute("RateAdvance", "RateAdvance", 50000)]
-        public static readonly int RateAdvance;
+        public static int RateAdvance;
 
         [ConfigPropertyAttribute("TimeX2", "TimeX2", 2)]
-        public static readonly int TimeX2;
+        public static int TimeX2;
 
         private static void Load(Type type)
         {
