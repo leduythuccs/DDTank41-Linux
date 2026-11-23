@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Road.Flash", "Road.Flash\Ro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tank.Web", "Tank.Web\Tank.Web.csproj", "{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameAdmin.Web", "GameAdmin.Web\GameAdmin.Web.csproj", "{C06E4C3C-ABFA-4772-8687-53F51719BF4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +86,9 @@ Global
 		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA5243E8-7C73-46B6-9E03-ACB45DE325DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C06E4C3C-ABFA-4772-8687-53F51719BF4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C06E4C3C-ABFA-4772-8687-53F51719BF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C06E4C3C-ABFA-4772-8687-53F51719BF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C06E4C3C-ABFA-4772-8687-53F51719BF4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
