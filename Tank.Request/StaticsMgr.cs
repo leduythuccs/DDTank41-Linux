@@ -31,7 +31,13 @@ namespace Tank.Request
 
         public static void Setup()
         {
-            CurrentPath = HttpContext.Current.Server.MapPath("~");
+            Setup(HttpContext.Current.Server.MapPath("~"));
+        }
+
+        /// <summary>Setup with an explicit site root (no HttpContext exists at application startup on ASP.NET Core).</summary>
+        public static void Setup(string currentPath)
+        {
+            CurrentPath = currentPath;
             CelebBuildDay = DateTime.Now.Day;
             
             pid = int.Parse(ConfigurationManager.AppSettings["PID"]);
@@ -68,7 +74,7 @@ namespace Tank.Request
                 {
                     if (_list.Count > 0)
                     {
-                        string filename = string.Format("{0}\\payment-{1:D2}{2:D2}{3:D2}-{4:yyyyMMdd}.log", _path, pid, did, sid, DateTime.Now);
+                        string filename = Path.Combine(_path, string.Format("payment-{0:D2}{1:D2}{2:D2}-{3:yyyyMMdd}.log", pid, did, sid, DateTime.Now));
                         using (FileStream fs = File.Open(filename, FileMode.Append))
                         {
                             using (StreamWriter writer = new StreamWriter(fs))
@@ -84,7 +90,7 @@ namespace Tank.Request
 
                     if (RegCount > 0)
                     {
-                        string filename = string.Format("{0}\\reg-{1:D2}{2:D2}{3:D2}-{4:yyyyMMdd}.log", _path, pid, did, sid, DateTime.Now);
+                        string filename = Path.Combine(_path, string.Format("reg-{0:D2}{1:D2}{2:D2}-{3:yyyyMMdd}.log", pid, did, sid, DateTime.Now));
                         using (FileStream fs = File.Open(filename, FileMode.Append))
                         {
                             using (StreamWriter writer = new StreamWriter(fs))

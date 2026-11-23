@@ -57,7 +57,7 @@ namespace Tank.Request
 			//context.Response.ContentType = "text/plain";
 			//context.Response.Write(node.ToString(check: false));
 			string path = HttpContext.Current.Server.MapPath(".");
-			path += "\\";
+			path += System.IO.Path.DirectorySeparatorChar;
 			LanguageMgr.Setup(path);
 			int selfid = Convert.ToInt32(context.Request["selfid"]);//    selfid=19&
 			int activeID = Convert.ToInt32(context.Request["activeID"]);//    activeID=21709&

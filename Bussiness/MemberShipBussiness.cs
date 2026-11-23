@@ -1,4 +1,4 @@
-using log4net;
+﻿using log4net;
 using SqlDataProvider.BaseClass;
 using SqlDataProvider.Data;
 using System;
@@ -59,6 +59,25 @@ namespace Bussiness
 			sqlParameters[1].Direction = ParameterDirection.Output;
 			db.RunProcedure("Mem_User_Point", sqlParameters);
 			return (int)sqlParameters[1].Value;
+        }
+
+        /// <summary>
+        /// Site login against Db_Membership (Mem_Users_Accede), the API Tank.Flash/checkuser.ashx uses.
+        /// The restored Db_Membership has no Check_User procedure, only Mem_Users_Accede.
+        /// </summary>
+        public bool CheckUsername(string applicationName, string username, string password)
+        {
+			SqlParameter[] sqlParameters = new SqlParameter[4]
+			{
+				new SqlParameter("@ApplicationName", applicationName),
+				new SqlParameter("@UserName", username),
+				new SqlParameter("@Password", password),
+				new SqlParameter("@UserId", SqlDbType.Int)
+			};
+			sqlParameters[3].Direction = ParameterDirection.Output;
+			db.RunProcedure("Mem_Users_Accede", sqlParameters);
+			int.TryParse(sqlParameters[3].Value?.ToString(), out int result);
+			return result > 0;
         }
 
         public bool CheckUsername(string username, string password)

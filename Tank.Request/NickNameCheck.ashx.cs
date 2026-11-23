@@ -27,7 +27,7 @@ namespace Tank.Request
         public void ProcessRequest(HttpContext context)
         {
             string path = HttpContext.Current.Server.MapPath(".");
-            path += "\\";
+            path += System.IO.Path.DirectorySeparatorChar;
             LanguageMgr.Setup(path);
             bool value = false;
             //string message = "Name is Exist!";

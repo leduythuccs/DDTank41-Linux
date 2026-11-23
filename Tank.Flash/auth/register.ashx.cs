@@ -53,7 +53,7 @@ namespace Tank.Flash.auth
 
         protected bool CreateUsername(HttpContext context, ref string message)
         {
-           password = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "md5");
+           password = Bussiness.Interface.BaseInterface.md5(password);
             using (MemberShipBussiness db = new MemberShipBussiness())
             {
                 return db.CreateUsername(SiteTitle, username, password, email, "1", "MD5", sex);

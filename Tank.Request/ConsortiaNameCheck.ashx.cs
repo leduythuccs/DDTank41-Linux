@@ -26,7 +26,7 @@ namespace Tank.Request
         {
             string path = HttpContext.Current.Server.MapPath(".");
             //LanguageMgr.Setup(ConfigurationManager.AppSettings["ReqPath"]);
-            path += "\\";
+            path += System.IO.Path.DirectorySeparatorChar;
             LanguageMgr.Setup(path);
             bool value = false;
             string message = LanguageMgr.GetTranslation("Tank.Request.ConsortiaCheck.Exist");

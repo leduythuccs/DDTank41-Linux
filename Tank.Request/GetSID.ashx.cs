@@ -20,9 +20,6 @@ namespace Tank.Request
 
         public void ProcessRequest(HttpContext context)
         {
-            CspParameters csp = new CspParameters();
-            //csp.KeyContainerName = "MyKey";
-            csp.Flags = CspProviderFlags.UseMachineKeyStore;
 
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048);//csp);
             rsa.FromXmlString(ConfigurationSettings.AppSettings["privateKey"]);

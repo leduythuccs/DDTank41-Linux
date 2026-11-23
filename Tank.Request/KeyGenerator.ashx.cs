@@ -22,8 +22,6 @@ namespace Tank.Request
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "text/plain";
-            CspParameters csp = new CspParameters();
-            csp.Flags = CspProviderFlags.UseMachineKeyStore;
 
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(2048);
             RSAParameters para = rsa.ExportParameters(true);
