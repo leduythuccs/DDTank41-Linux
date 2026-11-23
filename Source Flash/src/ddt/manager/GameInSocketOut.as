@@ -126,10 +126,14 @@ package ddt.manager
          sendPackage(_loc2_);
       }
       
+      /** Bots to fight in a match room, chosen with the room's bot button (0 = as many as the room's players). */
+      public static var matchBotCount:int = 0;
+      
       public static function sendGameStart() : void
       {
          var _loc1_:PackageOut = new PackageOut(ePackageType.GAME_ROOM);
          _loc1_.writeInt(GameRoomPackageType.GAME_START);
+         _loc1_.writeInt(matchBotCount);
          sendPackage(_loc1_);
       }
       

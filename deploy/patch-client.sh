@@ -15,6 +15,9 @@
 #                  finds the drop target with hitTestPoint instead of stage.getObjectsUnderPoint, a rough
 #                  stub in Ruffle that returns cells the point is not on (selling and dragging items in the
 #                  bag did nothing).
+#   room.view.roomView.MatchRoomView, ddt.manager.GameInSocketOut
+#                  "Đấu với: N bot" button in the PvP room (1-4 bots when matchmaking falls back to bots);
+#                  the count is sent with GAME_START.
 #
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
@@ -29,6 +32,8 @@ CLASSES=(
   ddt.data.analyze.ShopItemSortAnalyzer
   ddt.data.analyze.InventoryItemAnalyzer
   ddt.manager.DragManager
+  ddt.manager.GameInSocketOut
+  room.view.roomView.MatchRoomView
 )
 
 work="$(mktemp -d)"

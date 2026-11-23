@@ -32,6 +32,10 @@ package room.view.roomView
    import flash.events.Event;
    import flash.events.MouseEvent;
    import flash.events.TimerEvent;
+   import flash.display.Sprite;
+   import flash.text.TextField;
+   import flash.text.TextFieldAutoSize;
+   import flash.text.TextFormat;
    import flash.geom.Point;
    import flash.utils.Timer;
    import room.RoomManager;
@@ -82,6 +86,13 @@ package room.view.roomView
 	  
 	  private var _leagueTxt:FilterFrameText;
       
+      /** "Đấu với: N bot": how many bots to fight when matchmaking falls back to bots (GameInSocketOut.matchBotCount). */
+      private var _botBtn:Sprite;
+      
+      private var _botTxt:TextField;
+      
+      private var _botBtnEnabled:Boolean;
+      
       public function MatchRoomView(param1:RoomInfo)
       {
          this._timerII = new Timer(1000);
@@ -95,6 +106,7 @@ package room.view.roomView
          _info.addEventListener(RoomEvent.ALLOW_CROSS_CHANGE,this.__crossZoneChangeHandler);
          this._bigMapInfoPanel.addEventListener(RoomEvent.TWEENTY_SEC,this.__onTweentySec);
          this._crossZoneBtn.addEventListener(MouseEvent.CLICK,this.__crossZoneClick);
+         this._botBtn.addEventListener(MouseEvent.CLICK,this.__botClick);
          this._timerII.addEventListener(TimerEvent.TIMER,this.__onTimer);
          addEventListener(Event.ADDED_TO_STAGE,this.__loadWeakGuild);
          EliteGameController.Instance.addEventListener(EliteGameEvent.READY_TIME_OVER,this.__eliteTimeHandler);
@@ -112,6 +124,7 @@ package room.view.roomView
          _info.removeEventListener(RoomEvent.ALLOW_CROSS_CHANGE,this.__crossZoneChangeHandler);
          this._bigMapInfoPanel.removeEventListener(RoomEvent.TWEENTY_SEC,this.__onTweentySec);
          this._crossZoneBtn.removeEventListener(MouseEvent.CLICK,this.__crossZoneClick);
+         this._botBtn.removeEventListener(MouseEvent.CLICK,this.__botClick);
          this._timerII.removeEventListener(TimerEvent.TIMER,this.__onTimer);
          removeEventListener(Event.ADDED_TO_STAGE,this.__loadWeakGuild);
          EliteGameController.Instance.removeEventListener(EliteGameEvent.READY_TIME_OVER,this.__eliteTimeHandler);
@@ -282,6 +295,73 @@ package room.view.roomView
          this._crossZoneBtn.selected = _info.isCrossZone;
       }
       
+      private function roomPlayerCount() : int
+      {
+         var _loc1_:int = 0;
+         var _loc2_:RoomPlayerItem = null;
+         for each(_loc2_ in _playerItems)
+         {
+            if(_loc2_ && _loc2_.info)
+            {
+               _loc1_++;
+            }
+         }
+         return _loc1_ < 1 ? int(1) : int(_loc1_);
+      }
+      
+      /** The bot count in effect: the chosen one, else one bot per player in the room. */
+      private function effectiveBotCount() : int
+      {
+         return GameInSocketOut.matchBotCount > 0 ? int(GameInSocketOut.matchBotCount) : int(Math.min(this.roomPlayerCount(),4));
+      }
+      
+      private function createBotButton() : void
+      {
+         this._botBtn = new Sprite();
+         this._botBtn.buttonMode = true;
+         this._botBtn.useHandCursor = true;
+         this._botBtn.mouseChildren = false;
+         this._botTxt = new TextField();
+         this._botTxt.defaultTextFormat = new TextFormat("Arial",13,16777215,true);
+         this._botTxt.autoSize = TextFieldAutoSize.LEFT;
+         this._botTxt.selectable = false;
+         this._botTxt.x = 8;
+         this._botTxt.y = 3;
+         this._botBtn.addChild(this._botTxt);
+         // above the invite / cross-zone buttons, under the viewer box
+         this._botBtn.x = this._crossZoneBtn.x - 50;
+         this._botBtn.y = this._crossZoneBtn.y - 28;
+         addChild(this._botBtn);
+         this.updateBotButton();
+      }
+      
+      private function updateBotButton() : void
+      {
+         if(!this._botBtn)
+         {
+            return;
+         }
+         this._botTxt.text = "Đấu với: " + this.effectiveBotCount() + " bot";
+         var _loc1_:Number = this._botTxt.width + 16;
+         this._botBtn.graphics.clear();
+         this._botBtn.graphics.lineStyle(1,this._botBtnEnabled ? uint(16763955) : uint(8421504));
+         this._botBtn.graphics.beginFill(this._botBtnEnabled ? uint(1393749) : uint(4210752),0.9);
+         this._botBtn.graphics.drawRoundRect(0,0,_loc1_,24,8,8);
+         this._botBtn.graphics.endFill();
+         this._botBtn.alpha = this._botBtnEnabled ? Number(1) : Number(0.7);
+      }
+      
+      private function __botClick(param1:MouseEvent) : void
+      {
+         if(!this._botBtnEnabled)
+         {
+            return;
+         }
+         SoundManager.instance.play("008");
+         GameInSocketOut.matchBotCount = this.effectiveBotCount() % 4 + 1;
+         this.updateBotButton();
+      }
+      
       private function __onFightNpc(param1:CrazyTankSocketEvent) : void
       {
          this.showMatchNpc();
@@ -291,6 +371,8 @@ package room.view.roomView
       {
          super.updateButtons();
          this._crossZoneBtn.enable = _info.selfRoomPlayer.isHost && !_info.started;
+         this._botBtnEnabled = _info.selfRoomPlayer.isHost && !_info.started && _info.type != RoomInfo.SCORE_ROOM && _info.type != RoomInfo.RANK_ROOM;
+         this.updateBotButton();
          this._smallMapInfoPanel._actionStatus = _info.selfRoomPlayer.isHost && !_info.started && _info.type != RoomInfo.RANK_ROOM && _info.type != RoomInfo.SCORE_ROOM;
          if(_info.type == RoomInfo.SCORE_ROOM || _info.type == RoomInfo.RANK_ROOM)
          {
@@ -325,6 +407,7 @@ package room.view.roomView
          this._crossZoneBtn = ComponentFactory.Instance.creatComponentByStylename("asset.room.crossZoneButton");
          this._crossZoneBtn.selected = _info.isCrossZone;
          addChild(this._crossZoneBtn);
+         this.createBotButton();
          if(BossBoxManager.instance.isShowBoxButton())
          {
             this._boxButton = new SmallBoxButton(SmallBoxButton.PVP_ROOM_POINT);
@@ -432,6 +515,12 @@ package room.view.roomView
          this._playerItemContainer = null;
          this._crossZoneBtn.dispose();
          this._crossZoneBtn = null;
+         if(this._botBtn && this._botBtn.parent)
+         {
+            this._botBtn.parent.removeChild(this._botBtn);
+         }
+         this._botBtn = null;
+         this._botTxt = null;
          if(this._alert1)
          {
             this._alert1.dispose();
