@@ -6,6 +6,7 @@ package ddt.data.analyze
    import flash.events.TimerEvent;
    import flash.utils.Dictionary;
    import flash.utils.Timer;
+   import flash.utils.getTimer;
    
    public class ShopItemDisCountAnalyzer extends DataAnalyzer
    {
@@ -13,7 +14,6 @@ package ddt.data.analyze
       public static var shopDisCountGoods_Backup:Dictionary;
       
       public static var isLoginRqest:Boolean = true;
-       
       
       private var _xml:XML;
       
@@ -53,81 +53,84 @@ package ddt.data.analyze
       
       private function parseShop() : void
       {
-         this._timer = new Timer(30);
+         this._timer = new Timer(1);
          this._timer.addEventListener(TimerEvent.TIMER,this.__partexceute);
          this._timer.start();
       }
       
       private function __partexceute(param1:TimerEvent) : void
       {
+         var _loc2_:int = 0;
          var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc5_:Number = NaN;
+         var _loc4_:Number = NaN;
+         var _loc5_:String = null;
          var _loc6_:String = null;
-         var _loc7_:String = null;
-         var _loc8_:ShopItemInfo = null;
+         var _loc7_:ShopItemInfo = null;
          if(!ShopManager.Instance.initialized)
          {
             return;
          }
-         var _loc2_:int = 0;
-         while(_loc2_ < 40)
+         var _loc8_:int = 0;
+         // Patched: the original handled 40 items per 30 ms tick (about 5.6 s for the 7500 item
+         // templates whatever the machine); work for up to 25 ms per tick instead.
+         var __sliceStart:int = getTimer();
+         while(getTimer() - __sliceStart < 25)
          {
-            this.index++;
-            if(this.index < this._shoplist.length())
+            ++this.index;
+            if(this.index >= this._shoplist.length())
             {
-               _loc3_ = int(this._shoplist[this.index].@LableType);
-               _loc4_ = int(this._shoplist[this.index].@ID);
-               _loc5_ = Number(this._shoplist[this.index].@PriceMultiple);
-               _loc6_ = this._shoplist[this.index].@StartDate;
-               _loc7_ = this._shoplist[this.index].@EndDate;
-               _loc8_ = ShopManager.Instance.getCloneShopItemByGoodsID(_loc4_);
-               if(_loc8_ != null)
-               {
-                  if(this.isInDiscountGoods(_loc8_.GoodsID))
-                  {
-                     _loc8_ = (shopDisCountGoods_Backup[_loc8_.GoodsID] as ShopItemInfo).CloneShopItem();
-                  }
-                  else if(!this.isInDiscountGoods(_loc8_.GoodsID) && !isLoginRqest)
-                  {
-                     shopDisCountGoods_Backup[_loc4_] = ShopManager.Instance.getCloneShopItemByGoodsID(_loc4_);
-                  }
-                  if(isLoginRqest)
-                  {
-                     shopDisCountGoods_Backup[_loc4_] = ShopManager.Instance.getCloneShopItemByGoodsID(_loc4_);
-                  }
-                  _loc8_.AValue1 = _loc8_.AValue1 * _loc5_;
-                  _loc8_.BValue1 = _loc8_.BValue1 * _loc5_;
-                  _loc8_.CValue1 = _loc8_.CValue1 * _loc5_;
-                  _loc8_.StartDate = _loc6_;
-                  _loc8_.EndDate = _loc7_;
-                  _loc8_.Label = _loc3_;
-                  this.shopDisCountGoods[_loc4_] = _loc8_;
-               }
-               _loc2_++;
-               continue;
+               this._timer.removeEventListener(TimerEvent.TIMER,this.__partexceute);
+               this._timer.stop();
+               this._timer = null;
+               onAnalyzeComplete();
+               return;
             }
-            this._timer.removeEventListener(TimerEvent.TIMER,this.__partexceute);
-            this._timer.stop();
-            this._timer = null;
-            onAnalyzeComplete();
-            return;
+            _loc2_ = int(this._shoplist[this.index].@LableType);
+            _loc3_ = int(this._shoplist[this.index].@ID);
+            _loc4_ = Number(this._shoplist[this.index].@PriceMultiple);
+            _loc5_ = this._shoplist[this.index].@StartDate;
+            _loc6_ = this._shoplist[this.index].@EndDate;
+            _loc7_ = ShopManager.Instance.getCloneShopItemByGoodsID(_loc3_);
+            if(_loc7_ != null)
+            {
+               if(this.isInDiscountGoods(_loc7_.GoodsID))
+               {
+                  _loc7_ = (shopDisCountGoods_Backup[_loc7_.GoodsID] as ShopItemInfo).CloneShopItem();
+               }
+               else if(!this.isInDiscountGoods(_loc7_.GoodsID) && !isLoginRqest)
+               {
+                  shopDisCountGoods_Backup[_loc3_] = ShopManager.Instance.getCloneShopItemByGoodsID(_loc3_);
+               }
+               if(isLoginRqest)
+               {
+                  shopDisCountGoods_Backup[_loc3_] = ShopManager.Instance.getCloneShopItemByGoodsID(_loc3_);
+               }
+               _loc7_.AValue1 *= _loc4_;
+               _loc7_.BValue1 *= _loc4_;
+               _loc7_.CValue1 *= _loc4_;
+               _loc7_.StartDate = _loc5_;
+               _loc7_.EndDate = _loc6_;
+               _loc7_.Label = _loc2_;
+               this.shopDisCountGoods[_loc3_] = _loc7_;
+            }
+            _loc8_++;
          }
       }
       
       private function isInDiscountGoods(param1:int) : Boolean
       {
-         var _loc3_:ShopItemInfo = null;
-         var _loc2_:Boolean = false;
-         for each(_loc3_ in shopDisCountGoods_Backup)
+         var _loc2_:ShopItemInfo = null;
+         var _loc3_:Boolean = false;
+         for each(_loc2_ in shopDisCountGoods_Backup)
          {
-            if(_loc3_ && _loc3_.GoodsID == param1)
+            if(Boolean(_loc2_) && _loc2_.GoodsID == param1)
             {
-               _loc2_ = true;
+               _loc3_ = true;
                break;
             }
          }
-         return _loc2_;
+         return _loc3_;
       }
    }
 }
+

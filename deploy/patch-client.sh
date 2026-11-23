@@ -8,13 +8,23 @@
 # Patched classes:
 #   phy.maps.Tile  crater brink masked with copyPixels instead of a BlendMode.ALPHA draw, which
 #                  Ruffle renders wrong (filled discs over every crater and broken walking).
+#   ddt.data.analyze.{ItemTemplete,ShopItem,ShopItemDisCount,ShopItemSort,InventoryItem}Analyzer
+#                  parse for up to 25 ms per tick instead of 40 items per 30 ms tick (the item
+#                  templates alone took a fixed ~5.6 s of the loading screen).
 #
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 FFDEC="${FFDEC:?set FFDEC to the path of ffdec.jar}"
 SWF="Source Flash/FlashSV1/2.png"
-CLASSES=(phy.maps.Tile)
+CLASSES=(
+  phy.maps.Tile
+  ddt.data.analyze.ItemTempleteAnalyzer
+  ddt.data.analyze.ShopItemAnalyzer
+  ddt.data.analyze.ShopItemDisCountAnalyzer
+  ddt.data.analyze.ShopItemSortAnalyzer
+  ddt.data.analyze.InventoryItemAnalyzer
+)
 
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT

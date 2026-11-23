@@ -10,10 +10,10 @@ package ddt.data.analyze
    import flash.events.TimerEvent;
    import flash.utils.Dictionary;
    import flash.utils.Timer;
+   import flash.utils.getTimer;
    
    public class ShopItemSortAnalyzer extends DataAnalyzer
    {
-       
       
       private var _xml:XML;
       
@@ -48,47 +48,49 @@ package ddt.data.analyze
       
       private function parseShop() : void
       {
-         this._timer = new Timer(30);
+         this._timer = new Timer(1);
          this._timer.addEventListener(TimerEvent.TIMER,this.__partexceute);
          this._timer.start();
       }
       
       private function __partexceute(param1:TimerEvent) : void
       {
+         var _loc2_:int = 0;
          var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc5_:ShopItemInfo = null;
-         var _loc6_:BaseAlerFrame = null;
+         var _loc4_:ShopItemInfo = null;
+         var _loc5_:BaseAlerFrame = null;
          if(!ShopManager.Instance.initialized)
          {
             return;
          }
-         var _loc2_:int = 0;
-         while(_loc2_ < 40)
+         var _loc6_:int = 0;
+         // Patched: the original handled 40 items per 30 ms tick (about 5.6 s for the 7500 item
+         // templates whatever the machine); work for up to 25 ms per tick instead.
+         var __sliceStart:int = getTimer();
+         while(getTimer() - __sliceStart < 25)
          {
-            this.index++;
-            if(this.index < this._shoplist.length())
+            ++this.index;
+            if(this.index >= this._shoplist.length())
             {
-               _loc3_ = int(this._shoplist[this.index].@Type);
-               _loc4_ = int(this._shoplist[this.index].@ShopId);
-               _loc5_ = ShopManager.Instance.getShopItemByGoodsID(_loc4_);
-               if(_loc5_ != null)
-               {
-                  this.addToList(_loc3_,_loc5_);
-               }
-               else
-               {
-                  _loc6_ = AlertManager.Instance.simpleAlert(LanguageMgr.GetTranslation("AlertDialog.Info"),LanguageMgr.GetTranslation("shop.DataError.NoGood") + _loc4_);
-                  _loc6_.addEventListener(FrameEvent.RESPONSE,this.__onResponse);
-               }
-               _loc2_++;
-               continue;
+               this._timer.removeEventListener(TimerEvent.TIMER,this.__partexceute);
+               this._timer.stop();
+               this._timer = null;
+               onAnalyzeComplete();
+               return;
             }
-            this._timer.removeEventListener(TimerEvent.TIMER,this.__partexceute);
-            this._timer.stop();
-            this._timer = null;
-            onAnalyzeComplete();
-            return;
+            _loc2_ = int(this._shoplist[this.index].@Type);
+            _loc3_ = int(this._shoplist[this.index].@ShopId);
+            _loc4_ = ShopManager.Instance.getShopItemByGoodsID(_loc3_);
+            if(_loc4_ != null)
+            {
+               this.addToList(_loc2_,_loc4_);
+            }
+            else
+            {
+               _loc5_ = AlertManager.Instance.simpleAlert(LanguageMgr.GetTranslation("AlertDialog.Info"),LanguageMgr.GetTranslation("shop.DataError.NoGood") + _loc3_);
+               _loc5_.addEventListener(FrameEvent.RESPONSE,this.__onResponse);
+            }
+            _loc6_++;
          }
       }
       
@@ -111,3 +113,4 @@ package ddt.data.analyze
       }
    }
 }
+

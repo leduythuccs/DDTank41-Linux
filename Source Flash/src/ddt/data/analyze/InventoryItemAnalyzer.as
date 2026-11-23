@@ -6,12 +6,12 @@ package ddt.data.analyze
    import ddt.manager.ItemManager;
    import flash.events.TimerEvent;
    import flash.utils.Timer;
+   import flash.utils.getTimer;
    
    public class InventoryItemAnalyzer extends DataAnalyzer
    {
-       
       
-      public var list:Vector.<InventoryItemInfo>;
+      public var list:Vector.<InventoryItemInfo> = new Vector.<InventoryItemInfo>();
       
       private var _xml:XML;
       
@@ -23,7 +23,6 @@ package ddt.data.analyze
       
       public function InventoryItemAnalyzer(param1:Function)
       {
-         this.list = new Vector.<InventoryItemInfo>();
          super(param1);
       }
       
@@ -40,7 +39,7 @@ package ddt.data.analyze
          {
             this._xmllist = this._xml..Item;
             this._index = -1;
-            this._timer = new Timer(30);
+            this._timer = new Timer(1);
             this._timer.addEventListener(TimerEvent.TIMER,this.__partexceute);
             this._timer.start();
          }
@@ -53,26 +52,29 @@ package ddt.data.analyze
       
       private function __partexceute(param1:TimerEvent) : void
       {
-         var _loc3_:InventoryItemInfo = null;
-         var _loc2_:int = 0;
-         while(_loc2_ < 40)
+         var _loc2_:InventoryItemInfo = null;
+         var _loc3_:int = 0;
+         // Patched: the original handled 40 items per 30 ms tick (about 5.6 s for the 7500 item
+         // templates whatever the machine); work for up to 25 ms per tick instead.
+         var __sliceStart:int = getTimer();
+         while(getTimer() - __sliceStart < 25)
          {
-            this._index++;
-            if(this._index < this._xmllist.length())
+            ++this._index;
+            if(this._index >= this._xmllist.length())
             {
-               _loc3_ = new InventoryItemInfo();
-               ObjectUtils.copyPorpertiesByXML(_loc3_,this._xmllist[this._index]);
-               ItemManager.fill(_loc3_);
-               this.list.push(_loc3_);
-               _loc2_++;
-               continue;
+               this._timer.removeEventListener(TimerEvent.TIMER,this.__partexceute);
+               this._timer.stop();
+               this._timer = null;
+               onAnalyzeComplete();
+               return;
             }
-            this._timer.removeEventListener(TimerEvent.TIMER,this.__partexceute);
-            this._timer.stop();
-            this._timer = null;
-            onAnalyzeComplete();
-            return;
+            _loc2_ = new InventoryItemInfo();
+            ObjectUtils.copyPorpertiesByXML(_loc2_,this._xmllist[this._index]);
+            ItemManager.fill(_loc2_);
+            this.list.push(_loc2_);
+            _loc3_++;
          }
       }
    }
 }
+
