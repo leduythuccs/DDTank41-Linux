@@ -250,6 +250,8 @@ namespace Fighting.Server
 				character.apprenticeshipState = pkg.ReadInt();
 				character.masterID = pkg.ReadInt();
 				character.masterOrApprentices = pkg.ReadString();
+				character.Win = pkg.ReadInt();
+				character.Total = pkg.ReadInt();
 				character.IsAutoBot = isBot;
 				num2 += character.FightPower;
 				character.Attack = pkg.ReadInt();

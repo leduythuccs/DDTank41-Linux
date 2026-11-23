@@ -356,6 +356,9 @@ namespace Game.Server.RingStation.Battle
                 gSPacketIn.WriteInt(0);
                 gSPacketIn.WriteInt(0);
                 gSPacketIn.WriteString("");
+                // win/total games (read by Fighting.Server ServerClient after masterOrApprentices)
+                gSPacketIn.WriteInt(item.Win);
+                gSPacketIn.WriteInt(item.Total);
                 gSPacketIn.WriteInt(item.Attack);
                 gSPacketIn.WriteInt(item.Defence);
                 gSPacketIn.WriteInt(item.Agility);

@@ -680,6 +680,9 @@ namespace Game.Server.Battle
                 gSPacketIn.WriteInt(item.PlayerCharacter.apprenticeshipState);
                 gSPacketIn.WriteInt(item.PlayerCharacter.masterID);
                 gSPacketIn.WriteString(item.PlayerCharacter.masterOrApprentices);
+                // win/total games, shown as the win rate in battle (the fighting server had 0/0)
+                gSPacketIn.WriteInt(item.PlayerCharacter.Win);
+                gSPacketIn.WriteInt(item.PlayerCharacter.Total);
                 gSPacketIn.WriteInt(item.PlayerCharacter.Attack);
                 gSPacketIn.WriteInt(item.PlayerCharacter.Defence);
                 gSPacketIn.WriteInt(item.PlayerCharacter.Agility);
