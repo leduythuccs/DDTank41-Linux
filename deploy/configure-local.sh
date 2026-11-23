@@ -3,13 +3,19 @@
 # local docker SQL Server. App.config merges it via <appSettings file="appSettings.local.config">,
 # so these values override the committed ones. Re-run after changing deploy/.env, then rebuild.
 # Optional in deploy/.env: DDTANK_RUFFLE_URL (Ruffle build for the game page), DDTANK_PUBLIC_IP,
-# DDTANK_RESOURCE_UPSTREAM (site to fetch /resource/ files from when they are not in ../resource/).
+# DDTANK_RESOURCE_UPSTREAM (site to fetch /resource/ files from when they are not in ../resource/),
+# DDTANK_ADMIN_PASSWORD (GameAdmin.Web login; generated and saved to .env when missing).
 set -euo pipefail
 cd "$(dirname "$0")"
 set -a; . ./.env; set +a
+if [ -z "${DDTANK_ADMIN_PASSWORD:-}" ]; then
+  DDTANK_ADMIN_PASSWORD="$(head -c 18 /dev/urandom | base64 | tr '+/' '-_')"
+  printf '\n# GameAdmin.Web login (http://127.0.0.1:8081)\nDDTANK_ADMIN_PASSWORD=%s\n' "$DDTANK_ADMIN_PASSWORD" >> .env
+  echo "generated DDTANK_ADMIN_PASSWORD (saved in deploy/.env)"
+fi
 HOST="${DDTANK_DB_HOST:-127.0.0.1,1433}"
 cs() { echo "Data Source=$HOST;Initial Catalog=$1;User ID=ddtank;Password=$DDTANK_DB_PASSWORD;TrustServerCertificate=True;Encrypt=True"; }
-for svc in Road.Service Center.Service Fighting.Service Tank.Web; do
+for svc in Road.Service Center.Service Fighting.Service Tank.Web GameAdmin.Web; do
   umask 077
   cat > "../$svc/appSettings.local.config" <<XML
 <?xml version="1.0" encoding="utf-8"?>
@@ -20,6 +26,7 @@ for svc in Road.Service Center.Service Fighting.Service Tank.Web; do
 	<add key="membershipDb" value="$(cs Db_Membership)" />
 $( [ -n "${DDTANK_RUFFLE_URL:-}" ] && echo "	<add key=\"Web.RuffleUrl\" value=\"$DDTANK_RUFFLE_URL\" />" )
 $( [ -n "${DDTANK_RESOURCE_UPSTREAM:-}" ] && echo "	<add key=\"Web.ResourceUpstream\" value=\"$DDTANK_RESOURCE_UPSTREAM\" />" )
+$( [ "$svc" = GameAdmin.Web ] && echo "	<add key=\"Admin.Password\" value=\"$(printf '%s' "$DDTANK_ADMIN_PASSWORD" | sed 's/&/\&amp;/g; s/"/\&quot;/g; s/</\&lt;/g')\" />" )
 </appSettings>
 XML
   echo "wrote $svc/appSettings.local.config"

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Starts the whole game locally: Center -> Fighting -> Road (game server) -> Tank.Web (website + API).
+# Starts the whole game locally: Center -> Fighting -> Road (game server) -> Tank.Web (website + API)
+# -> GameAdmin.Web (admin site: send mail, items and money to characters).
 # Prerequisites (once): docker compose up -d && ./restore-databases.sh && ./configure-local.sh
 #                       dotnet build ../DDTank.Server.Linux.sln
 # Logs go to deploy/logs/*.log. Ctrl+C stops everything (SIGTERM, so the servers save and exit cleanly).
@@ -39,11 +40,14 @@ start center   Center.Service   Center.Service.dll   "GameServer is now open for
 start fighting Fighting.Service Fighting.Service.dll "GameServer is now open for connections"
 start road     Road.Service     Road.Service.dll     "GameServer is now open for connections"
 start web      Tank.Web         Tank.Web.dll         "Tank.Web listening"
+start admin    GameAdmin.Web    GameAdmin.Web.dll    "GameAdmin listening"
 
 cat <<EOF
 
 All services are running. Open the login page:
   http://127.0.0.1:8080/index.htm
+Admin site (password: DDTANK_ADMIN_PASSWORD in deploy/.env):
+  http://127.0.0.1:8081/
 Logs: $LOGS   (Ctrl+C to stop)
 EOF
 wait
