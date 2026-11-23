@@ -191,6 +191,9 @@ namespace GameAdmin.Web
             return html;
         }
 
+        /// <param name="Keys">the slot options, "validDays.strengthen.attack.defend.agility.luck"; "default" for a newly
+        /// attached item: permanent, and composed to MAX_COMPOSE when the item can be composed. The page reads the
+        /// options back from the returned image's alt text into the slot.</param>
         public static string AddItemsMail(int GoodIDs, string Keys, int isPopup)
         {
             using ProduceBussiness business = new ProduceBussiness();
@@ -198,6 +201,11 @@ namespace GameAdmin.Web
             if (item == null)
             {
                 return "";
+            }
+            if (Keys == "default")
+            {
+                int compose = item.CanCompose ? Setting("MAX_COMPOSE", 50) : 0;
+                Keys = "0.0." + compose + "." + compose + "." + compose + "." + compose;
             }
             string popup = (item.CanCompose || item.CanStrengthen) && isPopup == 1
                 ? item.TemplateID + ",ItemsInfo." + Encode(Keys) + ",popupInfo"

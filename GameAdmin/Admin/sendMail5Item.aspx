@@ -254,6 +254,7 @@
                         success: function (data) {
                             show_customitem();
                             $('#custom_ItemsContent').html(data);
+                            showSlotOptions(slotIDs);
 
                         }
                     });
@@ -372,12 +373,13 @@
                     $j.ajax({
                         type: "POST",
                         url: "mainRequest.ashx/AddItemsMail",
-                        data: "{GoodIDs:" + GoodIDs + ",Keys:'0.0.0.0.0.0',isPopup:1}",
+                        data: "{GoodIDs:" + GoodIDs + ",Keys:'default',isPopup:1}",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (message) {
                             //show data
                             msgbox.html(message.d);
+                            setSlotOptions(msgbox.attr("id").replace("td_item", ""), message.d);
                             //tb_showsearchPanel();
                         },
                         error: function (errormessage) {
@@ -399,7 +401,7 @@
                     getParam = $("#HiddenCount" + s);
                     getParam.val("1");
                     getParam = $("#HiddenValid" + s);
-                    getParam.val("7");
+                    getParam.val("0");
                     getParam = $("#HiddenStreng" + s);
                     getParam.val("0");
                     getParam = $("#HiddenAttack" + s);
@@ -555,6 +557,30 @@
                 $("#divSendMail").css({ display: "none" });
                 $("#divSendMoney").css({ display: "none" });
                 $("#divMailBox").css({ display: "block" });
+            }
+            // A newly attached item gets the default options the server put in its image's alt text
+            // ("ID,ItemsInfo.valid.strengthen.attack.defend.agility.luck,popupInfo"): permanent, and fully
+            // composed when the item can be composed. Items without options get permanent and nothing else.
+            function setSlotOptions(slot, html) {
+                var m = /ItemsInfo\.(\d+)\.(\d+)\.(\d+)\.(\d+)\.(\d+)\.(\d+)/.exec(html) || [null, 0, 0, 0, 0, 0, 0];
+                var fields = ["Valid", "Streng", "Attack", "Defend", "Agility", "Luck"];
+                for (var i = 0; i < fields.length; i++) {
+                    $("#Hidden" + fields[i] + slot).val(m[i + 1]);
+                }
+            }
+            // The options form opens with the slot's current options selected.
+            function showSlotOptions(slot) {
+                $("#SelectValid").val($("#HiddenValid" + slot).val());
+                $("#SelectStr").val($("#HiddenStreng" + slot).val());
+                var comp = [$("#HiddenAttack" + slot).val(), $("#HiddenDefend" + slot).val(), $("#HiddenAgility" + slot).val(), $("#HiddenLuck" + slot).val()];
+                var same = comp[0] == comp[1] && comp[0] == comp[2] && comp[0] == comp[3];
+                if (same && $("#SelectComp option[value='" + comp[0] + "']").length) {
+                    $("#SelectComp").val(comp[0]);
+                } else {
+                    $("#SelectComp").val("orther");
+                    $("#Txt_att").val(comp[0]); $("#Txt_def").val(comp[1]); $("#Txt_agi").val(comp[2]); $("#Txt_luc").val(comp[3]);
+                }
+                if (typeof call_option == "function") { call_option(); }
             }
             // The last receiver (item mail or money) is kept in this browser and filled into both forms.
             function rememberReceiver(name) {
