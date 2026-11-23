@@ -66,14 +66,8 @@ package bagAndInfo.bag
             _loc2_ = param1.target as BagCell;
             if(_loc2_ && _loc2_.info)
             {
-               if(EquipType.isValuableEquip(_loc2_.info))
-               {
-                  MessageTipManager.getInstance().show(LanguageMgr.GetTranslation("tank.view.bagII.SellGoodsBtn.CantSellEquip"));
-                  ChatManager.Instance.sysChatYellow(LanguageMgr.GetTranslation("tank.view.bagII.SellGoodsBtn.CantSellEquip"));
-                  _loc2_.locked = false;
-                  dispatchEvent(new Event(StopSell));
-               }
-               else if(EquipType.isPetSpeciallFood(_loc2_.info))
+               // Valuable equipment (+7 and up, etc.) can be sold too on this server: the sell frame still asks to confirm.
+               if(EquipType.isPetSpeciallFood(_loc2_.info))
                {
                   MessageTipManager.getInstance().show(LanguageMgr.GetTranslation("ddt.bagAndInfo.sell.CanNotSell"));
                   _loc2_.locked = false;

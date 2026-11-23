@@ -775,12 +775,7 @@ package bagAndInfo.cell
             BaglockedManager.Instance.show();
             return;
          }
-         if(EquipType.isValuableEquip(info))
-         {
-            MessageTipManager.getInstance().show(LanguageMgr.GetTranslation("tank.view.bagII.SellGoodsBtn.CantSellEquip"));
-            ChatManager.Instance.sysChatYellow(LanguageMgr.GetTranslation("tank.view.bagII.SellGoodsBtn.CantSellEquip"));
-            return;
-         }
+         // valuable equipment can be sold too (see SellGoodsBtn.dragStop)
          if(EquipType.isPetSpeciallFood(info))
          {
             MessageTipManager.getInstance().show(LanguageMgr.GetTranslation("ddt.bagAndInfo.sell.CanNotSell"));
