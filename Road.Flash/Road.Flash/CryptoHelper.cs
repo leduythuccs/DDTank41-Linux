@@ -10,9 +10,9 @@ namespace Road.Flash
     {
         public static RSACryptoServiceProvider GetRSACrypto(string privateKey)
         {
-            CspParameters csp = new CspParameters();
-            csp.Flags = CspProviderFlags.UseMachineKeyStore;
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(csp);
+            // CspParameters (Windows CAPI key containers) is not supported outside Windows; the key
+            // is imported from XML, so no key container is needed.
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(privateKey);
             return rsa;
         }
@@ -25,9 +25,9 @@ namespace Road.Flash
         /// <returns></returns>
         public static string RsaDecrypt(string privateKey, string src)
         {
-            CspParameters csp = new CspParameters();
-            csp.Flags = CspProviderFlags.UseMachineKeyStore;
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(csp);
+            // CspParameters (Windows CAPI key containers) is not supported outside Windows; the key
+            // is imported from XML, so no key container is needed.
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             rsa.FromXmlString(privateKey);
             return RsaDecrypt(rsa, src);
         }
