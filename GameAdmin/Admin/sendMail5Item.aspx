@@ -463,6 +463,7 @@
                         dataType: "json",
                         success: function (message) {
                             clearForm();
+                            rememberReceiver(TxtUserName);
                             //show data
                             msgbox.html(message.d);
 
@@ -517,7 +518,7 @@
                         dataType: "json",
                         success: function (message) {
                             //show data
-                            $("#TxtUserMoney").val("");
+                            rememberReceiver(UserName);
                             $("#TxtGold").val("");
                             $("#TxtMoney").val("");
                             $("#TxtGiftToken").val("");
@@ -555,6 +556,20 @@
                 $("#divSendMoney").css({ display: "none" });
                 $("#divMailBox").css({ display: "block" });
             }
+            // The last receiver (item mail or money) is kept in this browser and filled into both forms.
+            function rememberReceiver(name) {
+                try { localStorage.setItem("GameAdmin.receiver", name); } catch (e) { }
+                $("#TxtUserName").val(name);
+                $("#TxtUserMoney").val(name);
+            }
+            $(function () {
+                var name = null;
+                try { name = localStorage.getItem("GameAdmin.receiver"); } catch (e) { }
+                if (name) {
+                    $("#TxtUserName").val(name);
+                    $("#TxtUserMoney").val(name);
+                }
+            });
             
         </script>
 </asp:Content>
