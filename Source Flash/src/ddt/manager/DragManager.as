@@ -6,6 +6,7 @@ package ddt.manager
    import ddt.interfaces.IAcceptDrag;
    import ddt.interfaces.IDragable;
    import flash.display.DisplayObject;
+   import flash.display.DisplayObjectContainer;
    import flash.display.Sprite;
    import flash.display.Stage;
    import flash.events.Event;
@@ -180,6 +181,53 @@ package ddt.manager
          }
       }
       
+      /**
+       * Like stage.getObjectsUnderPoint (bottom-most first), but precise: Ruffle's version is a rough stub that
+       * also returns objects whose shapes are not under the point (several bag cells for one click), so items
+       * were dropped on, or sold from, the wrong cell. Uses hitTestPoint with shapeFlag, which Ruffle implements.
+       */
+      private static function objectsUnderPoint(param1:DisplayObjectContainer, param2:Number, param3:Number, param4:Array = null) : Array
+      {
+         var _loc5_:int = 0;
+         var _loc6_:DisplayObject = null;
+         var _loc7_:int = 0;
+         if(param4 == null)
+         {
+            param4 = [];
+         }
+         _loc5_ = 0;
+         while(_loc5_ < param1.numChildren)
+         {
+            try
+            {
+               _loc6_ = param1.getChildAt(_loc5_);
+            }
+            catch(e:Error)
+            {
+               _loc6_ = null;
+            }
+            if(_loc6_ && _loc6_.visible)
+            {
+               if(_loc6_ is DisplayObjectContainer)
+               {
+                  _loc7_ = param4.length;
+                  objectsUnderPoint(_loc6_ as DisplayObjectContainer,param2,param3,param4);
+                  // a container hit by its own graphics, not by any child
+                  if(param4.length == _loc7_ && _loc6_.hitTestPoint(param2,param3,true))
+                  {
+                     param4.push(_loc6_);
+                  }
+               }
+               else if(_loc6_.hitTestPoint(param2,param3,true))
+               {
+                  param4.push(_loc6_);
+               }
+            }
+            _loc5_++;
+         }
+         return param4;
+      }
+      
       private static function __stopDrag(param1:MouseEvent) : void
       {
          var _loc2_:Array = null;
@@ -196,7 +244,7 @@ package ddt.manager
             {
                _changCardStateFun();
             }
-            _loc2_ = _proxy.stage.getObjectsUnderPoint(new Point(param1.stageX,param1.stageY));
+            _loc2_ = objectsUnderPoint(_proxy.stage,param1.stageX,param1.stageY);
             _loc3_ = _proxy.stage;
             _loc4_ = true;
             InGameCursor.show();

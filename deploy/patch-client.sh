@@ -11,6 +11,10 @@
 #   ddt.data.analyze.{ItemTemplete,ShopItem,ShopItemDisCount,ShopItemSort,InventoryItem}Analyzer
 #                  parse for up to 25 ms per tick instead of 40 items per 30 ms tick (the item
 #                  templates alone took a fixed ~5.6 s of the loading screen).
+#   ddt.manager.DragManager
+#                  finds the drop target with hitTestPoint instead of stage.getObjectsUnderPoint, a rough
+#                  stub in Ruffle that returns cells the point is not on (selling and dragging items in the
+#                  bag did nothing).
 #
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
@@ -24,6 +28,7 @@ CLASSES=(
   ddt.data.analyze.ShopItemDisCountAnalyzer
   ddt.data.analyze.ShopItemSortAnalyzer
   ddt.data.analyze.InventoryItemAnalyzer
+  ddt.manager.DragManager
 )
 
 work="$(mktemp -d)"
