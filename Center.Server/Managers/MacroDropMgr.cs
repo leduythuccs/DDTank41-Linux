@@ -1,4 +1,4 @@
-using Bussiness;
+﻿using Bussiness;
 using Game.Base.Packets;
 using log4net;
 using SqlDataProvider.Data;
@@ -56,7 +56,7 @@ namespace Center.Server.Managers
         public static bool Init()
         {
 			m_lock = new ReaderWriterLock();
-			FilePath = Directory.GetCurrentDirectory() + "\\macrodrop\\macroDrop.ini";
+			FilePath = Path.Combine(Directory.GetCurrentDirectory(), "macrodrop", "macroDrop.ini");
 			return Reload();
         }
 

@@ -1,4 +1,4 @@
-using Bussiness;
+﻿using Bussiness;
 using Game.Logic.Phy.Maps;
 using Game.Logic.Phy.Object;
 using log4net;
@@ -119,7 +119,7 @@ namespace Game.Logic
 			{
 				if (current.HasTunnel)
 				{
-					string text = $"bomb\\{current.ID}.bomb";
+					string text = Path.Combine("bomb", $"{current.ID}.bomb");
 					Tile tile = null;
 					if (File.Exists(text))
 					{

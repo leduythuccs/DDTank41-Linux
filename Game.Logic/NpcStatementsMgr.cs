@@ -1,4 +1,4 @@
-using log4net;
+﻿using log4net;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,7 +35,7 @@ namespace Game.Logic
 
         public static bool Init()
         {
-			filePath = Directory.GetCurrentDirectory() + "\\ai\\npc\\npc_statements.txt";
+			filePath = Path.Combine(Directory.GetCurrentDirectory(), "ai", "npc", "npc_statements.txt");
 			random = new Random();
 			return ReLoad();
         }

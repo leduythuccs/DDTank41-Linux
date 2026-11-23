@@ -1,4 +1,4 @@
-using Bussiness;
+﻿using Bussiness;
 using Game.Logic.Phy.Maps;
 using log4net;
 using SqlDataProvider.Data;
@@ -241,13 +241,13 @@ namespace Game.Logic
 					if (!mapInfos.ContainsKey(info.ID))
 					{
 						Tile tile = null;
-						string path = $"map\\{info.ID}\\fore.map";
+						string path = Path.Combine("map", info.ID.ToString(), "fore.map");
 						if (File.Exists(path))
 						{
 							tile = new Tile(path, digable: true);
 						}
 						Tile tile2 = null;
-						path = $"map\\{info.ID}\\dead.map";
+						path = Path.Combine("map", info.ID.ToString(), "dead.map");
 						if (File.Exists(path))
 						{
 							tile2 = new Tile(path, digable: false);
