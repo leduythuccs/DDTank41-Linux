@@ -14,7 +14,6 @@ namespace Center.Service
         [STAThread]
 		private static void Main(string[] args)
         {
-			AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = "." + Path.DirectorySeparatorChar + "lib";
 			Thread.CurrentThread.Name = "MAIN";
 			RegisterActions();
 			if (args.Length == 0)

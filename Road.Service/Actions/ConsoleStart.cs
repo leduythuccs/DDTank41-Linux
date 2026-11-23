@@ -1,4 +1,4 @@
-using Bussiness;
+﻿using Bussiness;
 using Bussiness.Managers;
 using Game.Base;
 using Game.Logic;
@@ -20,7 +20,6 @@ namespace Game.Service.actions
 {
     public class ConsoleStart : IAction
     {
-        private delegate int ConsoleCtrlDelegate(ConsoleEvent ctrlType);
 
         private enum ConsoleEvent
         {
@@ -39,7 +38,6 @@ namespace Game.Service.actions
 
         private static int _count;
 
-        private static ConsoleCtrlDelegate handler;
 
         public string Name => "--start";
 
@@ -47,34 +45,25 @@ namespace Game.Service.actions
 
         public string Description => "Starts the DOL server in console mode";
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern IntPtr GetStdHandle(int nStdHandle);
 
-        [DllImport("kernel32.dll")]
-        private static extern bool ReadConsoleW(IntPtr hConsoleInput, [Out] byte[] lpBuffer, uint nNumberOfCharsToRead, out uint lpNumberOfCharsRead, IntPtr lpReserved);
 
-        public static IntPtr GetWin32InputHandle()
-        {
-            return GetStdHandle(-10);
-        }
 
         public void OnAction(Hashtable parameters)
         {
-            Console.Title = "Road Service | DDTank 3.0";
+            ConsoleHost.SetTitle("Road Service | DDTank 3.0");
             GameServer.CreateInstance(config = new GameServerConfig());
             GameServer.Instance.Start();
             GameServer.KeepRunning = true;
             FusionCombined.ListCombinedFusion();
             Console.WriteLine("Server started!");
             ConsoleClient client = new ConsoleClient();
+            ConsoleHost.RegisterShutdown(() => GameServer.Instance?.Stop());
             while (GameServer.KeepRunning)
             {
                 try
                 {
-                    handler = ConsoleCtrHandler;
-                    SetConsoleCtrlHandler(handler, add: true);
                     Console.Write("> ");
-                    string line = Console.ReadLine();
+                    string line = ConsoleHost.ReadLine();
                     switch (line.Split(' ')[0])
                     {
                         case "exit":
@@ -366,7 +355,7 @@ namespace Game.Service.actions
                             continue;
                         case "nickname":
                             Console.WriteLine("Please enter the nickname");
-                            Console.WriteLine(WorldMgr.GetPlayerStringByPlayerNickName(Console.ReadLine()));
+                            Console.WriteLine(WorldMgr.GetPlayerStringByPlayerNickName(ConsoleHost.ReadLine()));
                             continue;
                         case "cfg&reload":
                             ConfigurationManager.RefreshSection("appSettings");
@@ -400,19 +389,19 @@ namespace Game.Service.actions
                             {
                                 GamePlayer player = null;
                                 Console.WriteLine("Please enter the type, 0 = UserID, 1 = UserName, 2 = NickName:");
-                                switch (int.Parse(Console.ReadLine()))
+                                switch (int.Parse(ConsoleHost.ReadLine()))
                                 {
                                     case 0:
                                         Console.WriteLine("Please enter the UserID:");
-                                        player = WorldMgr.GetPlayerById(int.Parse(Console.ReadLine()));
+                                        player = WorldMgr.GetPlayerById(int.Parse(ConsoleHost.ReadLine()));
                                         break;
                                     case 1:
                                         Console.WriteLine("Please enter the UserName:");
-                                        player = WorldMgr.GetClientByPlayerUserName(Console.ReadLine());
+                                        player = WorldMgr.GetClientByPlayerUserName(ConsoleHost.ReadLine());
                                         break;
                                     case 2:
                                         Console.WriteLine("Please enter the NickName:");
-                                        player = WorldMgr.GetClientByPlayerNickName(Console.ReadLine());
+                                        player = WorldMgr.GetClientByPlayerNickName(ConsoleHost.ReadLine());
                                         break;
                                     default:
                                         Console.WriteLine("Type invalid, in the next time, please enter 0, 1 or 2");
@@ -424,7 +413,7 @@ namespace Game.Service.actions
                                     continue;
                                 }
                                 Console.WriteLine("Please enter the TemplateID");
-                                ItemTemplateInfo itemTemplateInfo = ItemMgr.FindItemTemplate(int.Parse(Console.ReadLine()));
+                                ItemTemplateInfo itemTemplateInfo = ItemMgr.FindItemTemplate(int.Parse(ConsoleHost.ReadLine()));
                                 ItemInfo item = ItemInfo.CreateFromTemplate(itemTemplateInfo, itemTemplateInfo.MaxCount, 104);
                                 if (itemTemplateInfo == null)
                                 {
@@ -442,19 +431,19 @@ namespace Game.Service.actions
                             {
                                 //GamePlayer player2 = null;
                                 //Console.WriteLine("Please enter the type, 0 = UserID, 1 = UserName, 2 = NickName:");
-                                //switch (int.Parse(Console.ReadLine()))
+                                //switch (int.Parse(ConsoleHost.ReadLine()))
                                 //{
                                 //    case 0:
                                 //        Console.WriteLine("Please enter the UserID:");
-                                //        player2 = WorldMgr.GetPlayerById(int.Parse(Console.ReadLine()));
+                                //        player2 = WorldMgr.GetPlayerById(int.Parse(ConsoleHost.ReadLine()));
                                 //        break;
                                 //    case 1:
                                 //        Console.WriteLine("Please enter the UserName:");
-                                //        player2 = WorldMgr.GetClientByPlayerUserName(Console.ReadLine());
+                                //        player2 = WorldMgr.GetClientByPlayerUserName(ConsoleHost.ReadLine());
                                 //        break;
                                 //    case 2:
                                 //        Console.WriteLine("Please enter the NickName:");
-                                //        player2 = WorldMgr.GetClientByPlayerNickName(Console.ReadLine());
+                                //        player2 = WorldMgr.GetClientByPlayerNickName(ConsoleHost.ReadLine());
                                 //        break;
                                 //    default:
                                 //        Console.WriteLine("Type invalid, in the next time, please enter 0, 1 or 2");
@@ -477,19 +466,19 @@ namespace Game.Service.actions
                             {
                                 GamePlayer player3 = null;
                                 Console.WriteLine("Please enter the type, 0 = UserID, 1 = UserName, 2 = NickName:");
-                                switch (int.Parse(Console.ReadLine()))
+                                switch (int.Parse(ConsoleHost.ReadLine()))
                                 {
                                     case 0:
                                         Console.WriteLine("Please enter the UserID:");
-                                        player3 = WorldMgr.GetPlayerById(int.Parse(Console.ReadLine()));
+                                        player3 = WorldMgr.GetPlayerById(int.Parse(ConsoleHost.ReadLine()));
                                         break;
                                     case 1:
                                         Console.WriteLine("Please enter the UserName:");
-                                        player3 = WorldMgr.GetClientByPlayerUserName(Console.ReadLine());
+                                        player3 = WorldMgr.GetClientByPlayerUserName(ConsoleHost.ReadLine());
                                         break;
                                     case 2:
                                         Console.WriteLine("Please enter the NickName:");
-                                        player3 = WorldMgr.GetClientByPlayerNickName(Console.ReadLine());
+                                        player3 = WorldMgr.GetClientByPlayerNickName(ConsoleHost.ReadLine());
                                         break;
                                     default:
                                         Console.WriteLine("Type invalid, in the next time, please enter 0, 1 or 2");
@@ -714,17 +703,6 @@ namespace Game.Service.actions
             }
         }
 
-        [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall)]
-        private static extern int SetConsoleCtrlHandler(ConsoleCtrlDelegate HandlerRoutine, bool add);
 
-        private static int ConsoleCtrHandler(ConsoleEvent e)
-        {
-            SetConsoleCtrlHandler(handler, add: false);
-            if (GameServer.Instance != null)
-            {
-                GameServer.Instance.Stop();
-            }
-            return 0;
-        }
     }
 }

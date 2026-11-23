@@ -1,4 +1,4 @@
-using Bussiness.Protocol;
+﻿using Bussiness.Protocol;
 using Center.Server;
 using Game.Base;
 using Game.Service;
@@ -24,7 +24,7 @@ namespace Center.Service.actions
 
         private static bool StartServer()
         {
-			Console.Title = "Center Service | DDTank 3.0";
+			ConsoleHost.SetTitle("Center Service | DDTank 3.0");
 			return CenterServer.Instance.Start();
         }
 
@@ -34,12 +34,13 @@ namespace Center.Service.actions
 			StartServer();
 			ConsoleClient client = new ConsoleClient();
 			bool run = true;
+			ConsoleHost.RegisterShutdown(() => CenterServer.Instance?.Stop());
 			while (run)
 			{
 				try
 				{
 					Console.Write("> ");
-					string line = Console.ReadLine();
+					string line = ConsoleHost.ReadLine();
 					string[] para = line.Split('&');
 					switch (para[0].ToLower())
 					{

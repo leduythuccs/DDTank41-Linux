@@ -1,23 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Fighting.Service</AssemblyName>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net48</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>Preview</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon>alpha.ico</ApplicationIcon>
+    <TargetFramework>net8.0</TargetFramework>
     <StartupObject>Fighting.Service.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>bin\Debug\</OutputPath>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <ApplicationIcon>alpha.ico</ApplicationIcon>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <NoWarn>$(NoWarn);CS0618;CS0612;CS0168;CS0219;CS0414;CS0649;CS0169;CS0162;CS0108;CS0114;SYSLIB0011;SYSLIB0014;SYSLIB0021;SYSLIB0023;CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
+    <PackageReference Include="log4net" Version="3.6.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bussiness\Bussiness.csproj" />
@@ -26,16 +24,10 @@
     <ProjectReference Include="..\Game.Logic\Game.Logic.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="logconfig.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Update="logconfig.xml" CopyToOutputDirectory="PreserveNewest" />
+    <!-- runtime data, kept in the legacy (tracked) net48 output folder -->
+    <None Include="bin\Debug\net48\Languages\**" Link="Languages\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="bin\Debug\net48\map\**" Link="map\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="bin\Debug\net48\bomb\**" Link="bomb\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

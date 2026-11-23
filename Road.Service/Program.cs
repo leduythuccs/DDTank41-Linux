@@ -1,4 +1,4 @@
-using Game.Service.actions;
+﻿using Game.Service.actions;
 using System;
 using System.Collections;
 using System.IO;
@@ -13,7 +13,6 @@ namespace Game.Service
         [MTAThread]
 		private static void Main(string[] args)
         {
-			AppDomain.CurrentDomain.SetupInformation.PrivateBinPath = "." + Path.DirectorySeparatorChar + "lib";
 			Thread.CurrentThread.Name = "MAIN";
 			RegisterActions();
 			if (args.Length == 0)
@@ -47,12 +46,7 @@ namespace Game.Service
 
         private static void RegisterActions()
         {
-			RegisterAction(new ServiceRun());
 			RegisterAction(new ConsoleStart());
-			RegisterAction(new ServiceInstall());
-			RegisterAction(new ServiceUninstall());
-			RegisterAction(new ServiceStart());
-			RegisterAction(new ServiceStop());
         }
 
         private static void RegisterAction(IAction action)

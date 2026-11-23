@@ -1,9 +1,10 @@
-using Bussiness.Managers;
+﻿using Bussiness.Managers;
 using Fighting.Server;
 using Fighting.Server.Games;
 using Fighting.Server.Rooms;
 using Game.Logic;
 using log4net;
+using Game.Base;
 using System;
 using System.Collections;
 using System.Configuration;
@@ -25,7 +26,7 @@ namespace Fighting.Service.action
 
         public void OnAction(Hashtable parameters)
         {
-			Console.Title = "Fighting Service | DDTank 3.0";
+			ConsoleHost.SetTitle("Fighting Service | DDTank 3.0");
 			FightServerConfig config = new FightServerConfig();
 			try
 			{
@@ -34,18 +35,19 @@ namespace Fighting.Service.action
 			catch (Exception ex2)
 			{
 				Console.WriteLine(ex2.Message);
-				Console.ReadKey();
+				if (!Console.IsInputRedirected) Console.ReadKey();
 				return;
 			}
 			FightServer.CreateInstance(config);
 			FightServer.Instance.Start();
 			bool run = true;
+			ConsoleHost.RegisterShutdown(() => FightServer.Instance?.Stop());
 			while (run)
 			{
 				try
 				{
 					Console.Write("> ");
-					string[] para = Console.ReadLine().Split(' ');
+					string[] para = ConsoleHost.ReadLine().Split(' ');
 					switch (para[0].ToLower())
 					{
 					case "clear":
