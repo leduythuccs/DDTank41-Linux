@@ -31,6 +31,9 @@ namespace Tank.Web
         /// <summary>Optional site that /resource/ files missing locally are fetched from (empty = disabled).</summary>
         public string ResourceUpstream { get; private set; }
 
+        /// <summary>Folder where files fetched from ResourceUpstream are saved and served from next time (empty = no caching).</summary>
+        public string ResourceCacheRoot { get; private set; }
+
         /// <summary>Inject the Ruffle Flash emulator into the game page.</summary>
         public bool Ruffle { get; private set; }
 
@@ -57,6 +60,9 @@ namespace Tank.Web
                 FlashRoot = ResolvePath(Get("Web.FlashRoot", "../../../../Source Flash/FlashSV1")),
                 ResourceRoot = ResolvePath(Get("Web.ResourceRoot", "../../../../resource")),
                 ResourceUpstream = Get("Web.ResourceUpstream", ""),
+                ResourceCacheRoot = ConfigurationManager.AppSettings["Web.ResourceCacheRoot"] is string cache
+                    ? (cache.Trim().Length == 0 ? "" : ResolvePath(cache.Trim()))
+                    : ResolvePath("../../../../resource-cache"),
                 Ruffle = !string.Equals(Get("Web.Ruffle", "true"), "false", StringComparison.OrdinalIgnoreCase),
                 RuffleUrl = Get("Web.RuffleUrl", "https://unpkg.com/@ruffle-rs/ruffle@0.7.1/ruffle.js"),
                 SocketHost = Get("Web.SocketHost", "127.0.0.1"),

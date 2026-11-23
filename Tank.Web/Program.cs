@@ -86,14 +86,19 @@ namespace Tank.Web
             contentTypes.Mappings[".xml"] = "text/xml";
             contentTypes.Mappings[".map"] = "application/octet-stream";
             ServeStatic(app, "/flash", settings.FlashRoot, contentTypes);
-            ServeStatic(app, "/resource", settings.ResourceRoot, contentTypes);
+            ServeStatic(app, "/resource", settings.ResourceRoot, contentTypes, serveUnknownFileTypes: true);
+            if (!string.IsNullOrEmpty(settings.ResourceUpstream) && !string.IsNullOrEmpty(settings.ResourceCacheRoot))
+            {
+                Directory.CreateDirectory(settings.ResourceCacheRoot);
+                ServeStatic(app, "/resource", settings.ResourceCacheRoot, contentTypes, serveUnknownFileTypes: true);
+            }
             ServeStatic(app, "/Request", settings.RequestRoot, contentTypes);
             ServeStatic(app, "", settings.SiteRoot, contentTypes);
 
             // Optionally fetch /resource/ files that are not available locally from an upstream site.
             if (!string.IsNullOrEmpty(settings.ResourceUpstream))
             {
-                ResourceProxy resourceProxy = new ResourceProxy(settings.ResourceUpstream);
+                ResourceProxy resourceProxy = new ResourceProxy(settings.ResourceUpstream, settings.ResourceCacheRoot);
                 app.Use(async (context, next) =>
                 {
                     if (context.GetEndpoint() != null || !await resourceProxy.TryHandle(context))
@@ -182,7 +187,7 @@ namespace Tank.Web
             }
         }
 
-        private static void ServeStatic(WebApplication app, string requestPath, string root, FileExtensionContentTypeProvider contentTypes)
+        private static void ServeStatic(WebApplication app, string requestPath, string root, FileExtensionContentTypeProvider contentTypes, bool serveUnknownFileTypes = false)
         {
             if (!Directory.Exists(root))
             {
@@ -193,7 +198,8 @@ namespace Tank.Web
                 RequestPath = requestPath,
                 FileProvider = new CaseInsensitiveFileProvider(root),
                 ContentTypeProvider = contentTypes,
-                ServeUnknownFileTypes = false
+                ServeUnknownFileTypes = serveUnknownFileTypes,
+                DefaultContentType = "application/octet-stream"
             });
         }
 

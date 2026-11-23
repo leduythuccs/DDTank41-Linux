@@ -6,3 +6,6 @@
 deploy/.env
 **/appSettings.local.config
 deploy/logs/
+# game art: local resource pack and files cached from Web.ResourceUpstream (third-party assets, do not commit)
+resource/
+resource-cache/
