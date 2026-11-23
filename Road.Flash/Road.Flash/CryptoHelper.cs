@@ -60,12 +60,28 @@ namespace Road.Flash
         public static byte[] RsaDecryt2(RSACryptoServiceProvider rsa, string src)
         {
             byte[] srcData = Convert.FromBase64String(src);
-            return rsa.Decrypt(srcData, false);
+            return rsa.Decrypt(PadToKeySize(rsa, srcData), false);
         }
         public static byte[] RsaDecryt3(RSACryptoServiceProvider rsa, string src)
         {
             byte[] srcData = Convert.FromBase64String(src);
-            return rsa.Decrypt(srcData, false);
+            return rsa.Decrypt(PadToKeySize(rsa, srcData), false);
+        }
+
+        /// <summary>
+        /// The Flash client's RSA library (as3crypto) writes the encrypted number without leading zero
+        /// bytes, so about 1 in 256 messages is one byte short and Decrypt rejects it: pad it back.
+        /// </summary>
+        public static byte[] PadToKeySize(RSACryptoServiceProvider rsa, byte[] data)
+        {
+            int keyBytes = rsa.KeySize / 8;
+            if (data.Length >= keyBytes)
+            {
+                return data;
+            }
+            byte[] padded = new byte[keyBytes];
+            Buffer.BlockCopy(data, 0, padded, keyBytes - data.Length, data.Length);
+            return padded;
         }
         public static string TripleDesDecrypt(string privateKey, string iv, string cypherText)
         {

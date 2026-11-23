@@ -25,6 +25,15 @@ namespace Game.Server.Packets.Client
                         byte[] src = packet.ReadBytes();
                         try
                         {
+                            // The client's RSA library (as3crypto) writes the encrypted number without leading
+                            // zero bytes, so about 1 login in 256 sends 127 bytes instead of 128: pad it back.
+                            int keyBytes = WorldMgr.RsaCryptor.KeySize / 8;
+                            if (src.Length < keyBytes)
+                            {
+                                byte[] padded = new byte[keyBytes];
+                                System.Buffer.BlockCopy(src, 0, padded, keyBytes - src.Length, src.Length);
+                                src = padded;
+                            }
                             src = WorldMgr.RsaCryptor.Decrypt(src, fOAEP: false);
                         }
                         catch (Exception ex)
