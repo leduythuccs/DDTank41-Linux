@@ -210,7 +210,7 @@ namespace GameAdmin.Web
             string popup = (item.CanCompose || item.CanStrengthen) && isPopup == 1
                 ? item.TemplateID + ",ItemsInfo." + Encode(Keys) + ",popupInfo"
                 : item.TemplateID + ",ItemsInfo,popup";
-            return "<img class=\"personPopupTrigger\" alt=\"" + popup + "\" src=\"" + ItemHtml.IconUrl(item) + "\" />";
+            return ItemHtml.Icon(ItemHtml.IconUrl(item), "class=\"personPopupTrigger\" alt=\"" + popup + "\"");
         }
 
         /// <summary>The user name, else the nickname, else the character ID.</summary>
@@ -246,12 +246,12 @@ namespace GameAdmin.Web
                     {
                         html += "onmouseout=\"$(this).css({ background: '#C4C4C4'});\"";
                         html += "onmouseover=\"$(this).css({ background: '#D2FFA6'});\">";
-                        html += "<img  style=\"cursor: pointer;\" class=\"personPopupTrigger\" onclick=\"call_addItems(" + clickArgs(item)
-                            + ");\" alt=\"" + id + ",ItemsInfo,popup\" src=\"" + ItemHtml.IconUrl(item) + "\" />";
+                        html += ItemHtml.IconBox(ItemHtml.Icon(ItemHtml.IconUrl(item), "class=\"personPopupTrigger\" onclick=\"call_addItems("
+                            + clickArgs(item) + ");\" alt=\"" + id + ",ItemsInfo,popup\"", "cursor: pointer; "));
                     }
                     else
                     {
-                        html += "><img alt=\"\" src=\"" + ItemHtml.IconUrl(item) + "\" />";
+                        html += ">" + ItemHtml.IconBox(ItemHtml.Icon(ItemHtml.IconUrl(item), "alt=\"\""));
                     }
                     html += "</td>";
                 }

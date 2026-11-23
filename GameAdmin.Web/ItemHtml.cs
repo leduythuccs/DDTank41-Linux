@@ -59,6 +59,25 @@ namespace GameAdmin.Web
             return ConfigurationManager.AppSettings["Resource"] + string.Format(path, item.Pic, item.NeedSex == 1 ? "m" : "f");
         }
 
+        /// <summary>
+        /// An item icon that cannot stretch its cell: scaled down to fit <paramref name="size"/> px, and replaced by
+        /// the "no icon" picture when it does not load (a broken image shows its alt text, which widened the tables).
+        /// </summary>
+        /// <param name="attributes">extra attributes (class, alt, onclick...), written as they are</param>
+        /// <param name="style">extra CSS for the image</param>
+        public static string Icon(string src, string attributes = "", string style = "", int size = 90)
+        {
+            return "<img " + attributes + " src=\"" + src + "\" style=\"" + style + "max-width: " + size + "px; max-height: " + size
+                + "px; vertical-align: middle;\" onerror=\"this.onerror = null; this.src = '" + NoIcon + "';\" />";
+        }
+
+        /// <summary>A fixed-size box for an item icon, so the grid keeps its layout whatever the image size.</summary>
+        public static string IconBox(string icon, int size = 95)
+        {
+            return "<div style=\"width: " + size + "px; height: " + size + "px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin: auto;\">"
+                + icon + "</div>";
+        }
+
         /// <summary>Bonus of a strengthened item: base * 1.1^level - base.</summary>
         public static double StrengthenBonus(int value, int level)
         {
@@ -70,8 +89,7 @@ namespace GameAdmin.Web
             string html = "<td class=\"style7\"><table class=\"style1\"><tr><td class=\"style6\" colspan=\"2\">"
                 + (name == "" ? "Default" : name)
                 + "</td></tr><tr><td class=\"style2\" rowspan=\"3\">"
-                + "<img class=\"personPopupTrigger\" alt=\"" + templateID + ",ItemsInfo,popup\" "
-                + (categoryID == 26 ? " style=\"height: 90px;\" " : "") + "src=\"" + icon + "\" />";
+                + IconBox(Icon(icon, "class=\"personPopupTrigger\" alt=\"" + templateID + ",ItemsInfo,popup\""));
             bool disabled = categoryID == 21 || categoryID == 31 || categoryID == 10 || categoryID == 27 || pic == "default";
             string[] actions = { "Thêm vào...", "Xoá Item", "Chỉnh sửa" };
             for (int i = 0; i < actions.Length; i++)

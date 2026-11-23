@@ -116,6 +116,23 @@
 
             $('body').append(container);
 
+            // Below-right of the icon, but kept inside the window (above / left of the icon when there is no room):
+            // a popup hanging past the bottom of the page made the page taller while it was shown.
+            var popupAnchor = { left: 0, top: 0 };
+            function placePopup() {
+                var win = $(window);
+                var w = container.outerWidth(), h = container.outerHeight();
+                var minLeft = win.scrollLeft(), minTop = win.scrollTop();
+                var left = popupAnchor.left + 37, top = popupAnchor.top + 47;
+                if (left + w > minLeft + win.width()) {
+                    left = Math.max(minLeft, popupAnchor.left - w - 5);
+                }
+                if (top + h > minTop + win.height()) {
+                    top = Math.max(minTop, popupAnchor.top - h - 5);
+                }
+                container.css({ left: left + 'px', top: top + 'px' });
+            }
+
             $('.personPopupTrigger').live('mouseover', function () {
                 // format of 'rel' tag: pageid,personguid
                 var settings = $(this).attr('alt').split(',');
@@ -129,12 +146,7 @@
                 if (hideTimer)
                     clearTimeout(hideTimer);
 
-                var pos = $(this).offset();
-                //var width = $(this).width();
-                container.css({
-                    left: (pos.left + 37) + 'px',
-                    top: (pos.top + 47) + 'px'
-                });
+                popupAnchor = $(this).offset();
 
                 $('#personPopupContent').html('<img src="../Images/uber-loading.gif"/>');
 
@@ -145,11 +157,14 @@
                     success: function (data) {
                         
                         $('#personPopupContent').html(data);
-                       
+                        placePopup();
+                        // images in the tooltip (strengthen level) change its size once loaded
+                        $('#personPopupContent img').load(placePopup);
                     }
                 });
 
                 container.css('display', 'block');
+                placePopup();
             });
            
             $('.personPopupTrigger').live('mouseout', function () {
@@ -389,7 +404,8 @@
         <!--- Search panel --->
         
         <div id="searchPanel"  class="searchPanel">
-     <input name="inputTemplateID"  type="text" onclick="this.value='';" value="Nhập ID Item ở đây" id="inputTemplateID" />&nbsp;
+     <input name="inputTemplateID"  type="text" onclick="this.value='';" value="Nhập ID Item ở đây" id="inputTemplateID" />
+&nbsp;
     
     <a href="javascript:void(0);" onclick="validate();"> Search</a>
     </div>
