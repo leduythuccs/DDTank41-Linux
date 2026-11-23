@@ -790,7 +790,7 @@
 		<component classname="ddt.view.SimpleItem" stylename="core.goodTip.HarmItem"
 			foreStyle="core.GoodsTipTxt" backStyle="asset.core.tip.GoodsTipItemHert"/>
 		<component classname="ddt.view.SimpleItem" stylename="core.goodTip.armAngleItem"
-			foreStyle="core.GoodsTipTxt" backStyle="asset.core.tip.GoodsTipItemArmAngle"/>
+			foreStyle="core.GoodsTipTxt,ddt.view.tips.GhostStarContainer" backStyle="asset.core.tip.GoodsTipItemArmAngle"/>
 		<component classname="ddt.view.SimpleItem" stylename="core.goodTip.otherHp"
 			foreStyle="core.GoodsTipTxt" backStyle="asset.core.tip.hp"/>
 		<component classname="ddt.view.SimpleItem" stylename="core.goodTip.ArmorItem"
@@ -799,7 +799,7 @@
 			foreStyle="core.GoodsTipTypeTxt" backStyle="asset.core.tip.GoodsType"/>
 			
 		<component classname="ddt.view.SimpleItem" stylename="core.goodTip.MainPropertyItem"
-			foreStyle="core.GoodsTipTxt" backStyle="core.goodTip.MainPropertyItemBackStyle"/>
+			foreStyle="core.GoodsTipTxt,ddt.view.tips.GhostStarContainer" backStyle="core.goodTip.MainPropertyItemBackStyle"/>
 		<component classname="com.pickgliss.ui.image.ScaleFrameImage" 	stylename="core.goodTip.MainPropertyItemBackStyle"
 			resourceLink="asset.core.tip.GoodsTipItemHert,asset.core.tip.GoodsTipItemDefence,asset.core.tip.GoodsTipItemRecover,asset.core.tip.GoodsTipItemRecover1"/>
 			
