@@ -1,0 +1,2 @@
+# The Flash client splits language.txt on "\r\n": keep its CRLF line endings byte for byte.
+Source?Flash/FlashSV1/ui/*/language.txt -text
