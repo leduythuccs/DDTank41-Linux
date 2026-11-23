@@ -645,6 +645,7 @@ namespace Game.Server.Battle
             gSPacketIn.WriteBoolean(room.StartWithNpc);
             gSPacketIn.WriteBoolean(val: false);
             gSPacketIn.WriteBoolean(room.isCrosszone);
+            gSPacketIn.WriteInt(room.BotCount);
             List<GamePlayer> players = room.GetPlayers();
             gSPacketIn.WriteInt(players.Count);
             foreach (GamePlayer item in players)

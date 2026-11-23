@@ -56,6 +56,12 @@ namespace Game.Server.Rooms
 
         public bool isCrosszone;
 
+        /// <summary>
+        /// Number of bots the host asked to fight in a match (the room's "Đấu với: N bot" button, sent with GAME_START).
+        /// 0 = as many bots as players in the room.
+        /// </summary>
+        public int BotCount;
+
         public bool isWithinLeageTime;
 
         public bool isOpenBoss;

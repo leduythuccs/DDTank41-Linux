@@ -321,6 +321,7 @@ namespace Game.Server.RingStation.Battle
             gSPacketIn.WriteBoolean(val: false);
             gSPacketIn.WriteBoolean(room.IsAutoBot);
             gSPacketIn.WriteBoolean(val: false);
+            gSPacketIn.WriteInt(0); // bot count (only player rooms ask for bots)
             List<VirtualGamePlayer> players = room.GetPlayers();
             gSPacketIn.WriteInt(players.Count);
             foreach (VirtualGamePlayer item in players)

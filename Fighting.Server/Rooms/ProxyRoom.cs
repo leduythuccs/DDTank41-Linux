@@ -98,6 +98,12 @@ namespace Fighting.Server.Rooms
 
         public int PlayerCount = 0;
 
+        /// <summary>Bots the host asked to fight (0 = as many as the room's players).</summary>
+        public int BotCount;
+
+        /// <summary>The size of the AutoBot room this room fights.</summary>
+        public int WantedBotCount => BotCount > 0 ? BotCount : PlayerCount;
+
         public BaseGame Game=> m_game;
 
         public ProxyRoom(int roomId, int orientRoomId, int zoneID, IGamePlayer[] players, ServerClient client, int npcId, bool pickUpWithNPC, bool isBot, bool isSmartBot)

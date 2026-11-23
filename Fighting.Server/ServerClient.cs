@@ -206,6 +206,7 @@ namespace Fighting.Server
 			bool pickUpWithNPC = pkg.ReadBoolean();
 			bool isBot = pkg.ReadBoolean();
 			bool flag = pkg.ReadBoolean();
+			int botCount = pkg.ReadInt();
 			int length = pkg.ReadInt();
 			int num21 = 0;
 			int num22 = 0;
@@ -366,6 +367,7 @@ namespace Fighting.Server
 			room.selfId = num22;
 			room.AvgLevel = num21;
 			room.startWithNpc = pickUpWithNPC;
+			room.BotCount = botCount;
 			room.RoomType = (eRoomType)num18;
 			room.GameType = (eGameType)num19;
 			room.IsCrossZone = flag;

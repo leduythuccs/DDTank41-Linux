@@ -4,6 +4,7 @@ using Game.Logic;
 using Game.Server.Packets;
 using Game.Server.Rooms;
 using SqlDataProvider.Data;
+using System;
 using System.Collections.Generic;
 
 namespace Game.Server.GameRoom.Handle
@@ -16,6 +17,11 @@ namespace Game.Server.GameRoom.Handle
             BaseRoom currentRoom = Player.CurrentRoom;
             if (currentRoom != null && currentRoom.Host == Player)
             {
+                // patched clients append the bot count chosen in a match room; older clients send nothing
+                if (packet.DataLeft >= 4)
+                {
+                    currentRoom.BotCount = Math.Clamp(packet.ReadInt(), 0, 4);
+                }
                 if (currentRoom.AvgLevel == 0)
                 {
                     currentRoom.UpdateAvgLevel();

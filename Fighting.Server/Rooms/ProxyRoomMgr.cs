@@ -226,7 +226,7 @@ namespace Fighting.Server.Rooms
                         bool flag = false;
                         foreach (ProxyRoom proxyRoom_1_2 in waitMatchRoomUnsafe)
                         {
-                            if (proxyRoom_1_2 != red && proxyRoom_1_2.PlayerCount == red.PlayerCount && !proxyRoom_1_2.IsPlaying && proxyRoom_1_2.isAutoBot && red.NpcId == proxyRoom_1_2.NpcId)
+                            if (proxyRoom_1_2 != red && proxyRoom_1_2.PlayerCount == red.WantedBotCount && !proxyRoom_1_2.IsPlaying && proxyRoom_1_2.isAutoBot && red.NpcId == proxyRoom_1_2.NpcId)
                             {
                                 flag = true;
                                 Console.WriteLine("Start fight with AutoBot No.{0}. RoomType: {1}, GameType: {2}", red.NpcId, red.RoomType, red.GameType);
@@ -372,7 +372,7 @@ namespace Fighting.Server.Rooms
         private static void RequestAutoBotUnsafe(ProxyRoom red)
         {
             red.startWithNpc = true;
-            red.Client.SendBeginFightNpc(red.selfId, (int)red.RoomType, (int)red.GameType, red.NpcId, red.PlayerCount);
+            red.Client.SendBeginFightNpc(red.selfId, (int)red.RoomType, (int)red.GameType, red.NpcId, red.WantedBotCount);
             Console.WriteLine("Call AutoBot No.{0}", red.NpcId);
         }
 
@@ -402,7 +402,7 @@ namespace Fighting.Server.Rooms
         {
             foreach (ProxyRoom red in GetWaitMatchRoomUnsafe())
             {
-                if (red != bot && !red.isAutoBot && red.startWithNpc && !red.IsPlaying && red.NpcId == bot.NpcId && red.PlayerCount == bot.PlayerCount)
+                if (red != bot && !red.isAutoBot && red.startWithNpc && !red.IsPlaying && red.NpcId == bot.NpcId && red.WantedBotCount == bot.PlayerCount)
                 {
                     Console.WriteLine("Start fight with AutoBot No.{0}. RoomType: {1}, GameType: {2}", red.NpcId, red.RoomType, red.GameType);
                     StartMatchGame(red, bot);
