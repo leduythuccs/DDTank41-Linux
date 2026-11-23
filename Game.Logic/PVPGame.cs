@@ -8,6 +8,7 @@ using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Drawing;
 using System.Reflection;
 using System.Text;
@@ -587,6 +588,28 @@ namespace Game.Logic
             return offer;
         }
 
+        /// <summary>
+        /// In a game against bots (IsAutoBot players), a human player always has the first turn: the one with the
+        /// lowest delay. Returns null in games without bots, which keep the normal delay/random order.
+        /// </summary>
+        private TurnedLiving FindFirstHumanAgainstBot()
+        {
+            List<TurnedLiving> livings = FindAllTurnLiving();
+            if (!livings.Any(l => l is Player p && p.PlayerDetail.PlayerCharacter.IsAutoBot))
+            {
+                return null;
+            }
+            TurnedLiving first = livings
+                .Where(l => l is Player p && !p.PlayerDetail.PlayerCharacter.IsAutoBot && !p.PlayerDetail.IsViewer)
+                .OrderBy(l => l.Delay)
+                .FirstOrDefault();
+            if (first != null)
+            {
+                first.TurnNum++;
+            }
+            return first;
+        }
+
         public void NextTurn()
         {
             if (base.GameState != eGameState.Playing)
@@ -603,7 +626,7 @@ namespace Game.Logic
                 item.PrepareNewTurn();
             }
             LastTurnLiving = m_currentLiving;
-            m_currentLiving = FindNextTurnedLiving();
+            m_currentLiving = (base.m_turnIndex == 1 ? FindFirstHumanAgainstBot() : null) ?? FindNextTurnedLiving();
             if (m_currentLiving.VaneOpen)
             {
                 UpdateWind(GetNextWind(), sendToClient: false);
