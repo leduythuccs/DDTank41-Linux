@@ -17,6 +17,21 @@ namespace Tank.Web.LegacyPages
     /// </summary>
     public class PlayGamePage : IHttpHandler, IRequiresSessionState
     {
+        /// <summary>
+        /// Volume slider for the whole game. The client changes music volume / mutes music through
+        /// NetStream.soundTransform, which Ruffle does not implement, so its own music setting has no
+        /// effect; Ruffle's player volume does work (it applies to music and sound effects alike).
+        /// </summary>
+        private const string RuffleVolumeControl =
+            "<label style=\"margin-right:14px;white-space:nowrap\">Sound <input id=\"ddtVolume\" type=\"range\" min=\"0\" max=\"100\" style=\"vertical-align:middle\"> <span id=\"ddtVolumeText\"></span></label>"
+            + "<script>(function () {"
+            + "var input = document.getElementById('ddtVolume'), text = document.getElementById('ddtVolumeText'), value = 100;"
+            + "try { var saved = localStorage.getItem('ddtVolume'); if (saved !== null) value = +saved; } catch (e) {}"
+            + "function apply() { text.textContent = value + '%'; document.querySelectorAll('ruffle-object, ruffle-embed, ruffle-player').forEach(function (p) { try { p.volume = value / 100; } catch (e) {} }); }"
+            + "input.value = value; input.addEventListener('input', function () { value = +input.value; try { localStorage.setItem('ddtVolume', value); } catch (e) {} apply(); });"
+            + "apply(); setInterval(apply, 2000);"
+            + "})();</script>";
+
         public bool IsReusable => false;
 
         private static string Setting(string key) => ConfigurationManager.AppSettings[key];
@@ -62,12 +77,15 @@ namespace Tank.Web.LegacyPages
 
             string extra =
                 "<div style=\"position:fixed;left:0;right:0;bottom:0;padding:6px 10px;background:#000c;color:#ddd;font:12px sans-serif;word-break:break-all\">"
+                + (WebSettings.Current.Ruffle ? RuffleVolumeControl : "")
                 + "Standalone Flash Player: <code style=\"user-select:all\">" + WebUtility.HtmlEncode(swfUrl) + "</code>"
                 + (WebSettings.Current.Ruffle ? " &middot; running in Ruffle (Flash emulator)" : "")
                 + "</div>";
             if (WebSettings.Current.Ruffle)
             {
-                extra = "<script>window.RufflePlayer = window.RufflePlayer || {}; window.RufflePlayer.config = { allowScriptAccess: true, autoplay: \"on\", unmuteOverlay: \"hidden\", logLevel: \"info\", socketProxy: " + SocketProxy.RuffleConfig(WebSettings.Current) + " };</script>"
+                // deviceFontRenderer "canvas": text in device fonts (most of the UI) is drawn with the browser's
+                // fonts; Ruffle's built-in fallback font has no Vietnamese stacked diacritics (ắ, ầ, ậ...).
+                extra = "<script>window.RufflePlayer = window.RufflePlayer || {}; window.RufflePlayer.config = { allowScriptAccess: true, autoplay: \"on\", unmuteOverlay: \"hidden\", logLevel: \"info\", deviceFontRenderer: \"canvas\", socketProxy: " + SocketProxy.RuffleConfig(WebSettings.Current) + " };</script>"
                     + "<script src=\"" + WebUtility.HtmlEncode(WebSettings.Current.RuffleUrl) + "\"></script>" + extra;
             }
             html = html.Replace("</body>", extra + "</body>");
