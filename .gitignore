@@ -5,3 +5,4 @@
 .vs/
 deploy/.env
 **/appSettings.local.config
+deploy/logs/

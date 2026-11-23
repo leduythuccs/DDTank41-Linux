@@ -2,12 +2,13 @@
 # Writes <Service>/appSettings.local.config (git-ignored) with connection strings for the
 # local docker SQL Server. App.config merges it via <appSettings file="appSettings.local.config">,
 # so these values override the committed ones. Re-run after changing deploy/.env, then rebuild.
+# Optional in deploy/.env: DDTANK_RUFFLE_URL (Ruffle build for the game page), DDTANK_PUBLIC_IP.
 set -euo pipefail
 cd "$(dirname "$0")"
 set -a; . ./.env; set +a
 HOST="${DDTANK_DB_HOST:-127.0.0.1,1433}"
 cs() { echo "Data Source=$HOST;Initial Catalog=$1;User ID=ddtank;Password=$DDTANK_DB_PASSWORD;TrustServerCertificate=True;Encrypt=True"; }
-for svc in Road.Service Center.Service Fighting.Service; do
+for svc in Road.Service Center.Service Fighting.Service Tank.Web; do
   umask 077
   cat > "../$svc/appSettings.local.config" <<XML
 <?xml version="1.0" encoding="utf-8"?>
@@ -16,7 +17,14 @@ for svc in Road.Service Center.Service Fighting.Service; do
 	<add key="conString" value="$(cs Project_Player34)" />
 	<add key="crosszoneString" value="$(cs Project_Game34)" />
 	<add key="membershipDb" value="$(cs Db_Membership)" />
+$( [ -n "${DDTANK_RUFFLE_URL:-}" ] && echo "	<add key=\"Web.RuffleUrl\" value=\"$DDTANK_RUFFLE_URL\" />" )
 </appSettings>
 XML
   echo "wrote $svc/appSettings.local.config"
 done
+
+# Point the game server list at this machine (the backup still lists the old public server IP).
+# Override with DDTANK_PUBLIC_IP in deploy/.env when clients connect from other machines.
+PUBLIC_IP="${DDTANK_PUBLIC_IP:-127.0.0.1}"
+docker exec -e SQLCMDPASSWORD="$MSSQL_SA_PASSWORD" ddtank-mssql /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -b -h -1 \
+  -d Project_Player34 -Q "SET NOCOUNT ON; UPDATE Server_List SET IP='$PUBLIC_IP'; SELECT CAST(ID AS varchar)+' '+Name+' -> '+IP+':'+CAST(Port AS varchar) FROM Server_List"
