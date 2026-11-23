@@ -1,0 +1,5 @@
+# build intermediates
+**/obj/
+# .NET 8 port build output (legacy net4x bin/ folders stay tracked: they contain game data)
+**/bin/*/net8.0/
+.vs/
