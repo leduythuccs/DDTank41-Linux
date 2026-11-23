@@ -19,7 +19,7 @@ layers): the CDN answers 404 for those. Each URL is requested through the runnin
 resource-cache/ are skipped, and 404s are remembered in resource-cache/.prefetch-missing.txt so
 a second run only tries new names (--retry-missing to try them again).
 
-Usage: deploy/prefetch-resources.py [--base http://127.0.0.1:8080] [--jobs 8] [--dry-run] [--sample N]
+Usage: deploy/prefetch-resources.py [--base http://127.0.0.1:8080] [--jobs 8] [--delay S] [--dry-run] [--sample N]
 Needs: Tank.Web running with Web.ResourceUpstream set, the database container (deploy/.env).
 """
 import argparse
@@ -207,6 +207,7 @@ def main():
     ap.add_argument("--base", default="http://127.0.0.1:8080", help="Tank.Web address")
     ap.add_argument("--jobs", type=int, default=8, help="parallel requests (be gentle with the CDN)")
     ap.add_argument("--dry-run", action="store_true", help="only count what would be fetched")
+    ap.add_argument("--delay", type=float, default=0.0, help="seconds each worker waits between requests")
     ap.add_argument("--sample", type=int, default=0, help="only try N names spread over the list (to estimate size)")
     ap.add_argument("--retry-missing", action="store_true", help="also retry names that were 404 before")
     args = ap.parse_args()
@@ -226,28 +227,38 @@ def main():
         return
 
     lock = threading.Lock()
-    stats = {"ok": 0, "missing": 0, "error": 0, "bytes": 0}
+    stats = {"ok": 0, "missing": 0, "error": 0, "retries": 0, "bytes": 0}
     new_missing = []
     started = time.time()
 
     def fetch(path):
         url = args.base.rstrip("/") + "/resource/" + urllib.request.quote(path)
-        try:
-            with urllib.request.urlopen(url, timeout=120) as r:
-                size = len(r.read())
-            with lock:
-                stats["ok"] += 1
-                stats["bytes"] += size
-        except urllib.error.HTTPError as e:
-            with lock:
+        for attempt in range(5):
+            if args.delay:
+                time.sleep(args.delay)
+            try:
+                with urllib.request.urlopen(url, timeout=120) as r:
+                    size = len(r.read())
+                with lock:
+                    stats["ok"] += 1
+                    stats["bytes"] += size
+                return
+            except urllib.error.HTTPError as e:
                 if e.code == 404:
-                    stats["missing"] += 1
-                    new_missing.append(path)
-                else:
-                    stats["error"] += 1
-        except (urllib.error.URLError, OSError):
+                    with lock:
+                        stats["missing"] += 1
+                        new_missing.append(path)
+                    return
+                retry = e.code == 429 or e.code >= 500  # rate limited / upstream trouble: back off
+            except (urllib.error.URLError, OSError):
+                retry = True
+            if not retry:
+                break
             with lock:
-                stats["error"] += 1
+                stats["retries"] += 1
+            time.sleep(min(60, 5 * 2 ** attempt))
+        with lock:
+            stats["error"] += 1
 
     done = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.jobs) as pool:
@@ -256,7 +267,7 @@ def main():
             if done % 500 == 0 or done == len(todo):
                 rate = done / max(time.time() - started, 0.001)
                 print(f"  {done}/{len(todo)}  downloaded {stats['ok']} ({stats['bytes'] / 1e6:.1f} MB), "
-                      f"not on CDN {stats['missing']}, errors {stats['error']}  [{rate:.0f}/s]", flush=True)
+                      f"not on CDN {stats['missing']}, retries {stats['retries']}, errors {stats['error']}  [{rate:.1f}/s]", flush=True)
                 if new_missing:
                     with lock:
                         batch, new_missing[:] = list(new_missing), []
