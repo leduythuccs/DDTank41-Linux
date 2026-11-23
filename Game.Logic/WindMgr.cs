@@ -1,11 +1,10 @@
-using Bussiness;
+﻿using Bussiness;
 using log4net;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+using SkiaSharp;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -90,44 +89,30 @@ namespace Game.Logic
 			{
 				width = 10;
 			}
-			Bitmap image = new Bitmap(width, 32);
-			Graphics graphics = Graphics.FromImage(image);
-			graphics.SmoothingMode = SmoothingMode.HighQuality;
-			try
+			using (SKBitmap image = new SKBitmap(width, 32, SKColorType.Rgba8888, SKAlphaType.Premul))
+			using (SKCanvas graphics = new SKCanvas(image))
 			{
-				graphics.Clear(Color.Transparent);
+				graphics.Clear(SKColors.Transparent);
 				rand.Next(7);
-				Brush brush = new SolidBrush(Color.Red);
-				StringFormat format = new StringFormat(StringFormatFlags.NoClip)
-				{
-					Alignment = StringAlignment.Center,
-					LineAlignment = StringAlignment.Center
-				};
 				int index = rand.Next(WindMgr.font.Length);
-				Font font = new Font(WindMgr.font[index], 17f, FontStyle.Italic);
+				SKTypeface typeface = SkiaText.GetTypeface(WindMgr.font[index], SKFontStyle.Italic);
+				float size = 17f;
 				Point point = new Point(8, 12);
 				if (isSmall(wind))
 				{
 					if (wind == fontWind[0])
 					{
-						font = new Font(WindMgr.font[index], 10f, FontStyle.Regular);
+						typeface = SkiaText.GetTypeface(WindMgr.font[index], SKFontStyle.Normal);
+						size = 10f;
 					}
 					point = new Point(4, 16);
 				}
 				float angle = ThreadSafeRandom.NextStatic(-maxValue, maxValue);
-				graphics.TranslateTransform(point.X, point.Y);
-				graphics.RotateTransform(angle);
-				graphics.DrawString(wind.ToString(), font, brush, 1f, 1f, format);
-				graphics.RotateTransform(0f - angle);
-				graphics.TranslateTransform(2f, 0f - (float)point.Y);
-				MemoryStream stream = new MemoryStream();
-				image.Save(stream, ImageFormat.Png);
-				return stream.ToArray();
-			}
-			finally
-			{
-				graphics.Dispose();
-				image.Dispose();
+				graphics.Translate(point.X, point.Y);
+				graphics.RotateDegrees(angle);
+				SkiaText.DrawCentered(graphics, wind.ToString(), typeface, size, SKColors.Red, 1f, 1f);
+				graphics.Flush();
+				return SkiaText.EncodePng(image);
 			}
         }
 

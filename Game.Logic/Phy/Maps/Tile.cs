@@ -63,29 +63,6 @@ namespace Game.Logic.Phy.Maps
         }
 
 
-        public Tile(Bitmap bitmap, bool digable)
-        {
-            _width = bitmap.Width;
-            _height = bitmap.Height;
-            _bw = _width / 8 + 1;
-            _bh = _height;
-            _data = new byte[_bw * _bh];
-            _digable = digable;
-
-            for (int j = 0; j < bitmap.Height; j++)
-            {
-                for (int i = 0; i < bitmap.Width; i++)
-                {
-                    byte flag = (byte)(bitmap.GetPixel(i, j).A <= 100 ? 0 : 1);
-
-                    _data[j * _bw + i / 8] |= (byte)(flag << (7 - i % 8));
-                }
-            }
-
-            _rect = new Rectangle(0, 0, _width, _height);
-            GC.AddMemoryPressure(_data.Length);
-        }
-
         public Tile(string file, bool digable)
         {
             FileStream fs = File.Open(file, FileMode.Open);
@@ -343,27 +320,6 @@ namespace Game.Logic.Phy.Maps
             {
                 return new Point(-1, -1);
             }
-        }
-
-        public Bitmap ToBitmap()
-        {
-            Bitmap bitmap = new Bitmap(_width, _height);
-
-            for (int j = 0; j < _height; j++)
-            {
-                for (int i = 0; i < _width; i++)
-                {
-                    if (IsEmpty(i, j))
-                    {
-                        bitmap.SetPixel(i, j, Color.FromArgb(0, 0, 0, 0));
-                    }
-                    else
-                    {
-                        bitmap.SetPixel(i, j, Color.FromArgb(255, 0, 0, 0));
-                    }
-                }
-            }
-            return bitmap;
         }
 
         public Tile Clone()

@@ -1,6 +1,5 @@
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+﻿using System.Drawing;
+using SkiaSharp;
 using System.IO;
 
 namespace Bussiness
@@ -210,48 +209,42 @@ namespace Bussiness
         public static byte[] CreateImage(string randomcode)
         {
 			int maxValue = 30;
-			Bitmap image = new Bitmap(randomcode.Length * 30, 32);
-			Graphics graphics = Graphics.FromImage(image);
-			graphics.SmoothingMode = SmoothingMode.HighQuality;
-			try
+			int width = randomcode.Length * 30;
+			int height = 32;
+			using (SKBitmap image = new SKBitmap(width, height, SKColorType.Rgba8888, SKAlphaType.Premul))
+			using (SKCanvas graphics = new SKCanvas(image))
 			{
-				graphics.Clear(Color.Transparent);
+				graphics.Clear(SKColors.Transparent);
 				int index = rand.Next(2);
-				Brush brush = new SolidBrush(c[index]);
+				SKColor color = SkiaText.ToSk(c[index]);
 				for (int i = 0; i < 1; i++)
 				{
-					int num11 = rand.Next(image.Width / 2);
-					int num12 = rand.Next(image.Width * 3 / 4, image.Width);
-					int num13 = rand.Next(image.Height);
-					int num14 = rand.Next(image.Height);
-					graphics.DrawBezier(new Pen(c[index], 2f), num11, num13, (num11 + num12) / 4, 0f, (num11 + num12) * 3 / 4, image.Height, num12, num14);
+					int num11 = rand.Next(width / 2);
+					int num12 = rand.Next(width * 3 / 4, width);
+					int num13 = rand.Next(height);
+					int num14 = rand.Next(height);
+					using (SKPath path = new SKPath())
+					using (SKPaint pen = new SKPaint { Color = color, StrokeWidth = 2f, IsStroke = true, IsAntialias = true })
+					{
+						path.MoveTo(num11, num13);
+						path.CubicTo((num11 + num12) / 4, 0f, (num11 + num12) * 3 / 4, height, num12, num14);
+						graphics.DrawPath(path, pen);
+					}
 				}
 				char[] chArray = randomcode.ToCharArray();
-				StringFormat format = new StringFormat(StringFormatFlags.NoClip)
-				{
-					Alignment = StringAlignment.Center,
-					LineAlignment = StringAlignment.Center
-				};
 				for (int j = 0; j < chArray.Length; j++)
 				{
 					int num10 = rand.Next(5);
-					Font font = new Font(CheckCode.font[num10], 22f, FontStyle.Bold);
-					Point point = new Point(16, 16);
+					SKTypeface typeface = SkiaText.GetTypeface(CheckCode.font[num10], SKFontStyle.Bold);
 					float angle = ThreadSafeRandom.NextStatic(-maxValue, maxValue);
-					graphics.TranslateTransform(point.X, point.Y);
-					graphics.RotateTransform(angle);
-					graphics.DrawString(chArray[j].ToString(), font, brush, 1f, 1f, format);
-					graphics.RotateTransform(0f - angle);
-					graphics.TranslateTransform(2f, 0f - (float)point.Y);
+					graphics.Translate(16f, 16f);
+					graphics.RotateDegrees(angle);
+					SkiaText.DrawCentered(graphics, chArray[j].ToString(), typeface, 22f, color, 1f, 1f);
+					graphics.RotateDegrees(0f - angle);
+					graphics.Translate(2f, -16f);
 				}
-				MemoryStream stream = new MemoryStream();
-				image.Save(stream, ImageFormat.Png);
-				return stream.ToArray();
-			}
-			finally
-			{
-				graphics.Dispose();
-				image.Dispose();
+				graphics.Flush();
+				return SkiaText.EncodePng(image);
 			}
         }
 
