@@ -1,4 +1,4 @@
-using System.CodeDom.Compiler;
+﻿using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.ServiceModel;
@@ -14,20 +14,8 @@ namespace Game.Server.WebLogin
         {
         }
 
-        public PassPortSoapClient(string endpointConfigurationName)
-			: base(endpointConfigurationName)
-        {
-        }
 
-        public PassPortSoapClient(string endpointConfigurationName, string remoteAddress)
-			: base(endpointConfigurationName, remoteAddress)
-        {
-        }
 
-        public PassPortSoapClient(string endpointConfigurationName, EndpointAddress remoteAddress)
-			: base(endpointConfigurationName, remoteAddress)
-        {
-        }
 
         public PassPortSoapClient(Binding binding, EndpointAddress remoteAddress)
 			: base(binding, remoteAddress)

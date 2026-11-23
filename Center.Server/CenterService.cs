@@ -1,17 +1,23 @@
-using Center.Server.Statics;
+﻿using Center.Server.Statics;
 using Game.Base.Packets;
 using log4net;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.ServiceModel;
+using System.Net;
+using CoreWCF;
+using CoreWCF.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Center.Server
 {
     public class CenterService : ICenterService
     {
-        private static ServiceHost host;
+        private static WebApplication host;
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -210,13 +216,40 @@ namespace Center.Server
 			return ServerMgr.ReLoadServerList();
         }
 
+        /// <summary>
+        /// Hosts the WCF service with CoreWCF (System.ServiceModel's ServiceHost does not exist on .NET 8).
+        /// Endpoints match the old App.config: net.tcp://host:2009/ (used by Road/Tank.Request/GameAdmin)
+        /// and basicHttp http://host:2008/CenterService/.
+        /// appSettings: CenterServiceHost (default 127.0.0.1), CenterServiceTcpPort (2009), CenterServiceHttpPort (2008).
+        /// </summary>
         public static bool Start()
         {
 			try
 			{
-				host = new ServiceHost(typeof(CenterService));
-				host.Open();
-				log.Info("Center Service started!");
+				string hostName = System.Configuration.ConfigurationManager.AppSettings["CenterServiceHost"];
+				IPAddress ip = string.IsNullOrEmpty(hostName) ? IPAddress.Loopback : IPAddress.Parse(hostName);
+				int tcpPort = ParsePort("CenterServiceTcpPort", 2009);
+				int httpPort = ParsePort("CenterServiceHttpPort", 2008);
+
+				WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions
+				{
+					ContentRootPath = AppContext.BaseDirectory
+				});
+				builder.Logging.ClearProviders();
+				builder.WebHost.ConfigureKestrel(options => options.Listen(ip, httpPort));
+				builder.WebHost.UseNetTcp(ip, tcpPort);
+				builder.Services.AddServiceModelServices();
+
+				WebApplication app = builder.Build();
+				app.UseServiceModel(serviceBuilder =>
+				{
+					serviceBuilder.AddService<CenterService>();
+					serviceBuilder.AddServiceEndpoint<CenterService, ICenterService>(new NetTcpBinding(SecurityMode.None), "/");
+					serviceBuilder.AddServiceEndpoint<CenterService, ICenterService>(new BasicHttpBinding(), "/CenterService/");
+				});
+				app.StartAsync().GetAwaiter().GetResult();
+				host = app;
+				log.InfoFormat("Center Service started! net.tcp://{0}:{1}/ http://{0}:{2}/CenterService/", ip, tcpPort, httpPort);
 				return true;
 			}
 			catch (Exception exception)
@@ -226,13 +259,20 @@ namespace Center.Server
 			}
         }
 
+        private static int ParsePort(string key, int defaultPort)
+        {
+			string value = System.Configuration.ConfigurationManager.AppSettings[key];
+			return int.TryParse(value, out int port) ? port : defaultPort;
+        }
+
         public static void Stop()
         {
 			try
 			{
 				if (host != null)
 				{
-					host.Close();
+					host.StopAsync().GetAwaiter().GetResult();
+					((IDisposable)host).Dispose();
 					host = null;
 				}
 			}

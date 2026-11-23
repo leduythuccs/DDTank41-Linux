@@ -1,4 +1,4 @@
-using System.CodeDom.Compiler;
+﻿using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.ServiceModel;
@@ -10,24 +10,26 @@ namespace Bussiness.WebLogin
 	[GeneratedCode("System.ServiceModel", "4.0.0.0")]
 	public class PassPortSoapClient : ClientBase<PassPortSoap>, PassPortSoap
     {
+        // .NET Core WCF clients cannot read <system.serviceModel> from App.config, so the
+        // default endpoint is built in code. Override the address with appSettings["PassPortAddress"].
         public PassPortSoapClient()
+			: base(CreateDefaultBinding(), CreateDefaultAddress())
         {
         }
 
-        public PassPortSoapClient(string endpointConfigurationName)
-			: base(endpointConfigurationName)
+        private static Binding CreateDefaultBinding()
         {
+			return new BasicHttpBinding(BasicHttpSecurityMode.None);
         }
 
-        public PassPortSoapClient(string endpointConfigurationName, string remoteAddress)
-			: base(endpointConfigurationName, remoteAddress)
+        private static EndpointAddress CreateDefaultAddress()
         {
+			string address = System.Configuration.ConfigurationManager.AppSettings["PassPortAddress"];
+			return new EndpointAddress(string.IsNullOrEmpty(address) ? "http://127.0.0.1/admingunny/Flash_Port/PassPort.asmx" : address);
         }
 
-        public PassPortSoapClient(string endpointConfigurationName, EndpointAddress remoteAddress)
-			: base(endpointConfigurationName, remoteAddress)
-        {
-        }
+
+
 
         public PassPortSoapClient(Binding binding, EndpointAddress remoteAddress)
 			: base(binding, remoteAddress)

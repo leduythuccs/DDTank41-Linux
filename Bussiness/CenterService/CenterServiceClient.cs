@@ -1,4 +1,4 @@
-using System.CodeDom.Compiler;
+﻿using System.CodeDom.Compiler;
 using System.Diagnostics;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -9,24 +9,26 @@ namespace Bussiness.CenterService
 	[GeneratedCode("System.ServiceModel", "4.0.0.0")]
 	public class CenterServiceClient : ClientBase<ICenterService>, ICenterService
     {
+        // .NET Core WCF clients cannot read <system.serviceModel> from App.config, so the
+        // default endpoint is built in code. Override the address with appSettings["CenterServiceAddress"].
         public CenterServiceClient()
+			: base(CreateDefaultBinding(), CreateDefaultAddress())
         {
         }
 
-        public CenterServiceClient(string endpointConfigurationName)
-			: base(endpointConfigurationName)
+        private static Binding CreateDefaultBinding()
         {
+			return new NetTcpBinding(SecurityMode.None);
         }
 
-        public CenterServiceClient(string endpointConfigurationName, string remoteAddress)
-			: base(endpointConfigurationName, remoteAddress)
+        private static EndpointAddress CreateDefaultAddress()
         {
+			string address = System.Configuration.ConfigurationManager.AppSettings["CenterServiceAddress"];
+			return new EndpointAddress(string.IsNullOrEmpty(address) ? "net.tcp://127.0.0.1:2009/" : address);
         }
 
-        public CenterServiceClient(string endpointConfigurationName, EndpointAddress remoteAddress)
-			: base(endpointConfigurationName, remoteAddress)
-        {
-        }
+
+
 
         public CenterServiceClient(Binding binding, EndpointAddress remoteAddress)
 			: base(binding, remoteAddress)
