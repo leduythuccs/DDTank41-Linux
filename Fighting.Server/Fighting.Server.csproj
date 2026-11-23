@@ -1,29 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Fighting.Server</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>Preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS0618;CS0612;CS0168;CS0219;CS0414;CS0649;CS0169;CS0162;CS0108;CS0114;SYSLIB0011;SYSLIB0014;SYSLIB0021;SYSLIB0023;CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
+    <PackageReference Include="log4net" Version="3.6.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bussiness\Bussiness.csproj" />
     <ProjectReference Include="..\Game.Base\Game.Base.csproj" />
     <ProjectReference Include="..\Game.Logic\Game.Logic.csproj" />
     <ProjectReference Include="..\SqlDataProvider\SqlDataProvider.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Core">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

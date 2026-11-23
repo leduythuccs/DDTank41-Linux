@@ -46,6 +46,18 @@ namespace Game.Server.Managers
 			{
 				return true;
 			}
+			// CodeDom compilation (CSharpCodeProvider/VBCodeProvider) throws PlatformNotSupportedException
+			// on .NET Core / .NET 5+. Game AI scripts are compiled directly into Game.Server.dll instead
+			// (Game.Server/GameServerScript), so loose script files are ignored here.
+			if (!System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework"))
+			{
+				if (log.IsWarnEnabled)
+				{
+					log.WarnFormat("Runtime script compilation is not supported on {0}; ignoring {1} script file(s) in {2}",
+						System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription, files.Count, path);
+				}
+				return true;
+			}
 			if (File.Exists(dllName))
 			{
 				File.Delete(dllName);

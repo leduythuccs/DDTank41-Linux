@@ -1,21 +1,22 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Game.Server</AssemblyName>
+    <TargetFramework>net8.0</TargetFramework>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>Preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS0618;CS0612;CS0168;CS0219;CS0414;CS0649;CS0169;CS0162;CS0108;CS0114;SYSLIB0011;SYSLIB0014;SYSLIB0021;SYSLIB0023;CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.14" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="log4net" Version="3.6.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="protobuf-net" Version="3.0.101" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="System.ServiceModel.Http" Version="8.1.2" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="8.1.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bussiness\Bussiness.csproj" />
@@ -24,29 +25,6 @@
     <ProjectReference Include="..\SqlDataProvider\SqlDataProvider.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.ServiceModel">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.ServiceModel\v4.0_4.0.0.0__b77a5c561934e089\System.ServiceModel.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.Runtime.Serialization\v4.0_4.0.0.0__b77a5c561934e089\System.Runtime.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_32\System.Data\v4.0_4.0.0.0__b77a5c561934e089\System.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net" />
-    <Reference Include="System.Xml.Linq">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.Xml.Linq\v4.0_4.0.0.0__b77a5c561934e089\System.Xml.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Configuration">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core">
-      <HintPath>C:\WINDOWS\Microsoft.NET\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="battle.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Update="battle.xml"><CopyToOutputDirectory>Always</CopyToOutputDirectory></None>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-using Bussiness.CenterService;
+﻿using Bussiness.CenterService;
 using log4net;
 using SqlDataProvider.Data;
 using System;
@@ -8,7 +8,6 @@ using System.Net;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web.Security;
 
 namespace Bussiness.Interface
 {
@@ -101,7 +100,7 @@ namespace Bussiness.Interface
         [Obsolete]
         public static string md5(string str)
         {
-			return FormsAuthentication.HashPasswordForStoringInConfigFile(str, "md5").ToLower();
+			return Convert.ToHexString(System.Security.Cryptography.MD5.HashData(Encoding.UTF8.GetBytes(str))).ToLower();
         }
 
         public static string RequestContent(string Url)
