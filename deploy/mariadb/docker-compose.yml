@@ -1,0 +1,30 @@
+# MariaDB for the DDTank Linux port (replaces the SQL Server container in deploy/docker-compose.yml).
+#   cd deploy/mariadb && docker compose --env-file ../.env up -d
+# The root password is read from deploy/.env (MARIADB_ROOT_PASSWORD=...), which is not committed.
+# The project name is set explicitly: deploy/docker-compose.yml is a different project.
+name: ddtank-mariadb
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: ddtank-mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:?set MARIADB_ROOT_PASSWORD in deploy/.env}"
+    command:
+      # SQL Server compares table names case-insensitively; so must the converted procedures.
+      - --lower-case-table-names=1
+      # Case-insensitive, accent-sensitive, like SQL_Latin1_General_CP1_CI_AS ("Hà" and "Ha" differ).
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_uca1400_as_ci
+      - --max-allowed-packet=64M
+    ports:
+      - "127.0.0.1:${DDTANK_MARIADB_PORT:-3306}:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+volumes:
+  mariadb-data:
