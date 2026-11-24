@@ -20,6 +20,9 @@
 #                  the count is sent with GAME_START.
 #   bagAndInfo.bag.SellGoodsBtn, bagAndInfo.cell.BagCell
 #                  valuable equipment (+7 and up, etc.) can be sold; the sell frame still asks to confirm.
+#   ddt.manager.SoundManager
+#                  closes the music stream before playing the next track: Ruffle kept the room music
+#                  playing when a battle switched to the map's own music.
 #
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
@@ -38,6 +41,7 @@ CLASSES=(
   room.view.roomView.MatchRoomView
   bagAndInfo.bag.SellGoodsBtn
   bagAndInfo.cell.BagCell
+  ddt.manager.SoundManager
 )
 
 work="$(mktemp -d)"

@@ -392,6 +392,7 @@ package ddt.manager
          {
             this._currentMusic = param1[0];
             this._isMusicPlaying = true;
+            this._ns.close();
             this._ns.play(SITE_MAIN + "sound/" + this._currentMusic + ".flv");
             this._ns.soundTransform = new SoundTransform(this._musicVolume / 100);
             if(!this._allowMusic)
