@@ -60,11 +60,26 @@ package ddt.manager
          this._allowSound = true;
          this._nc = new NetConnection();
          this._nc.connect(null);
+         this.newMusicStream();
+         this._musicPlayList = [];
+      }
+      
+      // Each track gets its own NetStream: Ruffle kept playing the previous track when the same
+      // stream was closed and played again, so the music never changed (lobby, room, every map).
+      private function newMusicStream() : void
+      {
+         if(this._ns)
+         {
+            this._ns.removeEventListener(NetStatusEvent.NET_STATUS,this.__netStatus);
+            this._ns.removeEventListener(NetStatusEvent.NET_STATUS,this.__onMusicStaus);
+            this._ns.soundTransform = new SoundTransform(0);
+            this._ns.pause();
+            this._ns.close();
+         }
          this._ns = new NetStream(this._nc);
          this._ns.bufferTime = 0.3;
          this._ns.client = this;
          this._ns.addEventListener(NetStatusEvent.NET_STATUS,this.__netStatus);
-         this._musicPlayList = [];
       }
       
       public static function get instance() : SoundManager
@@ -392,7 +407,7 @@ package ddt.manager
          {
             this._currentMusic = param1[0];
             this._isMusicPlaying = true;
-            this._ns.close();
+            this.newMusicStream();
             this._ns.play(SITE_MAIN + "sound/" + this._currentMusic + ".flv");
             this._ns.soundTransform = new SoundTransform(this._musicVolume / 100);
             if(!this._allowMusic)
@@ -459,7 +474,7 @@ package ddt.manager
          if(this._currentMusic)
          {
             this._isMusicPlaying = false;
-            this._ns.close();
+            this.newMusicStream();
             this._currentMusic = null;
          }
       }

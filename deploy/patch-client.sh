@@ -21,8 +21,8 @@
 #   bagAndInfo.bag.SellGoodsBtn, bagAndInfo.cell.BagCell
 #                  valuable equipment (+7 and up, etc.) can be sold; the sell frame still asks to confirm.
 #   ddt.manager.SoundManager
-#                  closes the music stream before playing the next track: Ruffle kept the room music
-#                  playing when a battle switched to the map's own music.
+#                  a new NetStream for each music track: Ruffle kept playing the previous track when the
+#                  same stream was closed and played again (same music in the lobby, rooms and every map).
 #   game.view.GameView, game.view.experience.ExpView
 #                  the reward screen after a battle skips the map snapshot and the motion-blur tweens: both
 #                  use BitmapData.draw, a slow GPU readback in Ruffle that made the game stutter there.
