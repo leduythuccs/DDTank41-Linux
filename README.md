@@ -17,89 +17,125 @@ Disclamer: I have no idea how this code works, all I did was ask claude do port 
 Claude to fix any bug I found while playing
 
 - All servers (Center, Fighting, Road and the web site/API) run as .NET 8 processes.
-- The databases run in MariaDB 11.4 in Docker, created from the SQL scripts in `Database/mariadb/`
+- The databases run in MariaDB 11.4, created from the SQL scripts in `Database/mariadb/`
   (converted from the original SQL Server backups, see [Database](#database)).
 - The game client is the original SWF, patched where Ruffle behaves differently from Flash Player
   (see [Client patches](#client-patches)).
-- A small admin site sends mail, items and money to characters.
+- A small admin site sends mail, items and money to characters, and switches game options on and off.
 
-## Requirements
+## Quick start (Docker)
 
-- Linux. Tested on **x86_64** only.
-- [Docker](https://docs.docker.com/engine/install/) with the compose plugin (`docker compose`). Your user
-  must be able to run `docker` without sudo (the `docker` group).
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0). `run-local.sh` uses `dotnet` from the
-  PATH, otherwise `~/.dotnet/dotnet`.
-- Python 3.
-
-## Quick start
+You need [Docker](https://docs.docker.com/engine/install/) with the compose plugin (`docker compose`).
+Nothing else: the image builds the servers itself. It runs on x86_64 and arm64 (tested on x86_64).
 
 ```bash
-git clone <this repo> && cd DDTank41
+git clone <this repo> && cd DDTank41/deploy/docker
 
-# 1. Settings (see the table below). This file holds passwords: it is git-ignored, never commit it.
-cat > deploy/.env <<'EOF'
-MARIADB_ROOT_PASSWORD=Change-me-Root-1
-DDTANK_DB_PASSWORD=Change-me-Db-1
-DDTANK_RUFFLE_URL=https://unpkg.com/@ruffle-rs/ruffle@0.8.0/ruffle.js
-DDTANK_RESOURCE_UPSTREAM=http://gunny.vcdn.vn/
-EOF
+# 1. Settings: writes .env with random passwords. Give the address players will open.
+./init-env.sh http://<server ip or domain>:16200
 
-# 2. Database: start MariaDB, create the databases and the app login, write the service configs.
-cd deploy
-(cd mariadb && docker compose --env-file ../.env up -d)
-./restore-databases.sh
-./configure-local.sh
-cd ..
-
-# 3. Build.
-dotnet build DDTank.Server.Linux.sln
-
-# 4. Run everything (Ctrl+C stops all services cleanly).
-deploy/run-local.sh
+# 2. Build and start. The first start builds the image and creates the databases (a few minutes).
+docker compose up -d --build
+docker compose logs -f game        # wait for "All services are running"
 ```
 
-Open <http://127.0.0.1:8080/index.htm>, click **Đăng ký nhanh** to create an account, then log in.
+Open `http://<server ip>:16200/index.htm`, click **Đăng ký nhanh** to create an account, then log in.
 The first time you load the game is slow, because the art is downloaded and cached (see [Game art](#game-art)).
 
-### deploy/.env
+Only port **16200** has to be reachable from the internet (open it in the firewall). The game socket goes
+through the web site, so no other port is needed.
 
-| Variable | Required | Meaning |
+Everyday commands, from `deploy/docker`:
+
+| What | Command |
+|---|---|
+| Stop / start | `docker compose stop` / `docker compose start` (players are saved on stop) |
+| Update after `git pull` | `docker compose up -d --build` |
+| Logs | `docker compose logs -f game`, or the files in `deploy/docker/data/logs/` |
+| Delete everything, including all accounts | `docker compose down -v` |
+
+### Settings (deploy/docker/.env)
+
+`init-env.sh` writes this file; edit it and run `docker compose up -d` to apply. It holds passwords: it is
+git-ignored, never commit it.
+
+| Variable | Meaning |
+|---|---|
+| `DDTANK_PUBLIC_URL` | The address players open, e.g. `http://203.0.113.5:16200`. The client loads everything from it. |
+| `DDTANK_ADMIN_PASSWORD` | Admin site password. |
+| `MARIADB_ROOT_PASSWORD`, `DDTANK_DB_PASSWORD` | MariaDB `root` and the `ddtank` user the servers use. Read only when the databases are created: changing them later does not change the database. |
+| `DDTANK_RESOURCE_UPSTREAM` | Where art and sound files are downloaded from when they are not cached. Without it the game has no images. |
+| `DDTANK_RUFFLE_URL` | Optional. The Ruffle build the game page loads; default 0.8.0 (0.7.1 stalls at 85% while loading). |
+| `DDTANK_ADMIN_BIND`, `DDTANK_DB_BIND` | Optional. `0.0.0.0` makes the admin site / MariaDB reachable from the internet. Default `127.0.0.1`: use an SSH tunnel. |
+| `DDTANK_TZ` | Optional. Time zone of the game (daily resets, events), default `Asia/Ho_Chi_Minh`. |
+
+### Ports
+
+All in the 162xx range:
+
+| Port | Service | Reachable from |
 |---|---|---|
-| `MARIADB_ROOT_PASSWORD` | yes | MariaDB `root` password, used only by the setup scripts. |
-| `DDTANK_DB_PASSWORD` | yes | Password of the `ddtank` user the servers use. It has rights on the 3 game databases only. |
-| `DDTANK_RUFFLE_URL` | yes, in practice | The Ruffle build the game page loads. **Use 0.8.0.** The built-in default, 0.7.1, stalls at 85% while loading. |
-| `DDTANK_RESOURCE_UPSTREAM` | yes, in practice | Where art and sound files are downloaded from when they are not local. Without it the game has no images. |
-| `DDTANK_ADMIN_PASSWORD` | no | Admin site password. Generated and saved to `.env` by `configure-local.sh` when missing. |
-| `DDTANK_DB_HOST` | no | MariaDB address, default `127.0.0.1`. |
-| `DDTANK_MARIADB_PORT` | no | MariaDB port, default `3306`. Change it if another MySQL/MariaDB already uses 3306. |
-| `DDTANK_PORT_OFFSET` | no | Added to every game port (8080 becomes 8080 + offset, and so on), to run a second copy next to another one. Default 0. |
+| 16200 | Tank.Web: login page, game page, the client's HTTP API, art files, and a WebSocket proxy to the game server (Ruffle cannot open raw TCP sockets). | the internet |
+| 16201 | GameAdmin.Web: the admin site. | the server (127.0.0.1) |
+| 16207 | MariaDB: `Project_Player34`, `Project_Game34`, `Db_Membership`. | the server (127.0.0.1) |
+| 16202 | Road, the game server. Reached through Tank.Web at `/socket/16202`. | inside the container |
+| 16203, 16205, 16206 | Center: login and server coordination. | inside the container |
+| 16204 | Fighting: matchmaking and battles. | inside the container |
 
-After changing `.env`, run `deploy/configure-local.sh` again and restart `run-local.sh`.
+To use the admin site or MariaDB from your computer, open an SSH tunnel:
+`ssh -L 16201:127.0.0.1:16201 -L 16207:127.0.0.1:16207 <server>`, then go to <http://127.0.0.1:16201/>.
 
-## Services and ports
+### Behind nginx (domain and HTTPS)
 
-Everything listens on `127.0.0.1` only.
+To serve the game on a domain, let nginx forward it to port 16200:
 
-| Service | Port | What it does |
-|---|---|---|
-| Tank.Web | 8080 | Login page, game page, the client's HTTP API, art files, and a WebSocket proxy to the game server (Ruffle cannot open raw TCP sockets). |
-| GameAdmin.Web | 8081 | Admin site: mail with items, money. |
-| Road (game server) | 9500 | Game socket, reached through Tank.Web at `/socket/9500`. |
-| Center | 9202, 2008, 2009 | Login and server coordination. |
-| Fighting | 9208 | Matchmaking and battles. |
-| MariaDB (Docker) | 3306 | `Project_Player34`, `Project_Game34`, `Db_Membership`. |
+1. In `.env`, set `DDTANK_PUBLIC_URL` to the address players open, without the port, e.g.
+   `DDTANK_PUBLIC_URL=https://game.example.com`. Then `docker compose up -d`.
+2. Forward everything to 16200. The game socket is a WebSocket under `/socket/`: it needs the upgrade headers
+   and a long timeout, or nginx cuts quiet players off after 60 seconds.
 
-Logs are written to `deploy/logs/*.log`. If a service hangs at "starting...", another process
-probably still holds its port. Check with `ss -tlnp`.
+```nginx
+server {
+    server_name game.example.com;
+    # listen 443 ssl; + certificates (e.g. certbot --nginx)
+
+    location / {
+        proxy_pass http://127.0.0.1:16200;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /socket/ {
+        proxy_pass http://127.0.0.1:16200;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 1h;
+        proxy_send_timeout 1h;
+    }
+}
+```
+
+With `https://` in `DDTANK_PUBLIC_URL`, the client uses `wss://` for the game socket by itself.
+
+### Moving an existing database
+
+On the first start, MariaDB loads `deploy/docker/seed/*.sql` if there are any, instead of the original data.
+To move the accounts and characters of a local server (the MariaDB of
+[Development without Docker](#development-without-docker)) to a new one, run `deploy/docker/export-db.sh`
+on the old machine. It writes `deploy/docker/seed/ddtank.sql`: copy `deploy/docker/seed/` to the same place on
+the new server before its first `docker compose up`.
+
+The containers run as user 1654, which owns `deploy/docker/data/` on the host: use `sudo` to delete files there.
 
 ## Database
 
 The game was written for SQL Server: about 550 stored procedures in T-SQL. This branch runs on MariaDB:
 
 - `Database/mariadb/<Db>.schema.sql`, `.data.sql` and `.routines.sql` create the tables, the starting data
-  and the procedures. `deploy/restore-databases.sh` loads them; `--force` drops and recreates databases
-  that already exist (**this deletes all accounts and characters**).
+  and the procedures. Docker loads them on the first start; `deploy/restore-databases.sh` does the same for
+  [Development without Docker](#development-without-docker).
 - These scripts were generated from the SQL Server backups in `Database/*.bak` by `tools/DbMigrate`, which
   translates the T-SQL procedures to MariaDB. A few procedures are written by hand in
   `Database/mariadb/manual/`.
@@ -108,11 +144,11 @@ The game was written for SQL Server: about 550 stored procedures in T-SQL. This 
 - `tools/DbTest` runs the game's database layer against MariaDB without the game client, to check the
   procedures quickly (see its README).
 
-The data lives in the Docker volume `ddtank-mariadb_mariadb-data`. To back it up:
+To back up the data of the Docker setup, from `deploy/docker`:
 
 ```bash
-docker exec -e MYSQL_PWD="<root password>" ddtank-mariadb mariadb-dump -uroot --routines \
-  --databases Project_Player34 Project_Game34 Db_Membership > ddtank-backup.sql
+docker compose exec mariadb sh -c 'MYSQL_PWD="$MARIADB_ROOT_PASSWORD" mariadb-dump -uroot -P16207 --routines \
+  --databases Project_Player34 Project_Game34 Db_Membership' > ddtank-backup.sql
 ```
 
 `deploy/docker-compose.yml` (SQL Server) and `deploy/patch-procedures.py` are only needed to regenerate
@@ -121,28 +157,56 @@ the scripts from the backups.
 ## Game art
 
 The art and sound files (about 1 GB) are **not in this repository**. They are third-party assets. Tank.Web
-serves `/resource/` from:
+downloads each file from `DDTANK_RESOURCE_UPSTREAM` the first time it is needed and keeps it in
+`deploy/docker/data/resource-cache/` (`resource-cache/` without Docker). A local resource pack in `resource/`
+is used first, if you have one.
 
-1. `resource/`: a local resource pack, if you have one (git-ignored);
-2. `resource-cache/`: files already downloaded (git-ignored);
-3. otherwise it downloads the file from `DDTANK_RESOURCE_UPSTREAM` and saves it to `resource-cache/`.
-
-To download everything ahead of time, run this while the servers are running. It works out the file names from the database, and it
-skips files that are already cached or known to be missing, so you can stop it and run it again:
+To download everything ahead of time, run this while the servers run without Docker (with Docker, copy a
+filled `resource-cache/` into `deploy/docker/data/resource-cache/` instead). It works out the file names from
+the database and skips files that are already cached or known to be missing, so you can stop it and run it
+again:
 
 ```bash
 python3 deploy/prefetch-resources.py --jobs 2 --delay 0.2
 ```
 
-If the upstream site goes away, only the files already in `resource-cache/` or `resource/` will work.
+If the upstream site goes away, only the files already cached will work.
 
 ## Admin site
 
-<http://127.0.0.1:8081/>. The password is `DDTANK_ADMIN_PASSWORD` in `deploy/.env`.
+Port 16201 (see [Ports](#ports)); <http://127.0.0.1:8081/> without Docker. The password is
+`DDTANK_ADMIN_PASSWORD` in the `.env` file.
 
-You can send mail with up to 5 items (strengthen level, hợp thành, expiry), or send xu, vàng and lễ kim.
-The receiver can be an account name, a character name or a character ID.
-Online players get the mail immediately.
+- **SendMail:** mail with up to 5 items (strengthen level, hợp thành, expiry), or xu, vàng and lễ kim. The
+  receiver can be an account name, a character name or a character ID. Online players get the mail
+  immediately.
+- **Cấu hình:** game options (see [Changes from the original game](#changes-from-the-original-game)).
+  A change applies to the running server at once.
+
+## Development without Docker
+
+To work on the code, run the servers directly. You need Linux, Docker (for MariaDB only, with your user in
+the `docker` group), the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (`dotnet` on the
+PATH, or `~/.dotnet/dotnet`) and Python 3. The servers then use the original ports (8080, 8081, 9500...),
+all on `127.0.0.1`.
+
+1. Create `deploy/.env` (git-ignored, it holds passwords) with `MARIADB_ROOT_PASSWORD`, `DDTANK_DB_PASSWORD`,
+   `DDTANK_RUFFLE_URL=https://unpkg.com/@ruffle-rs/ruffle@0.8.0/ruffle.js` and
+   `DDTANK_RESOURCE_UPSTREAM=http://gunny.vcdn.vn/`.
+2. Start MariaDB, create the databases and write the service configs:
+   `cd deploy && (cd mariadb && docker compose --env-file ../.env up -d) && ./restore-databases.sh && ./configure-local.sh`
+3. Build and run (Ctrl+C stops all services cleanly):
+   `dotnet build DDTank.Server.Linux.sln && deploy/run-local.sh`
+
+Open <http://127.0.0.1:8080/index.htm>; the admin site is <http://127.0.0.1:8081/>. Logs are in
+`deploy/logs/*.log`. If a service hangs at "starting...", another process probably still holds its port
+(check with `ss -tlnp`).
+
+Optional in `deploy/.env`: `DDTANK_ADMIN_PASSWORD` (generated when missing), `DDTANK_DB_HOST` /
+`DDTANK_MARIADB_PORT` (default `127.0.0.1` / `3306`), and `DDTANK_PORT_OFFSET`, added to every port to run a
+second copy next to another one. After changing it, run `deploy/configure-local.sh` again and restart
+`run-local.sh`. `deploy/restore-databases.sh --force` recreates the databases (**this deletes all accounts
+and characters**).
 
 ## Bug fixes
 
@@ -194,8 +258,12 @@ Bugs fixed that I found while playing, and ask Claude to fix
 
 These are deliberate gameplay changes in this branch:
 
-- **Strengthening (cường hoá) always succeeds.** To restore the normal odds, set `AlwaysSucceeds` in
-  `Game.Server/Packets/Client/ItemStrengthenHandler.cs` to false.
+- **Options on the admin site (Cấu hình):** strengthening (cường hoá) always succeeds (on by default);
+  Đá tăng bậc and Châu báu chúc phúc always succeed; Tẩy điểm always rolls the highest value; no daily
+  Tu luyện limit; free matches, even alone, count as guild wars for quests and guild tasks.
+- **One click uses everything:** card upgrades in the album use all the copies, and drilling a hole uses
+  all the matching Mũi khoan.
+- **Holes 5 and 6 go to level 5** with Mũi khoan cấp 5 (the client stopped at level 4).
 - **Bot matches:** the player always takes the first turn. In the PvP room, the host chooses with the
   **"Đấu với: N bot"** button how many bots (1-4) matchmaking falls back to.
 - **Selling:** valuable equipment (+7 and higher) can be sold. The game still asks for confirmation.

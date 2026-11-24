@@ -1,0 +1,67 @@
+# DDTank server in Docker (x64 or arm64).
+#   cd deploy/docker
+#   ./init-env.sh http://<server ip>:16200       # once: writes .env with random passwords
+#   docker compose up -d --build                 # first start: builds the image and loads the databases
+# Ports (162xx): 16200 website + game, 16201 admin site, 16207 MariaDB; 16202-16206 stay inside the game container.
+# Players open http://<server ip>:16200/index.htm. Only 16200 must be reachable from the internet: the game socket
+# goes through Tank.Web (WebSocket proxy). The admin site and MariaDB listen on 127.0.0.1 of the host; reach them
+# with an SSH tunnel (ssh -L 16201:127.0.0.1:16201 <server>), or set DDTANK_ADMIN_BIND=0.0.0.0 in .env.
+name: ddtank
+services:
+  mariadb:
+    image: mariadb:11.4
+    environment:
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:?run ./init-env.sh first}"
+      DDTANK_DB_PASSWORD: "${DDTANK_DB_PASSWORD:?run ./init-env.sh first}"
+    command:
+      # SQL Server compares table names case-insensitively; so must the converted procedures.
+      - --lower-case-table-names=1
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_uca1400_as_ci
+      - --max-allowed-packet=64M
+      - --port=16207
+      # The game databases are small (~250 MB).
+      - --innodb-buffer-pool-size=256M
+    ports:
+      - "${DDTANK_DB_BIND:-127.0.0.1}:16207:16207"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+      - ../../Database/mariadb:/ddtank/sql:ro
+      - ./seed:/ddtank/seed:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10m
+
+  game:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile
+    image: ddtank-game
+    environment:
+      DDTANK_PUBLIC_URL: "${DDTANK_PUBLIC_URL:?run ./init-env.sh first}"
+      DDTANK_DB_PASSWORD: "${DDTANK_DB_PASSWORD}"
+      DDTANK_ADMIN_PASSWORD: "${DDTANK_ADMIN_PASSWORD:-}"
+      DDTANK_RUFFLE_URL: "${DDTANK_RUFFLE_URL:-https://unpkg.com/@ruffle-rs/ruffle@0.8.0/ruffle.js}"
+      DDTANK_RESOURCE_UPSTREAM: "${DDTANK_RESOURCE_UPSTREAM:-}"
+      TZ: "${DDTANK_TZ:-Asia/Ho_Chi_Minh}"
+    ports:
+      - "16200:16200"
+      - "${DDTANK_ADMIN_BIND:-127.0.0.1}:16201:16201"
+    volumes:
+      # Game art fetched from DDTANK_RESOURCE_UPSTREAM; copy an existing resource-cache/ in here to skip that.
+      - ./data/resource-cache:/data/resource-cache
+      - ./data/logs:/var/log/ddtank
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: unless-stopped
+    # The servers save players and guilds when they stop.
+    stop_grace_period: 60s
+
+volumes:
+  mariadb-data:

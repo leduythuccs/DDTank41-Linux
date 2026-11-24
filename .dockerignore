@@ -1,0 +1,16 @@
+# Build context of deploy/docker/Dockerfile: only what the build and the servers need.
+.git
+.vs
+**/obj
+**/bin/*/net8.0
+**/appSettings.local.config
+resource
+resource-cache
+deploy
+!deploy/docker/start.sh
+Database
+Source Flash/src
+Source Launcher
+tools
+packages
+**/__pycache__
