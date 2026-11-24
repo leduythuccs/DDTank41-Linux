@@ -274,10 +274,6 @@ package game.view.experience
          ExpTweenManager.Instance.appendTween(TweenMax.from(this._resultSeal,0.5,{
             "x":1000,
             "ease":Quint.easeIn,
-            "motionBlur":{
-               "strength":2,
-               "quality":1
-            },
             "onComplete":this.blurTween
          }),-0.4);
       }
@@ -288,11 +284,7 @@ package game.view.experience
          this._rightView.addChildAt(this._titleBitmap,0);
          ExpTweenManager.Instance.appendTween(TweenMax.from(this._titleBitmap,0.5,{
             "x":1000,
-            "ease":Quint.easeIn,
-            "motionBlur":{
-               "strength":2,
-               "quality":1
-            }
+            "ease":Quint.easeIn
          }));
       }
       
@@ -310,11 +302,7 @@ package game.view.experience
          this._fightView.addEventListener(Event.CHANGE,this.__updateTotalExp);
          ExpTweenManager.Instance.appendTween(TweenMax.from(this._fightView,0.5,{
             "x":1000,
-            "ease":Quint.easeIn,
-            "motionBlur":{
-               "strength":2,
-               "quality":1
-            }
+            "ease":Quint.easeIn
          }));
          this._fightView.createView();
          this._rightView.addChildAt(this._fightView,0);
@@ -323,10 +311,6 @@ package game.view.experience
          ExpTweenManager.Instance.appendTween(TweenMax.from(this._totalView,0.5,{
             "x":1000,
             "ease":Quint.easeIn,
-            "motionBlur":{
-               "strength":2,
-               "quality":1
-            },
             "onComplete":checkZero
          }),-1);
       }
@@ -338,10 +322,6 @@ package game.view.experience
          ExpTweenManager.Instance.appendTween(TweenMax.from(this._attatchView,0.5,{
             "x":1000,
             "ease":Quint.easeIn,
-            "motionBlur":{
-               "strength":2,
-               "quality":1
-            },
             "onStart":this._totalView.playRedLight
          }));
          this._attatchView.createView();
@@ -367,10 +347,6 @@ package game.view.experience
          ExpTweenManager.Instance.appendTween(TweenMax.from(this._exploitView,0.5,{
             "x":1000,
             "ease":Quint.easeIn,
-            "motionBlur":{
-               "strength":2,
-               "quality":1
-            },
             "onStart":this._totalView.playRedLight,
             "onComplete":checkZero
          }));

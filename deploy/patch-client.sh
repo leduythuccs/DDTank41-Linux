@@ -23,6 +23,9 @@
 #   ddt.manager.SoundManager
 #                  closes the music stream before playing the next track: Ruffle kept the room music
 #                  playing when a battle switched to the map's own music.
+#   game.view.GameView, game.view.experience.ExpView
+#                  the reward screen after a battle skips the map snapshot and the motion-blur tweens: both
+#                  use BitmapData.draw, a slow GPU readback in Ruffle that made the game stutter there.
 #
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
@@ -42,6 +45,8 @@ CLASSES=(
   bagAndInfo.bag.SellGoodsBtn
   bagAndInfo.cell.BagCell
   ddt.manager.SoundManager
+  game.view.GameView
+  game.view.experience.ExpView
 )
 
 work="$(mktemp -d)"

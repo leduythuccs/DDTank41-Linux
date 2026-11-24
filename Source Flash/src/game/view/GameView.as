@@ -1659,7 +1659,9 @@ package game.view
             StateManager.setState(StateType.DUNGEON_LIST);
             return;
          }
-         this._expView = new ExpView(_map.mapBitmap);
+         // No snapshot of the map as background: BitmapData.draw of the whole map froze Ruffle for a moment
+         // before the rewards showed, and the map is still underneath the reward view anyway.
+         this._expView = new ExpView();
          this._expView.addEventListener(GameEvent.EXPSHOWED,this.__expShowed);
          addChild(this._expView);
          this._expView.show();
