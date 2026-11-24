@@ -68,7 +68,7 @@ namespace Game.Server.Packets.Client
                 int rand = random.Next(RateAdvance);
                 double probability = item.StrengthenExp / oldLv;
 
-                if (probability > rand)
+                if (GameProperties.ItemAdvanceAlwaysSucceed || probability > rand)
                 {
                     item.IsBinds = isBinds;
                     item.StrengthenLevel++;

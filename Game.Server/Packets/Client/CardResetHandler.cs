@@ -10,6 +10,9 @@ namespace Game.Server.Packets.Client
     [PacketHandler(196, "卡牌洗点")]
     public class CardResetHandler : IPacketHandler
     {
+        // The highest value NextSmallValue(5, NextSmallValue(6, 50)) can give: the inner roll is at most 44, the outer at most 44 - 5.
+        private const int MaxResetRoll = 39;
+
         public int HandlePacket(GameClient client, GSPacketIn packet)
         {
             int num = packet.ReadInt();
@@ -49,14 +52,10 @@ namespace Game.Server.Packets.Client
                     if (flag)
                     {
                         int[] array = new int[4];
-                        int max = randomSafe.NextSmallValue(6, 50);
-                        array[0] = randomSafe.NextSmallValue(5, max);
-                        max = randomSafe.NextSmallValue(6, 50);
-                        array[1] = randomSafe.NextSmallValue(5, max);
-                        max = randomSafe.NextSmallValue(6, 50);
-                        array[2] = randomSafe.NextSmallValue(5, max);
-                        max = randomSafe.NextSmallValue(6, 50);
-                        array[3] = randomSafe.NextSmallValue(5, max);
+                        for (int i = 0; i < array.Length; i++)
+                        {
+                            array[i] = GameProperties.CardResetAlwaysMax ? MaxResetRoll : randomSafe.NextSmallValue(5, randomSafe.NextSmallValue(6, 50));
+                        }
                         if (client.Player.CardResetTempProp.ContainsKey(itemAt.TemplateID))
                         {
                             client.Player.CardResetTempProp[itemAt.TemplateID] = array;

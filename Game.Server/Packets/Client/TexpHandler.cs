@@ -42,6 +42,10 @@ namespace Game.Server.Packets.Client
                 AbstractBuffer ofType = client.Player.BufferList.GetOfType(BuffType.Train_Good);
                 limitCount += ofType.Info.Value;
             }
+            if (GameProperties.TexpNoDailyLimit)
+            {
+                limitCount = int.MaxValue;
+            }
             if (info.texpTaskDate.Date.AddDays(1.0).Date <= DateTime.Now.Date && info.texpCount >= limitCount)
             {
                 info.texpCount = 0;
@@ -60,7 +64,7 @@ namespace Game.Server.Packets.Client
                 int capLevel = Math.Min(client.Player.PlayerCharacter.Grade + 5, ExerciseMgr.GetMaxLevel());
                 int capExp = ExerciseMgr.FindExercise(capLevel)?.GP ?? int.MaxValue;
                 int used = 0;
-                while (used < item.Count && info.texpCount + used < limitCount && exp + used * perPotion < capExp)
+                while (used < item.Count && used < limitCount - info.texpCount && exp + used * perPotion < capExp)
                 {
                     used++;
                 }

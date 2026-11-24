@@ -71,7 +71,7 @@ namespace Game.Server.Packets.Client
             }
             else if (!item.IsValidGoldItem())
             {
-                if (probability > random.Next(1000))
+                if (GameProperties.WishBeadAlwaysSucceed || probability > random.Next(1000))
                 {
                     item.goldBeginTime = DateTime.Now;
                     item.goldValidDate = 3;
@@ -86,7 +86,7 @@ namespace Game.Server.Packets.Client
                     client.Player.UpdateItem(item);
                     client.Player.SaveIntoDatabase();
                     pkg.WriteInt(0);
-                    GameServer.Instance.LoginServer.SendPacket(WorldMgr.SendSysNotice(eMessageType.ChatNormal, $"[{client.Player.ZoneName}] Chúc mừng người chơi [{client.Player.PlayerCharacter.NickName}] dát vàng thành công {item.TemplateID}, lực chiến lên tầm cao mới.", item.ItemID, item.TemplateID, null));
+                    GameServer.Instance.LoginServer.SendPacket(WorldMgr.SendSysNotice(eMessageType.ChatNormal, LanguageMgr.GetTranslation("WishBeadEquipHandler.Success", client.Player.ZoneName, client.Player.PlayerCharacter.NickName, item.TemplateID), item.ItemID, item.TemplateID, null));
                 }
                 else
                 {

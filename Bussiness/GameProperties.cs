@@ -70,6 +70,18 @@ namespace Bussiness
         [ConfigProperty("IsLimitMoney", "IsLimitMoney", false)]
 		public static bool IsLimitMoney;
 
+        [ConfigProperty("CardResetAlwaysMax", "Card reset always rolls the highest value", false)]
+		public static bool CardResetAlwaysMax;
+
+        [ConfigProperty("TexpNoDailyLimit", "No daily limit on training potions", false)]
+		public static bool TexpNoDailyLimit;
+
+        [ConfigProperty("ItemAdvanceAlwaysSucceed", "Item advance with the advance stone always succeeds", false)]
+		public static bool ItemAdvanceAlwaysSucceed;
+
+        [ConfigProperty("WishBeadAlwaysSucceed", "Gilding with a wish bead always succeeds", false)]
+		public static bool WishBeadAlwaysSucceed;
+
         [ConfigProperty("WishBeadLimitLv", "WishBeadLimitLv", 12)]
 		public static int WishBeadLimitLv;
 
