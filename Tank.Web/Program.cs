@@ -85,7 +85,9 @@ namespace Tank.Web
             contentTypes.Mappings[".swf"] = "application/x-shockwave-flash";
             contentTypes.Mappings[".xml"] = "text/xml";
             contentTypes.Mappings[".map"] = "application/octet-stream";
-            ServeStatic(app, "/flash", settings.FlashRoot, contentTypes);
+            // The client (1.png, 2.png...) is rebuilt by deploy/patch-client.sh: make browsers revalidate it on every
+            // load (a cheap 304 when unchanged), or they keep running an old build from their cache.
+            ServeStatic(app, "/flash", settings.FlashRoot, contentTypes, revalidate: true);
             ServeStatic(app, "/resource", settings.ResourceRoot, contentTypes, serveUnknownFileTypes: true);
             if (!string.IsNullOrEmpty(settings.ResourceUpstream) && !string.IsNullOrEmpty(settings.ResourceCacheRoot))
             {
@@ -187,7 +189,7 @@ namespace Tank.Web
             }
         }
 
-        private static void ServeStatic(WebApplication app, string requestPath, string root, FileExtensionContentTypeProvider contentTypes, bool serveUnknownFileTypes = false)
+        private static void ServeStatic(WebApplication app, string requestPath, string root, FileExtensionContentTypeProvider contentTypes, bool serveUnknownFileTypes = false, bool revalidate = false)
         {
             if (!Directory.Exists(root))
             {
@@ -199,7 +201,14 @@ namespace Tank.Web
                 FileProvider = new CaseInsensitiveFileProvider(root),
                 ContentTypeProvider = contentTypes,
                 ServeUnknownFileTypes = serveUnknownFileTypes,
-                DefaultContentType = "application/octet-stream"
+                DefaultContentType = "application/octet-stream",
+                OnPrepareResponse = context =>
+                {
+                    if (revalidate)
+                    {
+                        context.Context.Response.Headers.CacheControl = "no-cache";
+                    }
+                }
             });
         }
 
