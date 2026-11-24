@@ -180,13 +180,24 @@ namespace SqlDataProvider.BaseClass
 
         /// <summary>
         /// SQL Server converts some values implicitly that MariaDB (strict mode) rejects: an empty string passed for a
-        /// datetime is 1900-01-01, and for a number 0.
+        /// datetime is 1900-01-01, and for a number 0; a date written as text ("11/24/2026 5:34:28 PM", from
+        /// DateTime.ToString()) is parsed.
         /// </summary>
         private static object ToDb(object value, string type)
         {
+            bool date = type.StartsWith("datetime") || type.StartsWith("date") || type.StartsWith("timestamp");
+            if (value is string text && date && text.Trim().Length > 0)
+            {
+                // The game formats dates with the current culture (or "MM/dd/yyyy ..."), so try that first.
+                if (DateTime.TryParse(text, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out DateTime parsed)
+                    || DateTime.TryParse(text, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out parsed))
+                {
+                    return parsed;
+                }
+            }
             if (value is string str && str.Trim().Length == 0)
             {
-                if (type.StartsWith("datetime") || type.StartsWith("date"))
+                if (date)
                 {
                     return new DateTime(1900, 1, 1);
                 }
