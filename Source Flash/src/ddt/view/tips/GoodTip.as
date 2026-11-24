@@ -561,13 +561,14 @@ package ddt.view.tips
 		 this._autoGhostWidth = 0;
          if(EquipType.isArm(this._info))
          {
+			_loc88_ = 0;
             if(_loc5_ && _loc5_.StrengthenLevel > 0)
             {
                _loc2_ = !!_loc5_.isGold ? int(int(_loc5_.StrengthenLevel + 1)) : int(int(_loc5_.StrengthenLevel));
-               _loc1_ = "(+" + StaticFormula.getHertAddition(int(_loc5_.Property7),_loc2_) + ")";
+               _loc88_ = Number(StaticFormula.getHertAddition(int(_loc5_.Property7),_loc2_));
             }
             _loc4_.setFrame(1);
-			_loc1_ = (_loc6_ = uint(_loc7_ + (!!this._ghostPropertyData ? this._ghostPropertyData.mainProperty : 0))) > 0 ? "(+" + _loc6_ + ")" : "";
+			_loc1_ = (_loc6_ = uint(_loc88_ + (!!this._ghostPropertyData ? this._ghostPropertyData.mainProperty : 0))) > 0 ? "(+" + _loc6_ + ")" : "";
             _loc3_.text = " " + this._info.Property7.toString() + _loc1_;
             FilterFrameText(this._armAngleItem.foreItems[0]).text = " " + this._info.Property5 + "°~" + this._info.Property6 + "°";
             var _loc6_:* = this._displayIdx++;

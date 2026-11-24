@@ -26,6 +26,9 @@
 #   game.view.GameView, game.view.experience.ExpView
 #                  the reward screen after a battle skips the map snapshot and the motion-blur tweens: both
 #                  use BitmapData.draw, a slow GPU readback in Ruffle that made the game stutter there.
+#   ddt.view.tips.GoodTip
+#                  the weapon tooltip shows the strengthen bonus on the damage again, e.g. "60(+216)" like
+#                  hats and clothes: the decompiled code overwrote it with an unset variable.
 #
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
@@ -47,6 +50,7 @@ CLASSES=(
   ddt.manager.SoundManager
   game.view.GameView
   game.view.experience.ExpView
+  ddt.view.tips.GoodTip
 )
 
 work="$(mktemp -d)"
