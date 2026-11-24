@@ -66,7 +66,7 @@ namespace Game.Server.Packets.Client
                 }
                 if (used == 0)
                 {
-                    client.Out.SendMessage(eMessageType.GM_NOTICE, "Cấp tu luyện này đã đạt mức cao nhất!");
+                    client.Out.SendMessage(eMessageType.GM_NOTICE, LanguageMgr.GetTranslation("texpSystem.lvToplimit"));
                     return 0;
                 }
                 client.Player.OnUsingItem(templateID, used);
