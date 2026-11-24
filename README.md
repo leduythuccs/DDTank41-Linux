@@ -5,18 +5,27 @@ the browser through [Ruffle](https://ruffle.rs). No Windows, IIS or Flash Player
 
 
 
+> **Stable version:** this branch runs on **MariaDB** and is new. The version that has been played the
+> most is on the [`version-1.0`](../../tree/version-1.0) branch, which needs **SQL Server**. If you want
+> the stable one, use that branch and follow its README:
+>
+> ```bash
+> git clone -b version-1.0 <this repo>
+> ```
+
 Disclamer: I have no idea how this code works, all I did was ask claude do port to Linux, then I do the testing & ask
 Claude to fix any bug I found while playing
 
 - All servers (Center, Fighting, Road and the web site/API) run as .NET 8 processes.
-- The databases run in SQL Server 2022 in Docker, restored from the backups in `Database/`.
+- The databases run in MariaDB 11.4 in Docker, created from the SQL scripts in `Database/mariadb/`
+  (converted from the original SQL Server backups, see [Database](#database)).
 - The game client is the original SWF, patched where Ruffle behaves differently from Flash Player
   (see [Client patches](#client-patches)).
 - A small admin site sends mail, items and money to characters.
 
 ## Requirements
 
-- Linux on **x86_64**. The SQL Server image has no ARM build.
+- Linux. Tested on **x86_64** only.
 - [Docker](https://docs.docker.com/engine/install/) with the compose plugin (`docker compose`). Your user
   must be able to run `docker` without sudo (the `docker` group).
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0). `run-local.sh` uses `dotnet` from the
@@ -30,15 +39,15 @@ git clone <this repo> && cd DDTank41
 
 # 1. Settings (see the table below). This file holds passwords: it is git-ignored, never commit it.
 cat > deploy/.env <<'EOF'
-MSSQL_SA_PASSWORD=Change-me-Sa-1
+MARIADB_ROOT_PASSWORD=Change-me-Root-1
 DDTANK_DB_PASSWORD=Change-me-Db-1
 DDTANK_RUFFLE_URL=https://unpkg.com/@ruffle-rs/ruffle@0.8.0/ruffle.js
 DDTANK_RESOURCE_UPSTREAM=http://gunny.vcdn.vn/
 EOF
 
-# 2. Database: start SQL Server, restore the backups, create the app login, write the service configs.
+# 2. Database: start MariaDB, create the databases and the app login, write the service configs.
 cd deploy
-docker compose up -d
+(cd mariadb && docker compose --env-file ../.env up -d)
 ./restore-databases.sh
 ./configure-local.sh
 cd ..
@@ -57,13 +66,14 @@ The first time you load the game is slow, because the art is downloaded and cach
 
 | Variable | Required | Meaning |
 |---|---|---|
-| `MSSQL_SA_PASSWORD` | yes | SQL Server `sa` password. SQL Server's rules apply: at least 8 characters, with upper case, lower case, digits or symbols. |
-| `DDTANK_DB_PASSWORD` | yes | Password of the `ddtank` login the servers use. It owns only the 3 game databases. |
+| `MARIADB_ROOT_PASSWORD` | yes | MariaDB `root` password, used only by the setup scripts. |
+| `DDTANK_DB_PASSWORD` | yes | Password of the `ddtank` user the servers use. It has rights on the 3 game databases only. |
 | `DDTANK_RUFFLE_URL` | yes, in practice | The Ruffle build the game page loads. **Use 0.8.0.** The built-in default, 0.7.1, stalls at 85% while loading. |
 | `DDTANK_RESOURCE_UPSTREAM` | yes, in practice | Where art and sound files are downloaded from when they are not local. Without it the game has no images. |
 | `DDTANK_ADMIN_PASSWORD` | no | Admin site password. Generated and saved to `.env` by `configure-local.sh` when missing. |
-| `DDTANK_DB_HOST` | no | SQL Server address, default `127.0.0.1,1433`. |
-| `DDTANK_PUBLIC_IP` | no | IP written to the game's server list, default `127.0.0.1`. Leave it: the browser reaches the game server through Tank.Web, not directly. |
+| `DDTANK_DB_HOST` | no | MariaDB address, default `127.0.0.1`. |
+| `DDTANK_MARIADB_PORT` | no | MariaDB port, default `3306`. Change it if another MySQL/MariaDB already uses 3306. |
+| `DDTANK_PORT_OFFSET` | no | Added to every game port (8080 becomes 8080 + offset, and so on), to run a second copy next to another one. Default 0. |
 
 After changing `.env`, run `deploy/configure-local.sh` again and restart `run-local.sh`.
 
@@ -78,10 +88,35 @@ Everything listens on `127.0.0.1` only.
 | Road (game server) | 9500 | Game socket, reached through Tank.Web at `/socket/9500`. |
 | Center | 9202, 2008, 2009 | Login and server coordination. |
 | Fighting | 9208 | Matchmaking and battles. |
-| SQL Server (Docker) | 1433 | `Project_Player34`, `Project_Game34`, `Db_Membership`. |
+| MariaDB (Docker) | 3306 | `Project_Player34`, `Project_Game34`, `Db_Membership`. |
 
 Logs are written to `deploy/logs/*.log`. If a service hangs at "starting...", another process
 probably still holds its port. Check with `ss -tlnp`.
+
+## Database
+
+The game was written for SQL Server: about 550 stored procedures in T-SQL. This branch runs on MariaDB:
+
+- `Database/mariadb/<Db>.schema.sql`, `.data.sql` and `.routines.sql` create the tables, the starting data
+  and the procedures. `deploy/restore-databases.sh` loads them; `--force` drops and recreates databases
+  that already exist (**this deletes all accounts and characters**).
+- These scripts were generated from the SQL Server backups in `Database/*.bak` by `tools/DbMigrate`, which
+  translates the T-SQL procedures to MariaDB. A few procedures are written by hand in
+  `Database/mariadb/manual/`.
+- `SqlDataProvider` talks to MariaDB through MySqlConnector, and gives the game code the same value types
+  SQL Server did.
+- `tools/DbTest` runs the game's database layer against MariaDB without the game client, to check the
+  procedures quickly (see its README).
+
+The data lives in the Docker volume `ddtank-mariadb_mariadb-data`. To back it up:
+
+```bash
+docker exec -e MYSQL_PWD="<root password>" ddtank-mariadb mariadb-dump -uroot --routines \
+  --databases Project_Player34 Project_Game34 Db_Membership > ddtank-backup.sql
+```
+
+`deploy/docker-compose.yml` (SQL Server) and `deploy/patch-procedures.py` are only needed to regenerate
+the scripts from the backups.
 
 ## Game art
 
@@ -142,6 +177,8 @@ Bugs fixed that I found while playing, and ask Claude to fix
   sometimes sends its encrypted login data one byte short. The server now accepts it.
 - **Road wouldn't start on Linux:** data files were opened as `datas/` while the folder is `Datas/`.
   This works on Windows but not on Linux, where file names are case-sensitive.
+- **Database moved to MariaDB:** SQL Server needs about 2 GB of RAM and has no ARM build. The
+  procedures were translated to MariaDB (see [Database](#database)).
 - **Old code, newer database:** some stored procedures in the restored database expect different
   parameters than this code sends. `deploy/patch-procedures.py` patches them when the database is restored.
 - **Game AI scripts** were rebuilt from the original `Game.Server.dll`, because the scripts in git didn't
