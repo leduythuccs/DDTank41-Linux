@@ -4649,7 +4649,7 @@ DROP PROCEDURE IF EXISTS `SP_Get_AvatarCollect`$$
 CREATE PROCEDURE `SP_Get_AvatarCollect`(IN p_UserID INT, OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Sys_Users_AvatarCollection` WHERE `UserID` = p_UserID AND `IsExit` = 'True';
+  SELECT * FROM `Sys_Users_AvatarCollection` WHERE `UserID` = p_UserID AND `IsExit` = 1;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Get_EliteScorePlayers`$$
@@ -6568,7 +6568,7 @@ DROP PROCEDURE IF EXISTS `SP_Users_Gift_Single`$$
 CREATE PROCEDURE `SP_Users_Gift_Single`(IN p_UserID INT, IN p_IsReceive TINYINT(1), OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  IF p_IsReceive = 'True' THEN
+  IF p_IsReceive = 1 THEN
     SELECT * FROM `Sys_Users_Gift` WHERE `ReceiverID` = p_UserID ORDER BY `ID` DESC;
   ELSE
     SELECT * FROM `Sys_Users_Gift` WHERE `SenderID` = p_UserID ORDER BY `ID` DESC;

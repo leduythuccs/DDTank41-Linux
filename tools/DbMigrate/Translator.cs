@@ -435,8 +435,7 @@ public sealed class Translator
         if (kind == AssignmentKind.Equals && IsNumeric(type) && value is StringLiteral text)
         {
             // T-SQL converts a string constant to the variable's number type ('' is 0); MariaDB in strict mode refuses it.
-            string trimmed = text.Value.Trim();
-            sql = trimmed.Length == 0 ? "0" : decimal.TryParse(trimmed, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out _) ? trimmed : sql;
+            sql = AsNumber(text.Value) ?? sql;
         }
         return kind switch
         {
@@ -1135,6 +1134,7 @@ public sealed class Translator
         }
         return " ORDER BY " + string.Join(", ", o.OrderByElements.Select(e => Expr(e.Expression).Sql + (e.SortOrder == SortOrder.Descending ? " DESC" : "")));
     }
+
     /// <summary>
     /// Rows that tie on the ORDER BY come back from SQL Server in clustered index order (the order it scanned them);
     /// MariaDB promises no order for them. For a query on one table, the primary key is added after the ORDER BY
@@ -1159,7 +1159,6 @@ public sealed class Translator
         List<string> extra = pk.Where(c => !ordered.Contains(c)).Select(c => prefix + Program.Q(c)).ToList();
         return extra.Count == 0 ? "" : ", " + string.Join(", ", extra);
     }
-
 
     private string Offset(OffsetClause o)
     {
@@ -1866,7 +1865,13 @@ public sealed class Translator
                     BooleanComparisonType.LessThanOrEqualTo or BooleanComparisonType.NotGreaterThan => "<=",
                     _ => throw new UnsupportedException("comparison " + c.ComparisonType),
                 };
-                return Expr(c.FirstExpression).Sql + " " + op + " " + Expr(c.SecondExpression).Sql;
+                var left = Expr(c.FirstExpression);
+                var right = Expr(c.SecondExpression);
+                // T-SQL converts a string constant compared with a number or bit to that type (@IsReceive = 'True'
+                // is true for 1); MariaDB compares as numbers and 'True' is 0.
+                string leftSql = IsNumeric(right.Type) && c.FirstExpression is StringLiteral ls && AsNumber(ls.Value) is string ln ? ln : left.Sql;
+                string rightSql = IsNumeric(left.Type) && c.SecondExpression is StringLiteral rs && AsNumber(rs.Value) is string rn ? rn : right.Sql;
+                return leftSql + " " + op + " " + rightSql;
             case BooleanBinaryExpression bb:
                 return Bool(bb.FirstExpression) + (bb.BinaryExpressionType == BooleanBinaryExpressionType.And ? " AND " : " OR ") + Bool(bb.SecondExpression);
             case BooleanNotExpression n:
@@ -1932,6 +1937,24 @@ public sealed class Translator
     }
 
     private static bool IsInteger(T t) => t is T.Int or T.BigInt or T.Bit;
+
+    /// <summary>
+    /// A string constant as T-SQL converts it to a number or bit: '' is 0, 'True'/'False' are 1/0 (bit only, but
+    /// MariaDB has no bit type to tell), digits stay; null when T-SQL would fail too.
+    /// </summary>
+    private static string AsNumber(string text)
+    {
+        string t = text.Trim();
+        if (t.Length == 0 || t.Equals("false", StringComparison.OrdinalIgnoreCase))
+        {
+            return "0";
+        }
+        if (t.Equals("true", StringComparison.OrdinalIgnoreCase))
+        {
+            return "1";
+        }
+        return decimal.TryParse(t, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out _) ? t : null;
+    }
 
     private static bool IsNumeric(T t) => t is T.Int or T.BigInt or T.Bit or T.Float or T.Decimal;
 

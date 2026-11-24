@@ -351,7 +351,7 @@ proc: BEGIN
   SET p_ReturnValue = 0;
   SELECT `ApplicationId` INTO v_ApplicationId FROM `Mem_Application` WHERE `ApplicationName` = p_ApplicationName LIMIT 1;
   SELECT `A`.`UserId` INTO p_UserId FROM `Mem_Users` AS `A` LEFT JOIN `Mem_UserInfo` AS `B` ON `A`.`ApplicationId` = `B`.`ApplicationId` AND `A`.`UserId` = `B`.`UserId` WHERE `A`.`ApplicationId` = v_ApplicationId AND `A`.`UserName` = p_UserName AND `B`.`Password` = p_Password LIMIT 1;
-  IF IFNULL(p_UserId, '') <> '' THEN
+  IF IFNULL(p_UserId, '') <> 0 THEN
     UPDATE `Mem_UserInfo` SET `LastLoginDate` = NOW(3) WHERE `ApplicationId` = v_ApplicationId AND `UserId` = p_UserId;
     UPDATE `Mem_Users` SET `LoginTime` = `LoginTime` + 1 WHERE `ApplicationId` = v_ApplicationId AND `UserId` = p_UserId;
   END IF;
