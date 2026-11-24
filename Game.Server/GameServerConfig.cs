@@ -28,7 +28,7 @@ namespace Game.Server
         [ConfigProperty("InterName", "接口类型", "sevenroad")]
 		public string INTERFACE_NAME;
 
-        [ConfigProperty("IP", "频道的IP", "68.183.198.57")]
+        [ConfigProperty("IP", "频道的IP", "127.0.0.1")]
 		public string Ip;
 
         private static readonly ILog log;
@@ -39,7 +39,7 @@ namespace Game.Server
         [ConfigProperty("LogPath", "日志路径", 1)]
 		public string LogPath;
 
-        [ConfigProperty("LoginServerIp", "中心服务器的IP", "68.183.198.57")]
+        [ConfigProperty("LoginServerIp", "中心服务器的IP", "127.0.0.1")]
 		public string LoginServerIp;
 
 		[ConfigProperty("OtherLoginServer", "中心服务器的IP", "")]
