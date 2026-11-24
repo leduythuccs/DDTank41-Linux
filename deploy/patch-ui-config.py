@@ -6,6 +6,9 @@ XML files that the client loads at startup) where it is older than the game code
   * coreI.xml, core.goodTip.MainPropertyItem / core.goodTip.armAngleItem: GoodTip (the item tooltip)
     expects a GhostStarContainer as the second fore item; without it every item tooltip throws
     "RangeError: Error #1125" and nothing is shown.
+  * store.xml, HoleExpModel: holes 5 and 6 stop at level 4 in the client (maxLv/oprationLv 4), while the
+    game server goes to level 5 with Mũi khoan cấp 5. Raise the client to 5, with the server's exp list
+    (HoleLevelUpExpList in Server_Config).
 
 The loose copies next to xml.png get the same edit. Safe to run repeatedly.
 Usage: deploy/patch-ui-config.py
@@ -28,6 +31,25 @@ PATCHES = {
     ],
 }
 
+# file -> list of (stylename, {attribute: value}) for <custom> elements
+ATTRIBUTES = {
+    "store.xml": [
+        ("HoleExpModel", {"maxLv": "5", "oprationLv": "5", "explist": "400|600|700|800|1200"}),
+    ],
+}
+
+
+def patch_attributes(text, stylename, values):
+    m = re.search(r'<custom\b[^>]*\bstylename="' + re.escape(stylename) + r'"[^>]*>', text)
+    if not m:
+        raise RuntimeError(f"{stylename} not found")
+    element = m.group(0)
+    for name, value in values.items():
+        element, n = re.subn(r'(\b' + name + r'=")[^"]*(")', lambda a: a.group(1) + value + a.group(2), element)
+        if n != 1:
+            raise RuntimeError(f"{stylename}: attribute {name} not found")
+    return text[:m.start()] + element + text[m.end():], element != m.group(0)
+
 
 def patch_text(text, stylename, fore):
     pattern = re.compile(r'(<component\b[^>]*\bstylename="' + re.escape(stylename) + r'"[^>]*?\bforeStyle=")([^"]*)(")', re.S)
@@ -43,10 +65,16 @@ def patch_text(text, stylename, fore):
 
 def patch_file_text(name, text):
     changed = False
-    for stylename, fore in PATCHES[name]:
+    for stylename, fore in PATCHES.get(name, []):
         text, c = patch_text(text, stylename, fore)
         changed |= c
+    for stylename, values in ATTRIBUTES.get(name, []):
+        text, c = patch_attributes(text, stylename, values)
+        changed |= c
     return text, changed
+
+
+FILES = list(PATCHES) + [name for name in ATTRIBUTES if name not in PATCHES]
 
 
 def main():
@@ -55,7 +83,7 @@ def main():
         infos = src.infolist()
         data = {i.filename: src.read(i) for i in infos}
     changed_any = False
-    for name in PATCHES:
+    for name in FILES:
         text, changed = patch_file_text(name, data[name].decode("utf-8"))
         if changed:
             data[name] = text.encode("utf-8")
@@ -73,7 +101,7 @@ def main():
     print(("patched " if changed_any else "ok      ") + os.path.relpath(ARCHIVE))
 
     # 2. loose copies, kept in sync for reference
-    for name in PATCHES:
+    for name in FILES:
         path = os.path.join(ROOT, name)
         if not os.path.exists(path):
             continue

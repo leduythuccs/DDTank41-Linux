@@ -481,7 +481,7 @@ textFormatStyle="filter.store.MoneyFilter" filterString="store.transfer.CheckFie
             moveEnable="false" escEnable="true" enterEnable="true"/>
         <custom classname="flash.geom.Point" stylename="store.Transferpoint0" x="20" y="90"/>
         <custom classname="flash.geom.Point" stylename="store.Transferpoint1" x="232" y="90"/>
-        <custom classname="store.data.HoleExpModel" stylename="HoleExpModel" maxLv="4" oprationLv="4" explist="400|600|700|800"/>
+        <custom classname="store.data.HoleExpModel" stylename="HoleExpModel" maxLv="5" oprationLv="5" explist="400|600|700|800|1200"/>
         
         <!--熔炼-->
 		<custom classname="store.view.fusion.StoreIIFusionBG" stylename="store.StoreIIFusionBG" x="65" y="30"/>
