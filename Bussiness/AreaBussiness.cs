@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Bussiness
         public AreaConfigInfo[] GetAllAreaConfig()
         {
 			List<AreaConfigInfo> areaConfigInfoList = new List<AreaConfigInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_AreaConfig_All");
@@ -36,7 +37,7 @@ namespace Bussiness
 			return areaConfigInfoList.ToArray();
         }
 
-        public AreaConfigInfo InitAreaConfigInfo(SqlDataReader dr)
+        public AreaConfigInfo InitAreaConfigInfo(DbDataReader dr)
         {
 			return new AreaConfigInfo
 			{

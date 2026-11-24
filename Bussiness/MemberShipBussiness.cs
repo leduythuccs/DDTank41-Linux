@@ -1,4 +1,5 @@
 ﻿using log4net;
+using System.Data.Common;
 using SqlDataProvider.BaseClass;
 using SqlDataProvider.Data;
 using System;
@@ -116,7 +117,7 @@ namespace Bussiness
         public eStoreInfo[] GetAlleStore()
         {
 			List<eStoreInfo> list = new List<eStoreInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_eStore_All");
@@ -158,7 +159,7 @@ namespace Bussiness
         public eStoreInfo[] GetAlleStoreByDesc()
         {
 			List<eStoreInfo> list = new List<eStoreInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_eStore_Desc");
@@ -200,7 +201,7 @@ namespace Bussiness
         public eStoreInfo[] GetAlleStoreSale()
         {
 			List<eStoreInfo> list = new List<eStoreInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_eStore_Desc_Sale");
@@ -243,7 +244,7 @@ namespace Bussiness
         public eStoreInfo[] GetAlleStoreTopBuy()
         {
 			List<eStoreInfo> list = new List<eStoreInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_eStore_Desc_Buy");

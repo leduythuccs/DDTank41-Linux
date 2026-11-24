@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections;
@@ -11,7 +12,7 @@ namespace Bussiness
     {
         public FightRateInfo[] GetFightRate(int serverId)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			List<FightRateInfo> list = new List<FightRateInfo>();
 			try
 			{
@@ -60,7 +61,7 @@ namespace Bussiness
         public string GetGameEdition()
         {
 			string str = string.Empty;
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Server_Edition");
@@ -90,7 +91,7 @@ namespace Bussiness
 
         public ArrayList GetRate(int serverId)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				ArrayList list = new ArrayList();
@@ -135,7 +136,7 @@ namespace Bussiness
 
         public RateInfo GetRateWithType(int serverId, int type)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -177,7 +178,7 @@ namespace Bussiness
 
         public RecordInfo GetRecordInfo(DateTime date, int SaveRecordSecond)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -225,7 +226,7 @@ namespace Bussiness
         public Dictionary<string, string> GetServerConfig()
         {
 			Dictionary<string, string> dictionary = new Dictionary<string, string>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Server_Config");
@@ -259,7 +260,7 @@ namespace Bussiness
         public ServerInfo[] GetServerList()
         {
 			List<ServerInfo> list = new List<ServerInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Service_List");
@@ -305,7 +306,7 @@ namespace Bussiness
 		public ServerProperty[] GetAllServerProperty()
 		{
 			List<ServerProperty> result = new List<ServerProperty>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Server_Config");
@@ -337,7 +338,7 @@ namespace Bussiness
 		public ServerProperty GetServerPropertyByKey(string key)
         {
 			ServerProperty property = null;
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -376,7 +377,7 @@ namespace Bussiness
         public ServerInfo[] GetServiceByIP(string IP)
         {
 			List<ServerInfo> list = new List<ServerInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -422,7 +423,7 @@ namespace Bussiness
 
         public ServerInfo GetServiceSingle(int ID)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]

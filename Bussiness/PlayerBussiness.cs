@@ -1,4 +1,5 @@
 ﻿using Bussiness.CenterService;
+using System.Data.Common;
 using Bussiness.Managers;
 using Newtonsoft.Json;
 using SqlDataProvider.Data;
@@ -934,7 +935,7 @@ namespace Bussiness
         public ConsortiaUserInfo[] GetAllMemberByConsortia(int ConsortiaID)
         {
             List<ConsortiaUserInfo> list = new List<ConsortiaUserInfo>();
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] SqlParameters = new SqlParameter[1]
@@ -968,7 +969,7 @@ namespace Bussiness
         public UserMatchInfo[] GetAllUserMatchInfo()
         {
             List<UserMatchInfo> list = new List<UserMatchInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             int num = 1;
             try
             {
@@ -1005,7 +1006,7 @@ namespace Bussiness
         public UserMatchInfo[] GetTopUserMatchInfo()
         {
             List<UserMatchInfo> list = new List<UserMatchInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 db.GetReader(ref resultDataReader, "SP_GetListLeague");
@@ -1239,7 +1240,7 @@ namespace Bussiness
 
         public AuctionInfo GetAuctionSingle(int auctionID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1272,7 +1273,7 @@ namespace Bussiness
         public BestEquipInfo[] GetCelebByDayBestEquip()
         {
             List<BestEquipInfo> list = new List<BestEquipInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 db.GetReader(ref resultDataReader, "SP_Users_BestEquip");
@@ -1312,7 +1313,7 @@ namespace Bussiness
         public ChargeRecordInfo[] GetChargeRecordInfo(DateTime date, int SaveRecordSecond)
         {
             List<ChargeRecordInfo> list = new List<ChargeRecordInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -1353,7 +1354,7 @@ namespace Bussiness
 
         public ExerciseInfo GetExerciseSingle(int Grade)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1395,7 +1396,7 @@ namespace Bussiness
         public FriendInfo[] GetFriendsAll(int UserID)
         {
             List<FriendInfo> friendInfoList = new List<FriendInfo>();
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] SqlParameters = new SqlParameter[1]
@@ -1455,7 +1456,7 @@ namespace Bussiness
         public FriendInfo[] GetFriendsBbs(string condictArray)
         {
             List<FriendInfo> list = new List<FriendInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1496,7 +1497,7 @@ namespace Bussiness
         public ArrayList GetFriendsGood(string UserName)
         {
             ArrayList list = new ArrayList();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1532,7 +1533,7 @@ namespace Bussiness
         public Dictionary<int, int> GetFriendsIDAll(int UserID)
         {
             Dictionary<int, int> dictionary = new Dictionary<int, int>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1575,7 +1576,7 @@ namespace Bussiness
         public MailInfo[] GetMailBySenderID(int userID)
         {
             List<MailInfo> list = new List<MailInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1609,7 +1610,7 @@ namespace Bussiness
         public MailInfo[] GetMailByUserID(int userID)
         {
             List<MailInfo> list = new List<MailInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1642,7 +1643,7 @@ namespace Bussiness
 
         public MailInfo GetMailSingle(int UserID, int mailID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -1746,7 +1747,7 @@ namespace Bussiness
 
         public MarryInfo GetMarryInfoSingle(int ID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1785,7 +1786,7 @@ namespace Bussiness
 
         public MarryProp GetMarryProp(int id)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1825,7 +1826,7 @@ namespace Bussiness
 
         public MarryRoomInfo[] GetMarryRoomInfo()
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             List<MarryRoomInfo> list = new List<MarryRoomInfo>();
             try
             {
@@ -1877,7 +1878,7 @@ namespace Bussiness
 
         public MarryRoomInfo GetMarryRoomInfoSingle(int id)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1930,7 +1931,7 @@ namespace Bussiness
 
         public void GetPasswordInfo(int userID, ref string PasswordQuestion1, ref string PasswordAnswer1, ref string PasswordQuestion2, ref string PasswordAnswer2, ref int Count)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1972,7 +1973,7 @@ namespace Bussiness
 
         public MarryApplyInfo[] GetPlayerMarryApply(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             List<MarryApplyInfo> list = new List<MarryApplyInfo>();
             try
             {
@@ -2212,7 +2213,7 @@ namespace Bussiness
 
         public string GetSingleRandomName(int sex)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 if (sex > 1)
@@ -2249,7 +2250,7 @@ namespace Bussiness
 
         public UserMatchInfo GetSingleUserMatchInfo(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2300,7 +2301,7 @@ namespace Bussiness
 
         public List<UserRankInfo> GetSingleUserRank(int UserID)
         {
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             List<UserRankInfo> infos = new List<UserRankInfo>();
             try
             {
@@ -2350,7 +2351,7 @@ namespace Bussiness
 
         public UsersExtraInfo GetSingleUsersExtra(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2394,7 +2395,7 @@ namespace Bussiness
         }
         public int GetXepHang(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2432,7 +2433,7 @@ namespace Bussiness
         public AchievementData[] GetUserAchievement(int userID)
         {
             List<AchievementData> list = new List<AchievementData>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2473,7 +2474,7 @@ namespace Bussiness
         public ItemInfo[] GetUserBagByType(int UserID, int bagType)
         {
             List<ItemInfo> items = new List<ItemInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[2];
@@ -2505,7 +2506,7 @@ namespace Bussiness
         public List<ItemInfo> GetUserBeadEuqip(int UserID)
         {
             List<ItemInfo> list = new List<ItemInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2541,7 +2542,7 @@ namespace Bussiness
         public BufferInfo[] GetUserBuffer(int userID)
         {
             List<BufferInfo> list = new List<BufferInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2587,7 +2588,7 @@ namespace Bussiness
 
         public UsersCardInfo GetUserCardByPlace(int Place)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2621,7 +2622,7 @@ namespace Bussiness
         public List<UsersCardInfo> GetUserCardEuqip(int UserID)
         {
             List<UsersCardInfo> list = new List<UsersCardInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2657,7 +2658,7 @@ namespace Bussiness
         public UsersCardInfo[] GetUserCardSingles(int UserID)
         {
             List<UsersCardInfo> list = new List<UsersCardInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2691,7 +2692,7 @@ namespace Bussiness
         public ConsortiaBufferInfo[] GetUserConsortiaBuffer(int ConsortiaID)
         {
             List<ConsortiaBufferInfo> list = new List<ConsortiaBufferInfo>();
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] SqlParameters = new SqlParameter[1]
@@ -2734,7 +2735,7 @@ namespace Bussiness
         public ConsortiaBufferInfo[] GetUserConsortiaBufferLess(int ConsortiaID, int LessID)
         {
             List<ConsortiaBufferInfo> list = new List<ConsortiaBufferInfo>();
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[]
@@ -2778,7 +2779,7 @@ namespace Bussiness
 
         public ConsortiaBufferInfo GetUserConsortiaBufferSingle(int ID, int conid)
         {
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] SqlParameters = new SqlParameter[]
@@ -2824,7 +2825,7 @@ namespace Bussiness
         public List<ItemInfo> GetUserEuqip(int UserID)
         {
             List<ItemInfo> list = new List<ItemInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2860,7 +2861,7 @@ namespace Bussiness
         public List<ItemInfo> GetUserEuqipByNick(string Nick)
         {
             List<ItemInfo> list = new List<ItemInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2895,7 +2896,7 @@ namespace Bussiness
 
         public EventRewardProcessInfo[] GetUserEventProcess(int userID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             List<EventRewardProcessInfo> list = new List<EventRewardProcessInfo>();
             try
             {
@@ -2936,7 +2937,7 @@ namespace Bussiness
 
         public UserInfo GetUserInfo(int UserId)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             UserInfo info = new UserInfo
             {
                 UserID = UserId
@@ -2980,7 +2981,7 @@ namespace Bussiness
         public ItemInfo[] GetUserItem(int UserID)
         {
             List<ItemInfo> list = new List<ItemInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3013,7 +3014,7 @@ namespace Bussiness
 
         public ItemInfo GetUserItemSingle(int itemID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3046,7 +3047,7 @@ namespace Bussiness
 
         public LevelInfo GetUserLevelSingle(int Grade)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3083,7 +3084,7 @@ namespace Bussiness
 
         public PlayerLimitInfo GetUserLimitByUserName(string userName)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3121,7 +3122,7 @@ namespace Bussiness
         public PlayerInfo[] GetUserLoginList(string userName)
         {
             List<PlayerInfo> list = new List<PlayerInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3155,7 +3156,7 @@ namespace Bussiness
         public QuestDataInfo[] GetUserQuest(int userID)
         {
             List<QuestDataInfo> infos = new List<QuestDataInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -3200,7 +3201,7 @@ namespace Bussiness
         public QuestDataInfo GetUserQuestSiger(int userID, int QuestID)
         {
             new QuestDataInfo();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -3248,7 +3249,7 @@ namespace Bussiness
 
         public PlayerInfo GetUserSingleByNickName(string nickName)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3278,7 +3279,7 @@ namespace Bussiness
 
         public PlayerInfo GetUserSingleByUserID(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3311,7 +3312,7 @@ namespace Bussiness
 
         public PlayerInfo GetUserSingleByUserName(string userName)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3344,7 +3345,7 @@ namespace Bussiness
 
         public TexpInfo GetUserTexpInfoSingle(int ID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -3387,7 +3388,7 @@ namespace Bussiness
 
         public UsersCardInfo[] GetSingleUserCard(int UserID)
         {
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             List<UsersCardInfo> userCardInfoList = new List<UsersCardInfo>();
             try
             {
@@ -3446,7 +3447,7 @@ namespace Bussiness
             }
         }
 
-        public AuctionInfo InitAuctionInfo(SqlDataReader reader)
+        public AuctionInfo InitAuctionInfo(DbDataReader reader)
         {
             return new AuctionInfo
             {
@@ -3469,7 +3470,7 @@ namespace Bussiness
             };
         }
 
-        private UsersCardInfo InitCard(SqlDataReader sqlDataReader_0)
+        private UsersCardInfo InitCard(DbDataReader sqlDataReader_0)
         {
             return new UsersCardInfo
             {
@@ -3494,7 +3495,7 @@ namespace Bussiness
             };
         }
 
-        public CardGrooveUpdateInfo InitCardGrooveUpdate(SqlDataReader reader)
+        public CardGrooveUpdateInfo InitCardGrooveUpdate(DbDataReader reader)
         {
             return new CardGrooveUpdateInfo
             {
@@ -3511,7 +3512,7 @@ namespace Bussiness
             };
         }
 
-        public CardTemplateInfo InitCardTemplate(SqlDataReader reader)
+        public CardTemplateInfo InitCardTemplate(DbDataReader reader)
         {
             return new CardTemplateInfo
             {
@@ -3534,7 +3535,7 @@ namespace Bussiness
             };
         }
 
-        public ConsortiaUserInfo InitConsortiaUserInfo(SqlDataReader dr)
+        public ConsortiaUserInfo InitConsortiaUserInfo(DbDataReader dr)
         {
             ConsortiaUserInfo consortiaUserInfo = new ConsortiaUserInfo();
             consortiaUserInfo.ID = (int)dr["ID"];
@@ -3574,7 +3575,7 @@ namespace Bussiness
             return consortiaUserInfo;
         }
 
-        public ItemInfo InitItem(SqlDataReader reader)
+        public ItemInfo InitItem(DbDataReader reader)
         {
             ItemInfo item = new ItemInfo(ItemMgr.FindItemTemplate((int)reader["TemplateID"]));
             item.AgilityCompose = (int)reader["AgilityCompose"];
@@ -3622,7 +3623,7 @@ namespace Bussiness
             return item;
         }
 
-        public MailInfo InitMail(SqlDataReader reader)
+        public MailInfo InitMail(DbDataReader reader)
         {
             return new MailInfo
             {
@@ -3655,7 +3656,7 @@ namespace Bussiness
             };
         }
 
-        public PlayerInfo InitPlayerInfo(SqlDataReader reader)
+        public PlayerInfo InitPlayerInfo(DbDataReader reader)
         {
             PlayerInfo playerInfo = new PlayerInfo();
             playerInfo.Password = (string)reader["Password"];
@@ -4038,7 +4039,7 @@ namespace Bussiness
 
         public PlayerInfo LoginGame(string username, string password)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -4071,7 +4072,7 @@ namespace Bussiness
 
         public PlayerInfo LoginGame(string username, ref int isFirst, ref bool isExist, ref bool isError, bool firstValidate, ref DateTime forbidDate, string nickname)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[4]
@@ -4114,7 +4115,7 @@ namespace Bussiness
 
         public PlayerInfo LoginGame(string username, ref int isFirst, ref bool isExist, ref bool isError, bool firstValidate, ref DateTime forbidDate, ref string nickname, string ActiveIP)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[5]
@@ -4278,7 +4279,7 @@ namespace Bussiness
 
         public PlayerInfo ReLoadPlayer(int ID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -5206,7 +5207,7 @@ namespace Bussiness
         public List<AchievementDataInfo> GetUserAchievementData(int userID)
         {
             List<AchievementDataInfo> infos = new List<AchievementDataInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -5245,7 +5246,7 @@ namespace Bussiness
         public List<AchievementDataInfo> GetUserAchievementData(int userID, int id)
         {
             List<AchievementDataInfo> infos = new List<AchievementDataInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[2]
@@ -5285,7 +5286,7 @@ namespace Bussiness
         public List<UsersRecordInfo> GetUserRecord(int userID)
         {
             List<UsersRecordInfo> infos = new List<UsersRecordInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -6247,7 +6248,7 @@ namespace Bussiness
         public DailyRecordInfo[] GetDailyRecord(int UserID)
         {
             List<DailyRecordInfo> list = new List<DailyRecordInfo>();
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -6285,7 +6286,7 @@ namespace Bussiness
 
         public string GetASSInfoSingle(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -6317,7 +6318,7 @@ namespace Bussiness
 
         public DailyLogListInfo GetDailyLogListSingle(int UserID)
         {
-            SqlDataReader resultDataReader = null;
+            DbDataReader resultDataReader = null;
             try
             {
                 SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -6481,7 +6482,7 @@ namespace Bussiness
 
         public Dictionary<int, List<string>> LoadCommands()
         {
-            SqlDataReader sqlDataReader = null;
+            DbDataReader sqlDataReader = null;
             Dictionary<int, List<string>> commands = new Dictionary<int, List<string>>();
             db.GetReader(ref sqlDataReader, "SP_GetAllCommands");
             while (sqlDataReader.Read())
@@ -6626,7 +6627,7 @@ namespace Bussiness
         public UsersPetInfo[] GetUserPetSingles(int UserID, int vipLv)
         {
             List<UsersPetInfo> items = new List<UsersPetInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -6806,7 +6807,7 @@ namespace Bussiness
             }
         }
 
-        public UsersPetInfo InitPet(SqlDataReader reader)
+        public UsersPetInfo InitPet(DbDataReader reader)
         {
             return new UsersPetInfo
             {
@@ -6946,7 +6947,7 @@ namespace Bussiness
         public UsersExtraInfo[] GetRankCaddy()
         {
             List<UsersExtraInfo> userExtraInfoList = new List<UsersExtraInfo>();
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 db.GetReader(ref ResultDataReader, "SP_Get_Rank_Caddy");
@@ -6979,7 +6980,7 @@ namespace Bussiness
 
         public UserLabyrinthInfo GetSingleLabyrinth(int ID)
         {
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] SqlParameters = new SqlParameter[1]
@@ -7116,7 +7117,7 @@ namespace Bussiness
         public UserGiftInfo[] GetAllUserGifts(int userid, bool isReceive)
         {
             List<UserGiftInfo> userGiftInfoList = new List<UserGiftInfo>();
-            SqlDataReader ResultDataReader = null;
+            DbDataReader ResultDataReader = null;
             try
             {
                 SqlParameter[] SqlParameters = new SqlParameter[2]
@@ -7159,7 +7160,7 @@ namespace Bussiness
         public UserGiftInfo[] GetAllUserReceivedGifts(int userid)
         {
             Dictionary<int, UserGiftInfo> dictionary = new Dictionary<int, UserGiftInfo>();
-            SqlDataReader sqlDataReader = null;
+            DbDataReader sqlDataReader = null;
             try
             {
                 UserGiftInfo[] allUserGifts = GetAllUserGifts(userid, isReceive: true);
@@ -7273,7 +7274,7 @@ namespace Bussiness
 
         public EatPetsInfo GetAllEatPetsByID(int ID)
         {
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -7304,7 +7305,7 @@ namespace Bussiness
             return null;
         }
 
-        public EatPetsInfo InitEatPetsInfo(SqlDataReader dr)
+        public EatPetsInfo InitEatPetsInfo(DbDataReader dr)
         {
             EatPetsInfo info = new EatPetsInfo();
             info.ID = (int)dr["ID"];
@@ -7380,7 +7381,7 @@ namespace Bussiness
         public Suit_Manager Get_Suit_Manager(int UserID)
         {
             Suit_Manager items = new Suit_Manager();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para2 = new SqlParameter[1]
@@ -7466,7 +7467,7 @@ namespace Bussiness
         public UserRankDateInfo[] GetAllUserRankDate()
         {
             List<UserRankDateInfo> list = new List<UserRankDateInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[0];
@@ -7495,7 +7496,7 @@ namespace Bussiness
 
         public UserRankDateInfo GetUserRankDateByID(int userID)
         {
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -7526,7 +7527,7 @@ namespace Bussiness
             return null;
         }
 
-        public UserRankDateInfo InitUserRankDateInfo(SqlDataReader dr)
+        public UserRankDateInfo InitUserRankDateInfo(DbDataReader dr)
         {
             UserRankDateInfo info = new UserRankDateInfo();
             info.UserID = (int)dr["UserID"];
@@ -7555,7 +7556,7 @@ namespace Bussiness
         public UsersPetInfo[] GetUserAdoptPetSingles(int UserID)
         {
             List<UsersPetInfo> items = new List<UsersPetInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -7617,7 +7618,7 @@ namespace Bussiness
 
         public UserFarmInfo GetSingleFarm(int Id)
         {
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -7773,7 +7774,7 @@ namespace Bussiness
         public UserFieldInfo[] GetSingleFields(int ID)
         {
             List<UserFieldInfo> infos = new List<UserFieldInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -7905,7 +7906,7 @@ namespace Bussiness
         public NewChickenBoxItemInfo[] GetSingleNewChickenBox(int UserID)
         {
             List<NewChickenBoxItemInfo> list = new List<NewChickenBoxItemInfo>();
-            SqlDataReader sqlDataReader = null;
+            DbDataReader sqlDataReader = null;
             try
             {
                 SqlParameter[] array = new SqlParameter[1]
@@ -8045,7 +8046,7 @@ namespace Bussiness
 
         public ActiveSystemInfo GetSingleActiveSystem(int UserID)
         {
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[1]
@@ -8193,7 +8194,7 @@ namespace Bussiness
         public ConsortiaWithTaskInfo[] GetConsortiaTaskInfos()
         {
             List<ConsortiaWithTaskInfo> list = new List<ConsortiaWithTaskInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 SqlParameter[] para = new SqlParameter[0];
@@ -8272,7 +8273,7 @@ namespace Bussiness
             return result;
         }
 
-        public ConsortiaWithTaskInfo InitConsortiaTaskInfo(SqlDataReader dr)
+        public ConsortiaWithTaskInfo InitConsortiaTaskInfo(DbDataReader dr)
         {
             ConsortiaWithTaskInfo info = new ConsortiaWithTaskInfo();
             info.ID = (int)dr["ID"];
@@ -8394,7 +8395,7 @@ namespace Bussiness
         public LuckstarActivityRankInfo[] GetAllLuckstarActivityRank()
         {
             List<LuckstarActivityRankInfo> infos = new List<LuckstarActivityRankInfo>();
-            SqlDataReader reader = null;
+            DbDataReader reader = null;
             try
             {
                 db.GetReader(ref reader, "SP_Luckstar_Activity_Rank_All");
@@ -8424,7 +8425,7 @@ namespace Bussiness
             return infos.ToArray();
         }
 
-        public UserGemStone InitGemStones(SqlDataReader reader)
+        public UserGemStone InitGemStones(DbDataReader reader)
         {
             return new UserGemStone()
             {
@@ -8440,7 +8441,7 @@ namespace Bussiness
         public List<UserGemStone> GetSingleGemStones(int ID)
         {
             List<UserGemStone> userGemStones = new List<UserGemStone>();
-            SqlDataReader sqlDataReader = null;
+            DbDataReader sqlDataReader = null;
             try
             {
                 try
@@ -8532,7 +8533,7 @@ namespace Bussiness
 
         public List<UserAvatarCollectionInfo> GetSingleAvatarCollect(int userId)
         {
-            SqlDataReader sqlDataReader = null;
+            DbDataReader sqlDataReader = null;
             List<UserAvatarCollectionInfo> list = new List<UserAvatarCollectionInfo>();
             try
             {
@@ -8645,7 +8646,7 @@ namespace Bussiness
 
         public List<UserLeagueInfo> GetSingleUserLeague(int userId)
         {
-            SqlDataReader sqlDataReader = null;
+            DbDataReader sqlDataReader = null;
             List<UserLeagueInfo> list = new List<UserLeagueInfo>();
             try
             {

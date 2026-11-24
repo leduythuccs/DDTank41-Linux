@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Bussiness
         public ActiveInfo[] GetAllActives()
         {
 			List<ActiveInfo> list = new List<ActiveInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Active_All");
@@ -40,7 +41,7 @@ namespace Bussiness
         public ActiveConvertItemInfo[] GetSingleActiveConvertItems(int activeID)
         {
 			List<ActiveConvertItemInfo> list = new List<ActiveConvertItemInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -73,7 +74,7 @@ namespace Bussiness
 
         public ActiveInfo GetSingleActives(int activeID)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -104,7 +105,7 @@ namespace Bussiness
 			return null;
         }
 
-        public ActiveConvertItemInfo InitActiveConvertItemInfo(SqlDataReader reader)
+        public ActiveConvertItemInfo InitActiveConvertItemInfo(DbDataReader reader)
         {
 			return new ActiveConvertItemInfo
 			{
@@ -119,7 +120,7 @@ namespace Bussiness
 			};
         }
 
-        public ActiveInfo InitActiveInfo(SqlDataReader reader)
+        public ActiveInfo InitActiveInfo(DbDataReader reader)
         {
 			ActiveInfo info = new ActiveInfo
 			{
@@ -152,7 +153,7 @@ namespace Bussiness
 		public ActiveConvertItemInfo[] GetAllActiveConvertItem()
 		{
 			List<ActiveConvertItemInfo> infos = new List<ActiveConvertItemInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Active_Convert_Item_All");
@@ -177,7 +178,7 @@ namespace Bussiness
 		public ActiveAwardInfo[] GetAllActiveAwardInfo()
 		{
 			List<ActiveAwardInfo> list = new List<ActiveAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				base.db.GetReader(ref resultDataReader, "SP_Active_Award_All");
@@ -223,7 +224,7 @@ namespace Bussiness
 		public LuckyStartToptenAwardInfo[] GetAllLuckyStartToptenAward()
 		{
 			List<LuckyStartToptenAwardInfo> infos = new List<LuckyStartToptenAwardInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_LuckyStart_Topten_Award_All");

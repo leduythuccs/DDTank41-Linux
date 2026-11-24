@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Writes <Service>/appSettings.local.config (git-ignored) with connection strings for the
-# local docker SQL Server. App.config merges it via <appSettings file="appSettings.local.config">,
+# Writes <Service>/appSettings.local.config (git-ignored) with the connection strings for the local MariaDB
+# (deploy/mariadb/docker-compose.yml). App.config merges it via <appSettings file="appSettings.local.config">,
 # so these values override the committed ones. Re-run after changing deploy/.env, then rebuild.
-# Optional in deploy/.env: DDTANK_RUFFLE_URL (Ruffle build for the game page), DDTANK_PUBLIC_IP,
+# Optional in deploy/.env: DDTANK_RUFFLE_URL (Ruffle build for the game page),
 # DDTANK_RESOURCE_UPSTREAM (site to fetch /resource/ files from when they are not in ../resource/),
-# DDTANK_ADMIN_PASSWORD (GameAdmin.Web login; generated and saved to .env when missing).
+# DDTANK_ADMIN_PASSWORD (GameAdmin.Web login; generated and saved to .env when missing),
+# DDTANK_DB_HOST / DDTANK_MARIADB_PORT (default 127.0.0.1 / 3306),
+# DDTANK_PORT_OFFSET (default 0): added to every port (web 8080, admin 8081, game 9500, center 9202/2008/2009,
+# fighting 9208), to run a second copy next to another one.
 set -euo pipefail
 cd "$(dirname "$0")"
 set -a; . ./.env; set +a
@@ -13,8 +16,28 @@ if [ -z "${DDTANK_ADMIN_PASSWORD:-}" ]; then
   printf '\n# GameAdmin.Web login (http://127.0.0.1:8081)\nDDTANK_ADMIN_PASSWORD=%s\n' "$DDTANK_ADMIN_PASSWORD" >> .env
   echo "generated DDTANK_ADMIN_PASSWORD (saved in deploy/.env)"
 fi
-HOST="${DDTANK_DB_HOST:-127.0.0.1,1433}"
-cs() { echo "Data Source=$HOST;Initial Catalog=$1;User ID=ddtank;Password=$DDTANK_DB_PASSWORD;TrustServerCertificate=True;Encrypt=True"; }
+HOST="${DDTANK_DB_HOST:-127.0.0.1}"
+DBPORT="${DDTANK_MARIADB_PORT:-3306}"
+O="${DDTANK_PORT_OFFSET:-0}"
+WEB=$((8080 + O)); ADMIN=$((8081 + O)); GAME=$((9500 + O)); CENTER=$((9202 + O)); FIGHT=$((9208 + O))
+CENTER_TCP=$((2009 + O)); CENTER_HTTP=$((2008 + O))
+xml() { printf '%s' "$1" | sed 's/&/\&amp;/g; s/"/\&quot;/g; s/</\&lt;/g'; }
+cs() { xml "Server=$HOST;Port=$DBPORT;Database=$1;User ID=ddtank;Password=\"$DDTANK_DB_PASSWORD\";Pooling=true;ConvertZeroDateTime=true"; }
+add() { echo "	<add key=\"$1\" value=\"$(xml "$2")\" />"; }
+ports() { # port settings, only when they differ from the committed App.config values
+  [ "$O" = 0 ] && return
+  case "$1" in
+    Road.Service) add Port $GAME; add LoginServerPort $CENTER; add FightServerPort $FIGHT; add CenterServiceAddress "net.tcp://127.0.0.1:$CENTER_TCP/" ;;
+    Center.Service) add Port $CENTER; add CenterServiceTcpPort $CENTER_TCP; add CenterServiceHttpPort $CENTER_HTTP ;;
+    Fighting.Service) add Port $FIGHT ;;
+    Tank.Web)
+      add Web.Urls "http://127.0.0.1:$WEB"; add Web.PublicBaseUrl "http://127.0.0.1:$WEB"; add Web.SocketPorts $GAME
+      add CenterServiceAddress "net.tcp://127.0.0.1:$CENTER_TCP/"; add LoginUrl "http://127.0.0.1:$WEB/Request/CreateLogin.aspx"
+      add LoginOnUrl "http://127.0.0.1:$WEB/index.htm?open=self"; add FlashUrl "http://127.0.0.1:$WEB/playgame.aspx"
+      add FlashConfig "http://127.0.0.1:$WEB/flash/config.xml"; add FlashSite "http://127.0.0.1:$WEB/flash/" ;;
+    GameAdmin.Web) add Admin.Urls "http://127.0.0.1:$ADMIN"; add CenterServiceAddress "net.tcp://127.0.0.1:$CENTER_TCP/"; add Resource "http://127.0.0.1:$WEB/resource/" ;;
+  esac
+}
 for svc in Road.Service Center.Service Fighting.Service Tank.Web GameAdmin.Web; do
   umask 077
   cat > "../$svc/appSettings.local.config" <<XML
@@ -24,16 +47,16 @@ for svc in Road.Service Center.Service Fighting.Service Tank.Web GameAdmin.Web; 
 	<add key="conString" value="$(cs Project_Player34)" />
 	<add key="crosszoneString" value="$(cs Project_Game34)" />
 	<add key="membershipDb" value="$(cs Db_Membership)" />
-$( [ -n "${DDTANK_RUFFLE_URL:-}" ] && echo "	<add key=\"Web.RuffleUrl\" value=\"$DDTANK_RUFFLE_URL\" />" )
-$( [ -n "${DDTANK_RESOURCE_UPSTREAM:-}" ] && echo "	<add key=\"Web.ResourceUpstream\" value=\"$DDTANK_RESOURCE_UPSTREAM\" />" )
-$( [ "$svc" = GameAdmin.Web ] && echo "	<add key=\"Admin.Password\" value=\"$(printf '%s' "$DDTANK_ADMIN_PASSWORD" | sed 's/&/\&amp;/g; s/"/\&quot;/g; s/</\&lt;/g')\" />" )
+$( [ -n "${DDTANK_RUFFLE_URL:-}" ] && add Web.RuffleUrl "$DDTANK_RUFFLE_URL" )
+$( [ -n "${DDTANK_RESOURCE_UPSTREAM:-}" ] && add Web.ResourceUpstream "$DDTANK_RESOURCE_UPSTREAM" )
+$( [ "$svc" = GameAdmin.Web ] && add Admin.Password "$DDTANK_ADMIN_PASSWORD" )
+$(ports "$svc")
 </appSettings>
 XML
   echo "wrote $svc/appSettings.local.config"
 done
 
-# Point the game server list at this machine (the backup still lists the old public server IP).
-# Override with DDTANK_PUBLIC_IP in deploy/.env when clients connect from other machines.
-PUBLIC_IP="${DDTANK_PUBLIC_IP:-127.0.0.1}"
-docker exec -e SQLCMDPASSWORD="$MSSQL_SA_PASSWORD" ddtank-mssql /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -b -h -1 \
-  -d Project_Player34 -Q "SET NOCOUNT ON; UPDATE Server_List SET IP='$PUBLIC_IP'; SELECT CAST(ID AS varchar)+' '+Name+' -> '+IP+':'+CAST(Port AS varchar) FROM Server_List"
+# Point the game server list at this machine and port (the backup lists the old public server). The browser reaches
+# the game server through Tank.Web's socket proxy, so the IP stays 127.0.0.1.
+docker exec -e MYSQL_PWD="$DDTANK_DB_PASSWORD" ddtank-mariadb mariadb -uddtank -N Project_Player34 \
+  -e "UPDATE Server_List SET IP='127.0.0.1', Port=$GAME; SELECT CONCAT(ID, ' ', Name, ' -> ', IP, ':', Port) FROM Server_List"

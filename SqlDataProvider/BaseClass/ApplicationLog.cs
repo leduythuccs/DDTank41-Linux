@@ -1,29 +1,15 @@
-using System.Diagnostics;
+using log4net;
 
 namespace SqlDataProvider.BaseClass
 {
+    /// <summary>Database errors. They went to the Windows event log, which does not exist on Linux: log4net instead.</summary>
     public static class ApplicationLog
     {
+        private static readonly ILog log = LogManager.GetLogger("SqlDataProvider");
+
         public static void WriteError(string message)
         {
-			WriteLog(TraceLevel.Error, message);
-        }
-
-        private static void WriteLog(TraceLevel level, string messageText)
-        {
-			try
-			{
-				EventLogEntryType type = ((level != TraceLevel.Error) ? EventLogEntryType.Error : EventLogEntryType.Error);
-				string str = "Application";
-				if (!EventLog.SourceExists(str))
-				{
-					EventLog.CreateEventSource(str, "BIZ");
-				}
-				new EventLog(str, ".", str).WriteEntry(messageText, type);
-			}
-			catch
-			{
-			}
+            log.Error(message);
         }
     }
 }

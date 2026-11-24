@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace Bussiness
         public ConsortiaBossConfigInfo[] GetConsortiaBossConfigAll()
         {
 			List<ConsortiaBossConfigInfo> list = new List<ConsortiaBossConfigInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Boss_Config_All");
@@ -116,7 +117,7 @@ namespace Bussiness
         public ConsortiaBuffTempInfo[] GetAllConsortiaBuffTemp()
         {
 			List<ConsortiaBuffTempInfo> list = new List<ConsortiaBuffTempInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Buff_Temp_All");
@@ -848,7 +849,7 @@ namespace Bussiness
         public ConsortiaLevelInfo[] GetAllConsortiaLevel()
         {
 			List<ConsortiaLevelInfo> list = new List<ConsortiaLevelInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Consortia_Level_All");
@@ -891,7 +892,7 @@ namespace Bussiness
         public ConsortiaInfo[] GetConsortiaAll()
         {
 			List<ConsortiaInfo> list = new List<ConsortiaInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Consortia_All");
@@ -937,7 +938,7 @@ namespace Bussiness
         public ConsortiaAllyInfo[] GetConsortiaAllyAll()
         {
 			List<ConsortiaAllyInfo> list = new List<ConsortiaAllyInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_ConsortiaAlly_All");
@@ -1175,7 +1176,7 @@ namespace Bussiness
         public Dictionary<int, int> GetConsortiaByAlly(int consortiaID)
         {
 			Dictionary<int, int> dictionary = new Dictionary<int, int>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1217,7 +1218,7 @@ namespace Bussiness
         public int[] GetConsortiaByAllyByState(int consortiaID, int state)
         {
 			List<int> list = new List<int>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -1341,7 +1342,7 @@ namespace Bussiness
         public ConsortiaEquipControlInfo GetConsortiaEuqipRiches(int consortiaID, int Level, int type)
         {
 			ConsortiaEquipControlInfo info = null;
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[3]
@@ -1612,7 +1613,7 @@ namespace Bussiness
 
         public ConsortiaInfo GetConsortiaSingle(int id)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -1673,7 +1674,7 @@ namespace Bussiness
 
         public ConsortiaInfo GetConsortiaSingleByName(string ConsortiaName)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2918,7 +2919,7 @@ namespace Bussiness
         public ConsortiaInfo[] UpdateConsortiaFightPower()
         {
 			List<ConsortiaInfo> consortiaInfoList = new List<ConsortiaInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Update_FightPower");

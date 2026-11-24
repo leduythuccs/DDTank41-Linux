@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Bussiness
         public PveInfo[] GetAllPveInfos()
         {
 			List<PveInfo> list = new List<PveInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_PveInfos_All");

@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Bussiness
         public MapInfo[] GetAllMap()
         {
 			List<MapInfo> list = new List<MapInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Maps_All");
@@ -62,7 +63,7 @@ namespace Bussiness
         public ServerMapInfo[] GetAllServerMap()
         {
 			List<ServerMapInfo> list = new List<ServerMapInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Maps_Server_All");

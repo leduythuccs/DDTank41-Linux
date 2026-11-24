@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Starts the whole game locally: Center -> Fighting -> Road (game server) -> Tank.Web (website + API)
 # -> GameAdmin.Web (admin site: send mail, items and money to characters).
-# Prerequisites (once): docker compose up -d && ./restore-databases.sh && ./configure-local.sh
+# Prerequisites (once): (cd mariadb && docker compose --env-file ../.env up -d) && ./restore-databases.sh && ./configure-local.sh
 #                       dotnet build ../DDTank.Server.Linux.sln
 # Logs go to deploy/logs/*.log. Ctrl+C stops everything (SIGTERM, so the servers save and exit cleanly).
 set -euo pipefail
@@ -11,7 +11,8 @@ LOGS="$PWD/logs"
 DOTNET="${DOTNET:-$(command -v dotnet || echo "$HOME/.dotnet/dotnet")}"
 mkdir -p "$LOGS"
 
-docker start ddtank-mssql >/dev/null 2>&1 || true
+docker start ddtank-mariadb >/dev/null 2>&1 || true
+O="$(set -a; . ./.env; echo "${DDTANK_PORT_OFFSET:-0}")"
 
 pids=()
 stop_all() {
@@ -45,9 +46,9 @@ start admin    GameAdmin.Web    GameAdmin.Web.dll    "GameAdmin listening"
 cat <<EOF
 
 All services are running. Open the login page:
-  http://127.0.0.1:8080/index.htm
+  http://127.0.0.1:$((8080 + O))/index.htm
 Admin site (password: DDTANK_ADMIN_PASSWORD in deploy/.env):
-  http://127.0.0.1:8081/
+  http://127.0.0.1:$((8081 + O))/
 Logs: $LOGS   (Ctrl+C to stop)
 EOF
 wait

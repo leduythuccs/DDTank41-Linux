@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
@@ -36,7 +37,7 @@ namespace Bussiness
 
         public bool GetFromDbByUid(string uid, ref string userName, ref string portrait)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]

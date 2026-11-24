@@ -1,3 +1,4 @@
+using System.Data.Common;
 using SqlDataProvider.Data;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Bussiness
         public CardGroupInfo[] GetAllCardGroup()
         {
 			List<CardGroupInfo> infos = new List<CardGroupInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Card_Group_All");
@@ -37,7 +38,7 @@ namespace Bussiness
 			return infos.ToArray();
         }
 
-        public CardGroupInfo InitCardGroup(SqlDataReader reader)
+        public CardGroupInfo InitCardGroup(DbDataReader reader)
         {
 			CardGroupInfo info = new CardGroupInfo();
 			info.ID = (int)reader["ID"];
@@ -49,7 +50,7 @@ namespace Bussiness
         public CardInfo[] GetAllCard()
         {
 			List<CardInfo> infos = new List<CardInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Card_Info_All");
@@ -75,7 +76,7 @@ namespace Bussiness
 			return infos.ToArray();
         }
 
-        public CardInfo InitCard(SqlDataReader reader)
+        public CardInfo InitCard(DbDataReader reader)
         {
 			CardInfo info = new CardInfo();
 			info.ID = (int)reader["ID"];
@@ -88,7 +89,7 @@ namespace Bussiness
         public CardBuffInfo[] GetAllCardBuff()
         {
 			List<CardBuffInfo> infos = new List<CardBuffInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Card_Buff_All");
@@ -114,7 +115,7 @@ namespace Bussiness
 			return infos.ToArray();
         }
 
-        public CardBuffInfo InitCardBuff(SqlDataReader reader)
+        public CardBuffInfo InitCardBuff(DbDataReader reader)
         {
 			CardBuffInfo info = new CardBuffInfo();
 			info.ID = (int)reader["ID"];
@@ -129,7 +130,7 @@ namespace Bussiness
         public ActiveAwardInfo[] GetAllActiveAwardInfo()
         {
 			List<ActiveAwardInfo> list = new List<ActiveAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Active_Award");
@@ -176,7 +177,7 @@ namespace Bussiness
         public ActiveConditionInfo[] GetAllActiveConditionInfo()
         {
 			List<ActiveConditionInfo> list = new List<ActiveConditionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Active_Condition");
@@ -217,7 +218,7 @@ namespace Bussiness
         public AchievementInfo[] GetAllAchievement()
         {
 			List<AchievementInfo> list = new List<AchievementInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_Achievement");
@@ -265,7 +266,7 @@ namespace Bussiness
         public AchievementInfo[] GetALlAchievement()
         {
 			List<AchievementInfo> list = new List<AchievementInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Achievement_All");
@@ -294,7 +295,7 @@ namespace Bussiness
         public AchievementCondictionInfo[] GetAllAchievementCondiction()
         {
 			List<AchievementCondictionInfo> list = new List<AchievementCondictionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_AchievementCondiction");
@@ -331,7 +332,7 @@ namespace Bussiness
         public AchievementConditionInfo[] GetALlAchievementCondition()
         {
 			List<AchievementConditionInfo> list = new List<AchievementConditionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Achievement_Condition_All");
@@ -360,7 +361,7 @@ namespace Bussiness
         public AchievementGoodsInfo[] GetAllAchievementGoods()
         {
 			List<AchievementGoodsInfo> list = new List<AchievementGoodsInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_AchievementGoods");
@@ -397,7 +398,7 @@ namespace Bussiness
         public AchievementRewardInfo[] GetALlAchievementReward()
         {
 			List<AchievementRewardInfo> list = new List<AchievementRewardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Achievement_Reward_All");
@@ -426,7 +427,7 @@ namespace Bussiness
         public BallInfo[] GetAllBall()
         {
 			List<BallInfo> list = new List<BallInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Ball_All");
@@ -480,7 +481,7 @@ namespace Bussiness
         public ItemTemplateInfo[] GetSingleName(string ItemName)
         {
 			List<ItemTemplateInfo> infos = new List<ItemTemplateInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				SqlParameter[] para = new SqlParameter[1]
@@ -514,7 +515,7 @@ namespace Bussiness
         public BallConfigInfo[] GetAllBallConfig()
         {
 			List<BallConfigInfo> list = new List<BallConfigInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "[SP_Ball_Config_All]");
@@ -551,7 +552,7 @@ namespace Bussiness
         public CategoryInfo[] GetAllCategory()
         {
 			List<CategoryInfo> list = new List<CategoryInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Items_Category_All");
@@ -587,7 +588,7 @@ namespace Bussiness
         public DailyAwardInfo[] GetAllDailyAward()
         {
 			List<DailyAwardInfo> list = new List<DailyAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Daily_Award_All");
@@ -630,7 +631,7 @@ namespace Bussiness
         public DailyAwardInfo[] GetSingleDailyAward(int awardDays)
         {
 			List<DailyAwardInfo> list = new List<DailyAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -677,7 +678,7 @@ namespace Bussiness
         public DropCondiction[] GetAllDropCondictions()
         {
 			List<DropCondiction> list = new List<DropCondiction>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Drop_Condiction_All");
@@ -706,7 +707,7 @@ namespace Bussiness
         public DropItem[] GetAllDropItems()
         {
 			List<DropItem> list = new List<DropItem>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Drop_Item_All");
@@ -735,7 +736,7 @@ namespace Bussiness
         public EdictumInfo[] GetAllEdictum()
         {
 			List<EdictumInfo> list = new List<EdictumInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Edictum_All");
@@ -764,7 +765,7 @@ namespace Bussiness
         public EventRewardGoodsInfo[] GetAllEventRewardGoods()
         {
 			List<EventRewardGoodsInfo> list = new List<EventRewardGoodsInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_EventRewardGoods");
@@ -807,7 +808,7 @@ namespace Bussiness
         public EventRewardGoodsInfo[] GetEventRewardGoodsByType(int ActivityType, int SubActivityType)
         {
 			List<EventRewardGoodsInfo> list = new List<EventRewardGoodsInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -855,7 +856,7 @@ namespace Bussiness
         public EventRewardInfo[] GetAllEventRewardInfo()
         {
 			List<EventRewardInfo> list = new List<EventRewardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_EventRewardInfo");
@@ -890,7 +891,7 @@ namespace Bussiness
         public EventRewardInfo[] GetEventRewardInfoByType(int ActivityType, int SubActivityType)
         {
 			List<EventRewardInfo> list = new List<EventRewardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[2]
@@ -930,7 +931,7 @@ namespace Bussiness
 		public FusionInfo[] GetAllFusion()
 		{
 			List<FusionInfo> fusionInfoList = new List<FusionInfo>();
-			SqlDataReader ResultDataReader = (SqlDataReader)null;
+			DbDataReader ResultDataReader = (DbDataReader)null;
 			try
 			{
 				this.db.GetReader(ref ResultDataReader, "SP_Fusion_All");
@@ -962,7 +963,7 @@ namespace Bussiness
 		public FusionInfo[] GetAllFusionDesc()
         {
 			List<FusionInfo> list = new List<FusionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Fusion_All_Desc");
@@ -1001,7 +1002,7 @@ namespace Bussiness
         public Items_Fusion_List_Info[] GetAllFusionList()
         {
 			List<Items_Fusion_List_Info> list = new List<Items_Fusion_List_Info>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "GET_ItemFusion_All");
@@ -1037,7 +1038,7 @@ namespace Bussiness
         public ItemTemplateInfo[] GetAllGoods()
         {
 			List<ItemTemplateInfo> list = new List<ItemTemplateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Items_All");
@@ -1066,7 +1067,7 @@ namespace Bussiness
         public ItemTemplateInfo[] GetAllGoodsASC()
         {
 			List<ItemTemplateInfo> list = new List<ItemTemplateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Items_All_ASC");
@@ -1095,7 +1096,7 @@ namespace Bussiness
         public HotSpringRoomInfo[] GetAllHotSpringRooms()
         {
 			List<HotSpringRoomInfo> list = new List<HotSpringRoomInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_HotSpring_Room");
@@ -1140,7 +1141,7 @@ namespace Bussiness
         public ItemRecordTypeInfo[] GetAllItemRecordType()
         {
 			List<ItemRecordTypeInfo> list = new List<ItemRecordTypeInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Item_Record_Type_All");
@@ -1169,7 +1170,7 @@ namespace Bussiness
 		//     public ShopItemInfo[] GetALllShop()
 		//     {
 		//List<ShopItemInfo> list = new List<ShopItemInfo>();
-		//SqlDataReader resultDataReader = null;
+		//DbDataReader resultDataReader = null;
 		//try
 		//{
 		//	db.GetReader(ref resultDataReader, "SP_Shop_All");
@@ -1236,7 +1237,7 @@ namespace Bussiness
 		public ShopItemInfo[] GetALllShop()
 		{
 			List<ShopItemInfo> infos = new List<ShopItemInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Shop_All");
@@ -1303,7 +1304,7 @@ namespace Bussiness
 		public MissionInfo[] GetAllMissionInfo()
         {
 			List<MissionInfo> list = new List<MissionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Mission_Info_All");
@@ -1350,7 +1351,7 @@ namespace Bussiness
         public NpcInfo[] GetAllNPCInfo()
         {
 			List<NpcInfo> list = new List<NpcInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_NPC_Info_All");
@@ -1415,7 +1416,7 @@ namespace Bussiness
         public PropInfo[] GetAllProp()
         {
 			List<PropInfo> list = new List<PropInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Prop_All");
@@ -1466,7 +1467,7 @@ namespace Bussiness
         public QQtipsMessagesInfo[] GetAllQQtipsMessagesLoad()
         {
 			List<QQtipsMessagesInfo> list = new List<QQtipsMessagesInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_QQtipsMessages_All");
@@ -1495,7 +1496,7 @@ namespace Bussiness
         public QuestInfo[] GetALlQuest()
         {
 			List<QuestInfo> list = new List<QuestInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Quest_All");
@@ -1524,7 +1525,7 @@ namespace Bussiness
         public EventLiveInfo[] GetAllEventLive()
         {
 			List<EventLiveInfo> list = new List<EventLiveInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Event_Live_All");
@@ -1553,7 +1554,7 @@ namespace Bussiness
         public QuestConditionInfo[] GetAllQuestCondiction()
         {
 			List<QuestConditionInfo> list = new List<QuestConditionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Quest_Condiction_All");
@@ -1582,7 +1583,7 @@ namespace Bussiness
         public QuestRateInfo[] GetAllQuestRate()
         {
 			List<QuestRateInfo> list = new List<QuestRateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Quest_Rate_All");
@@ -1611,7 +1612,7 @@ namespace Bussiness
         public QuestAwardInfo[] GetAllQuestGoods()
         {
 			List<QuestAwardInfo> list = new List<QuestAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Quest_Goods_All");
@@ -1640,7 +1641,7 @@ namespace Bussiness
         public EventLiveGoods[] GetAllEventLiveGoods()
         {
 			List<EventLiveGoods> list = new List<EventLiveGoods>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Event_LiveGoods_All");
@@ -1669,7 +1670,7 @@ namespace Bussiness
         public List<RefineryInfo> GetAllRefineryInfo()
         {
 			List<RefineryInfo> list = new List<RefineryInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Item_Refinery_All");
@@ -1726,7 +1727,7 @@ namespace Bussiness
         public StrengthenInfo[] GetAllRefineryStrengthen()
         {
 			List<StrengthenInfo> list = new List<StrengthenInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Item_Refinery_Strengthen_All");
@@ -1760,7 +1761,7 @@ namespace Bussiness
         public SearchGoodsTempInfo[] GetAllSearchGoodsTemp()
         {
 			List<SearchGoodsTempInfo> list = new List<SearchGoodsTempInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_SearchGoodsTemp_All");
@@ -1797,7 +1798,7 @@ namespace Bussiness
         public ShopGoodsShowListInfo[] GetAllShopGoodsShowList()
         {
 			List<ShopGoodsShowListInfo> list = new List<ShopGoodsShowListInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_ShopGoodsShowList_All");
@@ -1826,7 +1827,7 @@ namespace Bussiness
         public StrengthenInfo[] GetAllStrengthen()
         {
 			List<StrengthenInfo> list = new List<StrengthenInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Item_Strengthen_All");
@@ -1864,7 +1865,7 @@ namespace Bussiness
 		public StrengThenExpInfo[] GetAllStrengThenExp()
 		{
 			List<StrengThenExpInfo> infos = new List<StrengThenExpInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_StrengThenExp_All");
@@ -1895,7 +1896,7 @@ namespace Bussiness
 		public StrengthenGoodsInfo[] GetAllStrengthenGoodsInfo()
         {
 			List<StrengthenGoodsInfo> list = new List<StrengthenGoodsInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Item_StrengthenGoodsInfo_All");
@@ -1932,7 +1933,7 @@ namespace Bussiness
         public LoadUserBoxInfo[] GetAllTimeBoxAward()
         {
 			List<LoadUserBoxInfo> list = new List<LoadUserBoxInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_TimeBox_Award_All");
@@ -1969,7 +1970,7 @@ namespace Bussiness
         public UserBoxInfo[] GetAllUserBox()
         {
 			List<UserBoxInfo> list = new List<UserBoxInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_TimeBox_Award_All");
@@ -2006,7 +2007,7 @@ namespace Bussiness
         public EventAwardInfo[] GetEventAwardInfos()
         {
 			List<EventAwardInfo> list = new List<EventAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_EventAwardItem_All");
@@ -2050,7 +2051,7 @@ namespace Bussiness
         public ItemTemplateInfo[] GetFusionType()
         {
 			List<ItemTemplateInfo> list = new List<ItemTemplateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Items_FusionType");
@@ -2079,7 +2080,7 @@ namespace Bussiness
         public ItemBoxInfo[] GetItemBoxInfos()
         {
 			List<ItemBoxInfo> list = new List<ItemBoxInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_ItemsBox_All");
@@ -2108,7 +2109,7 @@ namespace Bussiness
         public ItemTemplateInfo[] GetSingleCategory(int CategoryID)
         {
 			List<ItemTemplateInfo> list = new List<ItemTemplateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2141,7 +2142,7 @@ namespace Bussiness
 
         public ItemTemplateInfo GetSingleGoods(int goodsID)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2175,7 +2176,7 @@ namespace Bussiness
         public ItemBoxInfo[] GetSingleItemsBox(int DataID)
         {
 			List<ItemBoxInfo> list = new List<ItemBoxInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2208,7 +2209,7 @@ namespace Bussiness
 
         public QuestInfo GetSingleQuest(int questID)
         {
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2239,7 +2240,7 @@ namespace Bussiness
 			return null;
         }
 
-        public AchievementInfo InitAchievement(SqlDataReader reader)
+        public AchievementInfo InitAchievement(DbDataReader reader)
         {
 			return new AchievementInfo
 			{
@@ -2262,7 +2263,7 @@ namespace Bussiness
 			};
         }
 
-        public AchievementConditionInfo InitAchievementCondition(SqlDataReader reader)
+        public AchievementConditionInfo InitAchievementCondition(DbDataReader reader)
         {
 			return new AchievementConditionInfo
 			{
@@ -2274,7 +2275,7 @@ namespace Bussiness
 			};
         }
 
-        public AchievementRewardInfo InitAchievementReward(SqlDataReader reader)
+        public AchievementRewardInfo InitAchievementReward(DbDataReader reader)
         {
 			return new AchievementRewardInfo
 			{
@@ -2286,7 +2287,7 @@ namespace Bussiness
 			};
         }
 
-        public DropCondiction InitDropCondiction(SqlDataReader reader)
+        public DropCondiction InitDropCondiction(DbDataReader reader)
         {
 			return new DropCondiction
 			{
@@ -2297,7 +2298,7 @@ namespace Bussiness
 			};
         }
 
-        public DropItem InitDropItem(SqlDataReader reader)
+        public DropItem InitDropItem(DbDataReader reader)
         {
 			return new DropItem
 			{
@@ -2314,7 +2315,7 @@ namespace Bussiness
 			};
         }
 
-        public EdictumInfo InitEdictum(SqlDataReader reader)
+        public EdictumInfo InitEdictum(DbDataReader reader)
         {
 			return new EdictumInfo
 			{
@@ -2329,7 +2330,7 @@ namespace Bussiness
 			};
         }
 
-        public ItemBoxInfo InitItemBoxInfo(SqlDataReader reader)
+        public ItemBoxInfo InitItemBoxInfo(DbDataReader reader)
         {
 			return new ItemBoxInfo
 			{
@@ -2350,7 +2351,7 @@ namespace Bussiness
 			};
         }
 
-        public ItemRecordTypeInfo InitItemRecordType(SqlDataReader reader)
+        public ItemRecordTypeInfo InitItemRecordType(DbDataReader reader)
         {
 			return new ItemRecordTypeInfo
 			{
@@ -2360,7 +2361,7 @@ namespace Bussiness
 			};
         }
 
-        public ItemTemplateInfo InitItemTemplateInfo(SqlDataReader reader)
+        public ItemTemplateInfo InitItemTemplateInfo(DbDataReader reader)
         {
 			return new ItemTemplateInfo
 			{
@@ -2410,7 +2411,7 @@ namespace Bussiness
 			};
         }
 
-        public QQtipsMessagesInfo InitQQtipsMessagesLoad(SqlDataReader reader)
+        public QQtipsMessagesInfo InitQQtipsMessagesLoad(DbDataReader reader)
         {
 			return new QQtipsMessagesInfo
 			{
@@ -2426,7 +2427,7 @@ namespace Bussiness
 			};
         }
 
-        public QuestInfo InitQuest(SqlDataReader reader)
+        public QuestInfo InitQuest(DbDataReader reader)
         {
 			return new QuestInfo
 			{
@@ -2465,7 +2466,7 @@ namespace Bussiness
 			};
         }
 
-        public QuestConditionInfo InitQuestCondiction(SqlDataReader reader)
+        public QuestConditionInfo InitQuestCondiction(DbDataReader reader)
         {
 			return new QuestConditionInfo
 			{
@@ -2479,7 +2480,7 @@ namespace Bussiness
 			};
         }
 
-        public QuestAwardInfo InitQuestGoods(SqlDataReader reader)
+        public QuestAwardInfo InitQuestGoods(DbDataReader reader)
         {
 			return new QuestAwardInfo
 			{
@@ -2498,7 +2499,7 @@ namespace Bussiness
 			};
         }
 
-        public QuestRateInfo InitQuestRate(SqlDataReader reader)
+        public QuestRateInfo InitQuestRate(DbDataReader reader)
         {
 			return new QuestRateInfo
 			{
@@ -2510,7 +2511,7 @@ namespace Bussiness
 			};
         }
 
-        public ShopGoodsShowListInfo InitShopGoodsShowListInfo(SqlDataReader reader)
+        public ShopGoodsShowListInfo InitShopGoodsShowListInfo(DbDataReader reader)
         {
 			return new ShopGoodsShowListInfo
 			{
@@ -2519,7 +2520,7 @@ namespace Bussiness
 			};
         }
 
-        public EventLiveInfo InitEventLiveInfo(SqlDataReader reader)
+        public EventLiveInfo InitEventLiveInfo(DbDataReader reader)
         {
 			return new EventLiveInfo
 			{
@@ -2533,7 +2534,7 @@ namespace Bussiness
 			};
         }
 
-        public EventLiveGoods InitEventLiveGoods(SqlDataReader reader)
+        public EventLiveGoods InitEventLiveGoods(DbDataReader reader)
         {
 			return new EventLiveGoods
 			{
@@ -2553,7 +2554,7 @@ namespace Bussiness
         public SubActiveInfo[] GetAllSubActive()
         {
 			List<SubActiveInfo> list = new List<SubActiveInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_SubActive_All");
@@ -2595,7 +2596,7 @@ namespace Bussiness
         public CommunalActiveAwardInfo[] GetAllCommunalActiveAward()
         {
 			List<CommunalActiveAwardInfo> list = new List<CommunalActiveAwardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_CommunalActiveAward_All");
@@ -2641,7 +2642,7 @@ namespace Bussiness
         public CommunalActiveExpInfo[] GetAllCommunalActiveExp()
         {
 			List<CommunalActiveExpInfo> list = new List<CommunalActiveExpInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_CommunalActiveExp_All");
@@ -2677,7 +2678,7 @@ namespace Bussiness
         public SubActiveConditionInfo[] GetAllSubActiveCondition(int ActiveID)
         {
 			List<SubActiveConditionInfo> list = new List<SubActiveConditionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				SqlParameter[] sqlParameters = new SqlParameter[1]
@@ -2722,7 +2723,7 @@ namespace Bussiness
         public CommunalActiveInfo[] GetAllCommunalActive()
         {
 			List<CommunalActiveInfo> list = new List<CommunalActiveInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_CommunalActive_All");
@@ -2764,7 +2765,7 @@ namespace Bussiness
         public FairBattleRewardInfo[] GetAllFairBattleReward()
         {
 			List<FairBattleRewardInfo> list = new List<FairBattleRewardInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_FairBattleReward_All");
@@ -2802,7 +2803,7 @@ namespace Bussiness
         public CardUpdateConditionInfo[] GetAllCardUpdateCondition()
         {
 			List<CardUpdateConditionInfo> list = new List<CardUpdateConditionInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_CardUpdateCondiction");
@@ -2841,7 +2842,7 @@ namespace Bussiness
         public CardGrooveUpdateInfo[] GetAllCardGrooveUpdate()
         {
 			List<CardGrooveUpdateInfo> list = new List<CardGrooveUpdateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_CardGrooveUpdate_All");
@@ -2870,7 +2871,7 @@ namespace Bussiness
         public CardUpdateInfo[] GetAllCardUpdateInfo()
         {
 			List<CardUpdateInfo> list = new List<CardUpdateInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Get_CardUpdateInfo");
@@ -2907,7 +2908,7 @@ namespace Bussiness
 			return list.ToArray();
         }
 
-        public CardGrooveUpdateInfo InitCardGrooveUpdate(SqlDataReader reader)
+        public CardGrooveUpdateInfo InitCardGrooveUpdate(DbDataReader reader)
         {
 			return new CardGrooveUpdateInfo
 			{
@@ -2927,7 +2928,7 @@ namespace Bussiness
         public LevelInfo[] GetAllLevel()
         {
 			List<LevelInfo> list = new List<LevelInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Level_All");
@@ -2962,7 +2963,7 @@ namespace Bussiness
         public ExerciseInfo[] GetAllExercise()
         {
 			List<ExerciseInfo> list = new List<ExerciseInfo>();
-			SqlDataReader resultDataReader = null;
+			DbDataReader resultDataReader = null;
 			try
 			{
 				db.GetReader(ref resultDataReader, "SP_Exercise_All");
@@ -3001,7 +3002,7 @@ namespace Bussiness
         public PetConfig[] GetAllPetConfig()
         {
 			List<PetConfig> petConfigList = new List<PetConfig>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetConfig_All");
@@ -3034,7 +3035,7 @@ namespace Bussiness
         public PetLevel[] GetAllPetLevel()
         {
 			List<PetLevel> petLevelList = new List<PetLevel>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetLevel_All");
@@ -3067,7 +3068,7 @@ namespace Bussiness
         public PetTemplateInfo[] GetAllPetTemplateInfo()
         {
 			List<PetTemplateInfo> petTemplateInfoList = new List<PetTemplateInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetTemplateInfo_All");
@@ -3122,7 +3123,7 @@ namespace Bussiness
         public PetSkillTemplateInfo[] GetAllPetSkillTemplateInfo()
         {
 			List<PetSkillTemplateInfo> skillTemplateInfoList = new List<PetSkillTemplateInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetSkillTemplateInfo_All");
@@ -3160,7 +3161,7 @@ namespace Bussiness
         public PetSkillInfo[] GetAllPetSkillInfo()
         {
 			List<PetSkillInfo> petSkillInfoList = new List<PetSkillInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetSkillInfo_All");
@@ -3207,7 +3208,7 @@ namespace Bussiness
         public PetSkillElementInfo[] GetAllPetSkillElementInfo()
         {
 			List<PetSkillElementInfo> skillElementInfoList = new List<PetSkillElementInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetSkillElementInfo_All");
@@ -3243,7 +3244,7 @@ namespace Bussiness
         public PetExpItemPriceInfo[] GetAllPetExpItemPrice()
         {
 			List<PetExpItemPriceInfo> infos = new List<PetExpItemPriceInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_PetExpItemPriceInfo_All");
@@ -3277,7 +3278,7 @@ namespace Bussiness
         public PetFightPropertyInfo[] GetAllPetFightProperty()
         {
 			List<PetFightPropertyInfo> fightPropertyInfoList = new List<PetFightPropertyInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetFightProperty_All");
@@ -3315,7 +3316,7 @@ namespace Bussiness
         public PetStarExpInfo[] GetAllPetStarExp()
         {
 			List<PetStarExpInfo> petStarExpInfoList = new List<PetStarExpInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_PetStarExp_All");
@@ -3349,7 +3350,7 @@ namespace Bussiness
         public ConsortiaBuffTempInfo[] GetAllConsortiaBuffTemp()
         {
 			List<ConsortiaBuffTempInfo> consortiaBuffTempInfoList = new List<ConsortiaBuffTempInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Buff_Temp_All");
@@ -3390,7 +3391,7 @@ namespace Bussiness
         public ConsortiaLevelInfo[] GetAllConsortiaLevel()
         {
 			List<ConsortiaLevelInfo> consortiaLevelInfoList = new List<ConsortiaLevelInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Level_All");
@@ -3432,7 +3433,7 @@ namespace Bussiness
         public ConsortiaBadgeConfigInfo[] GetAllConsortiaBadgeConfig()
         {
 			List<ConsortiaBadgeConfigInfo> consortiaBadgeConfigInfoList = new List<ConsortiaBadgeConfigInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Badge_Config_All");
@@ -3458,7 +3459,7 @@ namespace Bussiness
 			return consortiaBadgeConfigInfoList.ToArray();
         }
 
-        public ConsortiaBadgeConfigInfo InitConsortiaBadgeConfig(SqlDataReader reader)
+        public ConsortiaBadgeConfigInfo InitConsortiaBadgeConfig(DbDataReader reader)
         {
 			return new ConsortiaBadgeConfigInfo
 			{
@@ -3473,7 +3474,7 @@ namespace Bussiness
         public GoldEquipTemplateInfo[] GetAllGoldEquipTemplateLoad()
         {
 			List<GoldEquipTemplateInfo> equipTemplateInfoList = new List<GoldEquipTemplateInfo>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_GoldEquipTemplateLoad_All");
@@ -3499,7 +3500,7 @@ namespace Bussiness
 			return equipTemplateInfoList.ToArray();
         }
 
-        public GoldEquipTemplateInfo InitGoldEquipTemplateLoad(SqlDataReader reader)
+        public GoldEquipTemplateInfo InitGoldEquipTemplateLoad(DbDataReader reader)
         {
 			return new GoldEquipTemplateInfo
 			{
@@ -3523,7 +3524,7 @@ namespace Bussiness
         public PetMoePropertyInfo[] GetAllPetMoeProperty()
         {
 			List<PetMoePropertyInfo> infos = new List<PetMoePropertyInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Pet_Moe_Property_All");
@@ -3549,7 +3550,7 @@ namespace Bussiness
 			return infos.ToArray();
         }
 
-        public PetMoePropertyInfo InitPetMoePropertyInfo(SqlDataReader dr)
+        public PetMoePropertyInfo InitPetMoePropertyInfo(DbDataReader dr)
         {
 			PetMoePropertyInfo info = new PetMoePropertyInfo();
 			info.Level = (int)dr["Level"];
@@ -3605,7 +3606,7 @@ namespace Bussiness
         public Suit_TemplateID[] Load_Suit_TemplateID()
         {
 			List<Suit_TemplateID> infos = new List<Suit_TemplateID>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Suit_TemplateID");
@@ -3639,7 +3640,7 @@ namespace Bussiness
         public Suit_TemplateInfo[] Load_Suit_TemplateInfo()
         {
 			List<Suit_TemplateInfo> infos = new List<Suit_TemplateInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Suit_TemplateInfo");
@@ -3687,7 +3688,7 @@ namespace Bussiness
         public AccumulAtiveLoginAwardInfo[] GetAccumulAtiveLoginAwardInfos()
         {
 			List<AccumulAtiveLoginAwardInfo> infos = new List<AccumulAtiveLoginAwardInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_AccumulAtiveLoginAward_All");
@@ -3729,7 +3730,7 @@ namespace Bussiness
         public NewTitleInfo[] GetAllNewTitle()
         {
 			List<NewTitleInfo> infos = new List<NewTitleInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_New_Title_All");
@@ -3755,7 +3756,7 @@ namespace Bussiness
 			return infos.ToArray();
         }
 
-        public NewTitleInfo InitNewTitleInfo(SqlDataReader dr)
+        public NewTitleInfo InitNewTitleInfo(DbDataReader dr)
         {
 			NewTitleInfo info = new NewTitleInfo();
 			info.ID = (int)dr["ID"];
@@ -3774,7 +3775,7 @@ namespace Bussiness
 		public ConsortiaTaskConditions[] GetAllConsortiaTask()
 		{
 			List<ConsortiaTaskConditions> consortiaTaskInfoList = new List<ConsortiaTaskConditions>();
-			SqlDataReader ResultDataReader = null;
+			DbDataReader ResultDataReader = null;
 			try
 			{
 				db.GetReader(ref ResultDataReader, "SP_Consortia_Task_All");
@@ -3813,7 +3814,7 @@ namespace Bussiness
 		public CategoryInfo[] GetSingleCategoryName(int ID)
 		{
 			List<CategoryInfo> infos = new List<CategoryInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				SqlParameter[] para = new SqlParameter[1]
@@ -3854,7 +3855,7 @@ namespace Bussiness
 		public ActivitySystemItemInfo[] GetAllActivitySystemItem()
 		{
 			List<ActivitySystemItemInfo> infos = new List<ActivitySystemItemInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_ActivitySystemItem_All");
@@ -3893,7 +3894,7 @@ namespace Bussiness
 		public FightSpiritTemplateInfo[] GetAllFightSpiritTemplate()
 		{
 			List<FightSpiritTemplateInfo> infos = new List<FightSpiritTemplateInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				this.db.GetReader(ref reader, "SP_FightSpiritTemplate_All");
@@ -3934,7 +3935,7 @@ namespace Bussiness
 		public ClothGroupTemplateInfo[] GetAllClothGroup()
 		{
 			List<ClothGroupTemplateInfo> list = new List<ClothGroupTemplateInfo>();
-			SqlDataReader sqlDataReader = null;
+			DbDataReader sqlDataReader = null;
 			try
 			{
 				this.db.GetReader(ref sqlDataReader, "SP_ClothGroup_All");
@@ -3972,7 +3973,7 @@ namespace Bussiness
 		public ClothPropertyTemplateInfo[] GetAllClothProperty()
 		{
 			List<ClothPropertyTemplateInfo> list = new List<ClothPropertyTemplateInfo>();
-			SqlDataReader sqlDataReader = null;
+			DbDataReader sqlDataReader = null;
 			try
 			{
 				this.db.GetReader(ref sqlDataReader, "SP_ClothProperty_All");
@@ -4015,7 +4016,7 @@ namespace Bussiness
 		public TotemInfo[] GetAllTotem()
 		{
 			List<TotemInfo> infos = new List<TotemInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Totem_All");
@@ -4056,7 +4057,7 @@ namespace Bussiness
 		public TotemHonorTemplateInfo[] GetAllTotemHonorTemplate()
 		{
 			List<TotemHonorTemplateInfo> infos = new List<TotemHonorTemplateInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_TotemHonorTemplate_All");
@@ -4086,7 +4087,7 @@ namespace Bussiness
 		public DailyLeagueAwardInfo[] GetAllDailyLeagueAward()
 		{
 			List<DailyLeagueAwardInfo> infos = new List<DailyLeagueAwardInfo>();
-			SqlDataReader reader = null;
+			DbDataReader reader = null;
 			try
 			{
 				db.GetReader(ref reader, "SP_Daily_League_Award_All");
@@ -4109,7 +4110,7 @@ namespace Bussiness
 		}
 
 
-		public DailyLeagueAwardInfo InitDailyLeagueAwardInfo(SqlDataReader dr)
+		public DailyLeagueAwardInfo InitDailyLeagueAwardInfo(DbDataReader dr)
 		{
 			DailyLeagueAwardInfo info = new DailyLeagueAwardInfo();
 			info.Level = (int)dr["Level"];

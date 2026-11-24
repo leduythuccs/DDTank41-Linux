@@ -1,787 +1,481 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
+using System.Linq;
 using Microsoft.Data.SqlClient;
+using MySqlConnector;
 
 namespace SqlDataProvider.BaseClass
 {
+    /// <summary>
+    /// Runs the game's stored procedures on MariaDB (see tools/DbMigrate for how they were translated).
+    /// The callers still build SqlParameter objects ("@Name", output and return-value directions); they are mapped
+    /// onto the translated procedure's parameters:
+    ///   @Name                          -> p_Name
+    ///   Direction = ReturnValue        -> OUT p_ReturnValue (the T-SQL RETURN value)
+    /// and output values are copied back into the SqlParameter objects, converted to the parameter's declared type
+    /// (callers unbox them: (int)param.Value). Readers convert computed values to SQL Server's types, see CoercingDataReader.
+    /// </summary>
     public sealed class Sql_DbObject : IDisposable
     {
-        private SqlConnection _SqlConnection;
+        private sealed class RoutineParam
+        {
+            public string Name;
+            public ParameterDirection Direction;
+            public string Type;    // DTD_IDENTIFIER, e.g. int(11), tinyint(1), varchar(100)
+        }
 
-        private SqlCommand _SqlCommand;
+        private sealed class Binding
+        {
+            public SqlParameter Source;
+            public MySqlParameter Target;
+            public string Type;
+        }
 
-        private SqlDataAdapter _SqlDataAdapter;
+        private static readonly ConcurrentDictionary<string, RoutineParam[]> Signatures = new(StringComparer.OrdinalIgnoreCase);
+
+        private readonly string connectionString;
 
         public Sql_DbObject()
         {
-			_SqlConnection = new SqlConnection();
         }
 
         public Sql_DbObject(string Path_Source, string Conn_DB)
         {
-			switch (Path_Source)
-			{
-			case "AppConfig":
-				_SqlConnection = new SqlConnection(ConfigurationSettings.AppSettings[Conn_DB]);
-				break;
-			default:
-				_SqlConnection = new SqlConnection(Conn_DB);
-				break;
-			case "File":
-				_SqlConnection = new SqlConnection(Conn_DB);
-				break;
-			case "WebConfig":
-				_SqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings[Conn_DB].ConnectionString);
-				break;
-			}
+            connectionString = Path_Source switch
+            {
+                "AppConfig" => ConfigurationManager.AppSettings[Conn_DB],
+                "WebConfig" => ConfigurationManager.ConnectionStrings[Conn_DB].ConnectionString,
+                _ => Conn_DB,
+            };
         }
 
-        private static bool OpenConnection(SqlConnection _SqlConnection)
+        private MySqlConnection Open()
         {
-			try
-			{
-				if (_SqlConnection.State != ConnectionState.Open)
-				{
-					_SqlConnection.Open();
-					return true;
-				}
-				return true;
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("\u00b4ò¿ªÊý¾Ý¿âÁ¬½Ó\u00b4íÎó:" + ex.Message.Trim());
-				return false;
-			}
+            try
+            {
+                MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+                return conn;
+            }
+            catch (Exception ex) when (ex is MySqlException or InvalidOperationException or ArgumentException)
+            {
+                ApplicationLog.WriteError("Cannot open the database connection: " + ex.Message);
+                return null;
+            }
         }
 
-        public bool Exesqlcomm(string Sqlcomm)
+        // ---------------------------------------------------------------- procedure calls
+
+        /// <summary>The parameters of a procedure, read once from information_schema.</summary>
+        private static RoutineParam[] Signature(MySqlConnection conn, string procedure)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.CommandType = CommandType.Text;
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandText = Sqlcomm;
-				_SqlCommand.ExecuteNonQuery();
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return true;
+            return Signatures.GetOrAdd(conn.Database + "." + procedure, _ =>
+            {
+                using MySqlCommand cmd = new MySqlCommand(@"SELECT PARAMETER_NAME, PARAMETER_MODE, DTD_IDENTIFIER FROM information_schema.PARAMETERS
+                    WHERE SPECIFIC_SCHEMA = DATABASE() AND SPECIFIC_NAME = @p AND ROUTINE_TYPE = 'PROCEDURE' ORDER BY ORDINAL_POSITION", conn);
+                cmd.Parameters.AddWithValue("@p", procedure);
+                List<RoutineParam> list = new();
+                using MySqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    list.Add(new RoutineParam
+                    {
+                        Name = r.GetString(0),
+                        Direction = r.GetString(1) switch
+                        {
+                            "OUT" => ParameterDirection.Output,
+                            "INOUT" => ParameterDirection.InputOutput,
+                            _ => ParameterDirection.Input,
+                        },
+                        Type = r.GetString(2).ToLowerInvariant(),
+                    });
+                }
+                return list.ToArray();
+            });
         }
 
-        public int GetRecordCount(string Sqlcomm)
+        /// <summary>T-SQL names as the callers write them: "[SP_X]", "dbo.SP_X" or "[dbo].[SP_X]" -> "SP_X".</summary>
+        private static string ProcedureName(string name)
         {
-			int num = 0;
-			if (!OpenConnection(_SqlConnection))
-			{
-				num = 0;
-			}
-			else
-			{
-				try
-				{
-					_SqlCommand = new SqlCommand();
-					_SqlCommand.Connection = _SqlConnection;
-					_SqlCommand.CommandType = CommandType.Text;
-					_SqlCommand.CommandText = Sqlcomm;
-					num = ((_SqlCommand.ExecuteScalar() != null) ? ((int)_SqlCommand.ExecuteScalar()) : 0);
-				}
-				catch (SqlException ex)
-				{
-					ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				}
-				finally
-				{
-					_SqlConnection.Close();
-					Dispose(disposing: true);
-				}
-			}
-			return num;
+            string n = name.Trim().Replace("[", "").Replace("]", "");
+            int dot = n.LastIndexOf('.');
+            return dot >= 0 ? n[(dot + 1)..] : n;
         }
 
-        public DataTable GetDataTableBySqlcomm(string TableName, string Sqlcomm)
+        private static MySqlCommand ProcedureCommand(MySqlConnection conn, string procedure, SqlParameter[] parameters, List<Binding> outputs, int commandTimeout = -1)
         {
-			DataTable dataTable = new DataTable(TableName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				return dataTable;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.Text;
-				_SqlCommand.CommandText = Sqlcomm;
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(dataTable);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataTable;
+            procedure = ProcedureName(procedure);
+            MySqlCommand cmd = new MySqlCommand(procedure, conn) { CommandType = CommandType.StoredProcedure };
+            if (commandTimeout >= 0)
+            {
+                cmd.CommandTimeout = commandTimeout;
+            }
+            parameters ??= Array.Empty<SqlParameter>();
+            foreach (RoutineParam rp in Signature(conn, procedure))
+            {
+                SqlParameter source = rp.Name.Equals("p_ReturnValue", StringComparison.OrdinalIgnoreCase)
+                    ? parameters.FirstOrDefault(p => p.Direction == ParameterDirection.ReturnValue)
+                    : parameters.FirstOrDefault(p => p.Direction != ParameterDirection.ReturnValue
+                        && ("p_" + p.ParameterName.TrimStart('@')).Equals(rp.Name, StringComparison.OrdinalIgnoreCase));
+                object value = rp.Direction == ParameterDirection.Output ? DBNull.Value : ToDb(source?.Value);
+                MySqlParameter target = new MySqlParameter(rp.Name, value) { Direction = rp.Direction };
+                cmd.Parameters.Add(target);
+                if (source != null && rp.Direction != ParameterDirection.Input)
+                {
+                    outputs.Add(new Binding { Source = source, Target = target, Type = rp.Type });
+                }
+            }
+            return cmd;
         }
 
-        public DataSet GetDataSetBySqlcomm(string TableName, string Sqlcomm)
+        private static object ToDb(object value)
         {
-			DataSet dataSet = new DataSet();
-			if (!OpenConnection(_SqlConnection))
-			{
-				return dataSet;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.Text;
-				_SqlCommand.CommandText = Sqlcomm;
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(dataSet);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐSqlÓï¾ä£º" + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª£º" + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataSet;
+            return value ?? DBNull.Value;
         }
 
-        public bool FillSqlDataReader(ref SqlDataReader Sdr, string SqlComm)
+        /// <summary>Output values typed as SQL Server returned them (MariaDB hands integers back as Int64).</summary>
+        private static void CopyOutputs(List<Binding> outputs)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.Text;
-				_SqlCommand.CommandText = SqlComm;
-				Sdr = _SqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
-				return true;
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐSqlÓï¾ä£º" + SqlComm + "\u00b4íÎóÐÅÏ¢Îª£º" + ex.Message.Trim());
-			}
-			finally
-			{
-				Dispose(disposing: true);
-			}
-			return false;
+            foreach (Binding b in outputs)
+            {
+                object v = b.Target.Value;
+                if (v == null || v is DBNull)
+                {
+                    b.Source.Value = DBNull.Value;
+                    continue;
+                }
+                string type = b.Type;
+                b.Source.Value = type switch
+                {
+                    _ when type.StartsWith("tinyint(1)") => Convert.ToBoolean(v),
+                    _ when type.StartsWith("int") || type.StartsWith("smallint") || type.StartsWith("mediumint") => Convert.ToInt32(v),
+                    _ when type.StartsWith("tinyint") => Convert.ToByte(v),
+                    _ when type.StartsWith("bigint") => Convert.ToInt64(v),
+                    _ when type.StartsWith("decimal") => Convert.ToDecimal(v),
+                    _ when type.StartsWith("double") => Convert.ToDouble(v),
+                    _ when type.StartsWith("float") => Convert.ToSingle(v),
+                    _ when type.StartsWith("datetime") || type.StartsWith("date") => Convert.ToDateTime(v),
+                    _ when type.StartsWith("varchar") || type.StartsWith("char") || type.Contains("text") => Convert.ToString(v),
+                    _ => v,
+                };
+            }
         }
 
-        public DataTable GetDataTableBySqlcomm(string TableName, string Sqlcomm, int StartRecordNo, int PageSize)
+        private static void LogError(string procedure, Exception ex)
         {
-			DataTable dataTable = new DataTable(TableName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataTable.Dispose();
-				Dispose(disposing: true);
-				return dataTable;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.Text;
-				_SqlCommand.CommandText = Sqlcomm;
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(new DataSet
-				{
-					Tables = 
-					{
-						dataTable
-					}
-				}, StartRecordNo, PageSize, TableName);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐsqlÓï¾ä: " + Sqlcomm + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataTable;
+            ApplicationLog.WriteError("Procedure " + procedure + ": " + ex.Message.Trim());
         }
 
         public bool RunProcedure(string ProcedureName, SqlParameter[] SqlParameters)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlCommand.ExecuteNonQuery();
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return true;
+            using MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return false;
+            }
+            try
+            {
+                List<Binding> outputs = new();
+                using MySqlCommand cmd = ProcedureCommand(conn, ProcedureName, SqlParameters, outputs);
+                cmd.ExecuteNonQuery();
+                CopyOutputs(outputs);
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                LogError(ProcedureName, ex);
+                return false;
+            }
         }
 
-        public bool RunProcedure(string ProcedureName)
+        public bool RunProcedure(string ProcedureName) => RunProcedure(ProcedureName, null);
+
+        public void BeginRunProcedure(string ProcedureName, SqlParameter[] SqlParameters)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				_SqlCommand.ExecuteNonQuery();
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return true;
+            RunProcedure(ProcedureName, SqlParameters);
         }
 
-        public bool GetReader(ref SqlDataReader ResultDataReader, string ProcedureName)
+        public bool GetReader(ref DbDataReader ResultDataReader, string ProcedureName) => GetReader(ref ResultDataReader, ProcedureName, null);
+
+        /// <summary>The reader owns the connection; closing it copies the output parameters back and closes the connection.</summary>
+        public bool GetReader(ref DbDataReader ResultDataReader, string ProcedureName, SqlParameter[] SqlParameters)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				ResultDataReader = _SqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			return true;
+            MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return false;
+            }
+            try
+            {
+                List<Binding> outputs = new();
+                MySqlCommand cmd = ProcedureCommand(conn, ProcedureName, SqlParameters, outputs);
+                MySqlDataReader reader = cmd.ExecuteReader();
+                ResultDataReader = new CoercingDataReader(reader, () =>
+                {
+                    CopyOutputs(outputs);
+                    cmd.Dispose();
+                    conn.Dispose();
+                });
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                LogError(ProcedureName, ex);
+                conn.Dispose();
+                return false;
+            }
         }
 
-        public bool GetReader(ref SqlDataReader ResultDataReader, string ProcedureName, SqlParameter[] SqlParameters)
+        /// <summary>Runs a procedure and loads its result sets (Table, Table1, ... like SqlDataAdapter).</summary>
+        private List<DataTable> LoadTables(string ProcedureName, SqlParameter[] SqlParameters, int commandTimeout, string firstName)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				ResultDataReader = _SqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			return true;
+            List<DataTable> tables = new();
+            using MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return tables;
+            }
+            try
+            {
+                List<Binding> outputs = new();
+                using MySqlCommand cmd = ProcedureCommand(conn, ProcedureName, SqlParameters, outputs, commandTimeout);
+                using (CoercingDataReader reader = new CoercingDataReader(cmd.ExecuteReader(), null))
+                {
+                    do
+                    {
+                        if (reader.FieldCount == 0)
+                        {
+                            continue;
+                        }
+                        tables.Add(Load(reader, tables.Count == 0 ? firstName : "Table" + tables.Count));
+                    } while (reader.NextResult());
+                }
+                CopyOutputs(outputs);
+            }
+            catch (MySqlException ex)
+            {
+                LogError(ProcedureName, ex);
+            }
+            return tables;
+        }
+
+        /// <summary>One result set as a DataTable: columns typed like SqlDataAdapter made them, no constraints.</summary>
+        private static DataTable Load(DbDataReader reader, string name)
+        {
+            DataTable table = new DataTable(name);
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                string column = reader.GetName(i);
+                string unique = column;
+                for (int n = 1; table.Columns.Contains(unique); n++)
+                {
+                    unique = column + n;
+                }
+                table.Columns.Add(unique, reader.GetFieldType(i));
+            }
+            object[] values = new object[reader.FieldCount];
+            table.BeginLoadData();
+            while (reader.Read())
+            {
+                reader.GetValues(values);
+                table.Rows.Add(values);
+            }
+            table.EndLoadData();
+            return table;
+        }
+
+        private static DataTable Page(DataTable table, int StartRecordNo, int PageSize)
+        {
+            DataTable page = table.Clone();
+            foreach (DataRow row in table.Rows.Cast<DataRow>().Skip(Math.Max(StartRecordNo, 0)).Take(PageSize))
+            {
+                page.ImportRow(row);
+            }
+            return page;
         }
 
         public DataSet GetDataSet(string ProcedureName, SqlParameter[] SqlParameters)
         {
-			DataSet dataSet = new DataSet();
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataSet.Dispose();
-				return dataSet;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(dataSet);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì£º" + ProcedureName + "\u00b4íÐÅÐÅÏ¢Îª£º" + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataSet;
-        }
-
-        public bool GetDataSet(ref DataSet ResultDataSet, ref int row_total, string TableName, string ProcedureName, int StartRecordNo, int PageSize, SqlParameter[] SqlParameters)
-        {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				row_total = 0;
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				DataSet dataSet = new DataSet();
-				row_total = _SqlDataAdapter.Fill(dataSet);
-				_SqlDataAdapter.Fill(ResultDataSet, StartRecordNo, PageSize, TableName);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì£º" + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª£º" + ex.Message.Trim());
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return true;
+            DataSet dataSet = new DataSet();
+            foreach (DataTable t in LoadTables(ProcedureName, SqlParameters, -1, "Table"))
+            {
+                dataSet.Tables.Add(t);
+            }
+            return dataSet;
         }
 
         public DataSet GetDateSet(string DatesetName, string ProcedureName, SqlParameter[] SqlParameters)
         {
-			DataSet dataSet = new DataSet(DatesetName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataSet.Dispose();
-				return dataSet;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(dataSet);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì£º" + ProcedureName + "\u00b4íÐÅÐÅÏ¢Îª£º" + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataSet;
+            DataSet dataSet = GetDataSet(ProcedureName, SqlParameters);
+            dataSet.DataSetName = DatesetName;
+            return dataSet;
+        }
+
+        public bool GetDataSet(ref DataSet ResultDataSet, ref int row_total, string TableName, string ProcedureName, int StartRecordNo, int PageSize, SqlParameter[] SqlParameters)
+        {
+            List<DataTable> tables = LoadTables(ProcedureName, SqlParameters, -1, TableName);
+            row_total = tables.Count > 0 ? tables[0].Rows.Count : 0;
+            if (tables.Count > 0)
+            {
+                ResultDataSet.Tables.Add(Page(tables[0], StartRecordNo, PageSize));
+            }
+            return true;
         }
 
         public DataTable GetDataTable(string TableName, string ProcedureName, SqlParameter[] SqlParameters)
         {
-			return GetDataTable(TableName, ProcedureName, SqlParameters, -1);
+            return GetDataTable(TableName, ProcedureName, SqlParameters, -1);
         }
 
         public DataTable GetDataTable(string TableName, string ProcedureName, SqlParameter[] SqlParameters, int commandTimeout)
         {
-			DataTable dataTable = new DataTable(TableName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataTable.Dispose();
-				Dispose(disposing: true);
-				return dataTable;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				if (commandTimeout >= 0)
-				{
-					_SqlCommand.CommandTimeout = commandTimeout;
-				}
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(dataTable);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataTable;
+            List<DataTable> tables = LoadTables(ProcedureName, SqlParameters, commandTimeout, TableName);
+            return tables.Count > 0 ? tables[0] : new DataTable(TableName);
         }
 
-        public DataTable GetDataTable(string TableName, string ProcedureName)
-        {
-			DataTable dataTable = new DataTable(TableName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataTable.Dispose();
-				Dispose(disposing: true);
-				return dataTable;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(dataTable);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataTable;
-        }
+        public DataTable GetDataTable(string TableName, string ProcedureName) => GetDataTable(TableName, ProcedureName, null, -1);
 
         public DataTable GetDataTable(string TableName, string ProcedureName, int StartRecordNo, int PageSize)
         {
-			DataTable dataTable = new DataTable(TableName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataTable.Dispose();
-				Dispose(disposing: true);
-				return dataTable;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(new DataSet
-				{
-					Tables = 
-					{
-						dataTable
-					}
-				}, StartRecordNo, PageSize, TableName);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataTable;
+            return Page(GetDataTable(TableName, ProcedureName, null, -1), StartRecordNo, PageSize);
         }
 
         public DataTable GetDataTable(string TableName, string ProcedureName, SqlParameter[] SqlParameters, int StartRecordNo, int PageSize)
         {
-			DataTable dataTable = new DataTable(TableName);
-			if (!OpenConnection(_SqlConnection))
-			{
-				dataTable.Dispose();
-				Dispose(disposing: true);
-				return dataTable;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				_SqlDataAdapter.Fill(new DataSet
-				{
-					Tables = 
-					{
-						dataTable
-					}
-				}, StartRecordNo, PageSize, TableName);
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return dataTable;
+            return Page(GetDataTable(TableName, ProcedureName, SqlParameters, -1), StartRecordNo, PageSize);
         }
 
         public bool GetDataTable(ref DataTable ResultTable, string TableName, string ProcedureName, int StartRecordNo, int PageSize)
         {
-			ResultTable = null;
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				DataSet dataSet = new DataSet();
-				dataSet.Tables.Add(ResultTable);
-				_SqlDataAdapter.Fill(dataSet, StartRecordNo, PageSize, TableName);
-				ResultTable = dataSet.Tables[TableName];
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return true;
+            ResultTable = Page(GetDataTable(TableName, ProcedureName, null, -1), StartRecordNo, PageSize);
+            return true;
         }
 
         public bool GetDataTable(ref DataTable ResultTable, string TableName, string ProcedureName, int StartRecordNo, int PageSize, SqlParameter[] SqlParameters)
         {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlDataAdapter = new SqlDataAdapter();
-				_SqlDataAdapter.SelectCommand = _SqlCommand;
-				DataSet dataSet = new DataSet();
-				dataSet.Tables.Add(ResultTable);
-				_SqlDataAdapter.Fill(dataSet, StartRecordNo, PageSize, TableName);
-				ResultTable = dataSet.Tables[TableName];
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return true;
+            ResultTable = Page(GetDataTable(TableName, ProcedureName, SqlParameters, -1), StartRecordNo, PageSize);
+            return true;
+        }
+
+        // ---------------------------------------------------------------- SQL text (MariaDB syntax)
+
+        public bool Exesqlcomm(string Sqlcomm, SqlParameter[] SqlParameters)
+        {
+            string msgError = "";
+            return Exesqlcomm(Sqlcomm, SqlParameters, ref msgError);
+        }
+
+        public bool Exesqlcomm(string Sqlcomm, SqlParameter[] SqlParameters, ref string msgError)
+        {
+            using MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return false;
+            }
+            try
+            {
+                using MySqlCommand cmd = new MySqlCommand(Sqlcomm, conn);
+                foreach (SqlParameter p in SqlParameters ?? Array.Empty<SqlParameter>())
+                {
+                    cmd.Parameters.AddWithValue(p.ParameterName, ToDb(p.Value));
+                }
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                msgError = "Execute sql statement: " + Sqlcomm + " Error information: " + ex.Message.Trim();
+                ApplicationLog.WriteError(msgError);
+                return false;
+            }
+        }
+
+        public bool Exesqlcomm(string Sqlcomm) => Exesqlcomm(Sqlcomm, null);
+
+        public int GetRecordCount(string Sqlcomm)
+        {
+            using MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return 0;
+            }
+            try
+            {
+                using MySqlCommand cmd = new MySqlCommand(Sqlcomm, conn);
+                object v = cmd.ExecuteScalar();
+                return v == null || v is DBNull ? 0 : Convert.ToInt32(v);
+            }
+            catch (MySqlException ex)
+            {
+                ApplicationLog.WriteError("Sql " + Sqlcomm + ": " + ex.Message.Trim());
+                return 0;
+            }
+        }
+
+        public DataTable GetDataTableBySqlcomm(string TableName, string Sqlcomm)
+        {
+            using MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return new DataTable(TableName);
+            }
+            try
+            {
+                using MySqlCommand cmd = new MySqlCommand(Sqlcomm, conn);
+                using CoercingDataReader reader = new CoercingDataReader(cmd.ExecuteReader(), null);
+                return Load(reader, TableName);
+            }
+            catch (MySqlException ex)
+            {
+                ApplicationLog.WriteError("Sql " + Sqlcomm + ": " + ex.Message.Trim());
+                return new DataTable(TableName);
+            }
+        }
+
+        public DataTable GetDataTableBySqlcomm(string TableName, string Sqlcomm, int StartRecordNo, int PageSize)
+        {
+            return Page(GetDataTableBySqlcomm(TableName, Sqlcomm), StartRecordNo, PageSize);
+        }
+
+        public DataSet GetDataSetBySqlcomm(string TableName, string Sqlcomm)
+        {
+            DataSet dataSet = new DataSet();
+            dataSet.Tables.Add(GetDataTableBySqlcomm(TableName, Sqlcomm));
+            return dataSet;
+        }
+
+        public bool FillSqlDataReader(ref DbDataReader Sdr, string SqlComm)
+        {
+            MySqlConnection conn = Open();
+            if (conn == null)
+            {
+                return false;
+            }
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(SqlComm, conn);
+                Sdr = new CoercingDataReader(cmd.ExecuteReader(), () =>
+                {
+                    cmd.Dispose();
+                    conn.Dispose();
+                });
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                ApplicationLog.WriteError("Sql " + SqlComm + ": " + ex.Message.Trim());
+                conn.Dispose();
+                return false;
+            }
         }
 
         public void Dispose()
         {
-			Dispose(disposing: true);
-			GC.SuppressFinalize(true);
+            GC.SuppressFinalize(this);
         }
-
-        private void Dispose(bool disposing)
-        {
-			if (!disposing || _SqlDataAdapter == null)
-			{
-				return;
-			}
-			if (_SqlDataAdapter.SelectCommand != null)
-			{
-				if (_SqlCommand.Connection != null)
-				{
-					_SqlDataAdapter.SelectCommand.Connection.Dispose();
-				}
-				_SqlDataAdapter.SelectCommand.Dispose();
-			}
-			_SqlDataAdapter.Dispose();
-			_SqlDataAdapter = null;
-        }
-
-        public void BeginRunProcedure(string ProcedureName, SqlParameter[] SqlParameters)
-        {
-			if (!OpenConnection(_SqlConnection))
-			{
-				return;
-			}
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandType = CommandType.StoredProcedure;
-				_SqlCommand.CommandText = ProcedureName;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlCommand.BeginExecuteNonQuery();
-			}
-			catch (SqlException ex)
-			{
-				ApplicationLog.WriteError("Ö\u00b4ÐÐ\u00b4æ\u00b4¢¹ý³Ì: " + ProcedureName + "\u00b4íÎóÐÅÏ¢Îª: " + ex.Message.Trim());
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-        }
-
-		//public bool Exesqlcomm(string Sqlcomm)
-		//{
-		//	if (!OpenConnection(_SqlConnection))
-		//	{
-		//		return false;
-		//	}
-		//	try
-		//	{
-		//		_SqlCommand = new SqlCommand();
-		//		_SqlCommand.CommandType = CommandType.Text;
-		//		_SqlCommand.Connection = _SqlConnection;
-		//		_SqlCommand.CommandText = Sqlcomm;
-		//		_SqlCommand.ExecuteNonQuery();
-		//	}
-		//	catch (SqlException ex)
-		//	{
-		//		ApplicationLog.WriteError("执行sql语句: " + Sqlcomm + "错误信息为: " + ex.Message.Trim());
-		//		return false;
-		//	}
-		//	finally
-		//	{
-		//		_SqlConnection.Close();
-		//		Dispose(disposing: true);
-		//	}
-		//	return true;
-		//}
-
-		public bool Exesqlcomm(string Sqlcomm, SqlParameter[] SqlParameters)
-		{
-			string msgError = "";
-			return Exesqlcomm(Sqlcomm, SqlParameters, ref msgError);
-		}
-
-		public bool Exesqlcomm(string Sqlcomm, SqlParameter[] SqlParameters, ref string msgError)
-		{
-			if (!OpenConnection(_SqlConnection))
-			{
-				return false;
-			}
-			int num = 0;
-			try
-			{
-				_SqlCommand = new SqlCommand();
-				_SqlCommand.CommandType = CommandType.Text;
-				_SqlCommand.Connection = _SqlConnection;
-				_SqlCommand.CommandText = Sqlcomm;
-				foreach (SqlParameter sqlParameter in SqlParameters)
-				{
-					_SqlCommand.Parameters.Add(sqlParameter);
-				}
-				_SqlCommand.ExecuteNonQuery();
-			}
-			catch (SqlException ex)
-			{
-				msgError = "Execute sql statement: " + Sqlcomm + " Error information: " + ex.Message.Trim();
-				ApplicationLog.WriteError(msgError);
-				return false;
-			}
-			finally
-			{
-				_SqlConnection.Close();
-				Dispose(disposing: true);
-			}
-			return num == 0;
-		}
-	}
+    }
 }
