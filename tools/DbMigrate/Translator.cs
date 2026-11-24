@@ -14,6 +14,9 @@ public sealed class Schema
     public readonly Dictionary<string, Dictionary<string, List<Param>>> Procedures = new(StringComparer.OrdinalIgnoreCase);
     public readonly Dictionary<string, Dictionary<string, T>> Functions = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>Per database and table: the columns in order, without the IDENTITY column (only tables that have one).</summary>
+    public readonly Dictionary<string, Dictionary<string, List<string>>> NonIdentityColumns = new(StringComparer.OrdinalIgnoreCase);
+
     public sealed class Param
     {
         public string Name;     // T-SQL name without @
@@ -29,6 +32,8 @@ public sealed class Schema
             map[t.Name] = t.Columns.ToDictionary(c => c.Name, c => Translator.TypeOf(c.Type), StringComparer.OrdinalIgnoreCase);
         }
         Tables[db] = map;
+        NonIdentityColumns[db] = tables.Where(t => t.Columns.Any(c => c.Identity))
+            .ToDictionary(t => t.Name, t => t.Columns.Where(c => !c.Identity).Select(c => c.Name).ToList(), StringComparer.OrdinalIgnoreCase);
     }
 
     public Dictionary<string, T> FindTable(string db, string name)
@@ -69,6 +74,8 @@ public sealed class Translator
     private readonly List<string> hoisted = new();
     private readonly List<string> cursors = new();
     private readonly Dictionary<string, Dictionary<string, T>> tempTables = new(StringComparer.OrdinalIgnoreCase);
+    // Temporary tables and table variables with an IDENTITY column: their other columns, in order.
+    private readonly Dictionary<string, List<string>> tempNonIdentity = new(StringComparer.OrdinalIgnoreCase);
     private readonly Stack<List<(string Alias, Dictionary<string, T> Columns, string Table)>> scopes = new();
     private readonly Stack<string> loops = new();
     private bool isFunction;
@@ -219,12 +226,42 @@ public sealed class Translator
         foreach (DeclareTableVariableStatement t in c.TableVariables)
         {
             tempTables[t.Body.VariableName.Value] = TableColumns(t.Body.Definition);
+            NoteIdentity(t.Body.VariableName.Value, t.Body.Definition);
         }
         foreach (CreateTableStatement t in c.CreateTables)
         {
             tempTables[t.SchemaObjectName.BaseIdentifier.Value] = TableColumns(t.Definition);
+            NoteIdentity(t.SchemaObjectName.BaseIdentifier.Value, t.Definition);
         }
         hasCursor = c.Cursors.Count > 0;
+    }
+
+    private void NoteIdentity(string name, TableDefinition def)
+    {
+        if (def.ColumnDefinitions.Any(c => c.IdentityOptions != null))
+        {
+            tempNonIdentity[name] = def.ColumnDefinitions.Where(c => c.IdentityOptions == null).Select(c => c.ColumnIdentifier.Value).ToList();
+        }
+    }
+
+    /// <summary>
+    /// The columns to list for an INSERT without a column list. T-SQL skips the IDENTITY column there; MariaDB expects a
+    /// value for every column, AUTO_INCREMENT ones included. Null when the table has no IDENTITY column.
+    /// </summary>
+    private List<string> InsertColumns(TableReference target)
+    {
+        switch (target)
+        {
+            case VariableTableReference v:
+                return tempNonIdentity.GetValueOrDefault(v.Variable.Name);
+            case NamedTableReference n when n.SchemaObject.BaseIdentifier.Value.StartsWith('#'):
+                return tempNonIdentity.GetValueOrDefault(n.SchemaObject.BaseIdentifier.Value);
+            case NamedTableReference n:
+                string targetDb = string.IsNullOrEmpty(n.SchemaObject.DatabaseIdentifier?.Value) ? db : n.SchemaObject.DatabaseIdentifier.Value;
+                return schema.NonIdentityColumns.TryGetValue(targetDb, out var map) ? map.GetValueOrDefault(n.SchemaObject.BaseIdentifier.Value) : null;
+            default:
+                return null;
+        }
     }
 
     private static Dictionary<string, T> TableColumns(TableDefinition def)
@@ -933,6 +970,10 @@ public sealed class Translator
                 return target + " VALUES ()";
             case ValuesInsertSource v:
                 scopes.Push(new());
+        else if (InsertColumns(ins.Target) is List<string> columns)
+        {
+            target += " (" + string.Join(", ", columns.Select(Program.Q)) + ")";
+        }
                 try
                 {
                     return target + " VALUES " + string.Join(", ", v.RowValues.Select(r => "(" + string.Join(", ", r.ColumnValues.Select(c => Expr(c).Sql)) + ")"));

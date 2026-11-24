@@ -853,7 +853,7 @@ proc: BEGIN
     DROP TEMPORARY TABLE IF EXISTS `tmp_Award`;
   END IF;
   CREATE TEMPORARY TABLE `tmp_Award` (`id` INT NULL AUTO_INCREMENT PRIMARY KEY, `TemplateID` INT NOT NULL, `Count` INT NOT NULL, `ValidDate` INT NOT NULL, `StrengthenLevel` INT NOT NULL, `AttackCompose` INT NOT NULL, `DefendCompose` INT NOT NULL, `LuckCompose` INT NOT NULL, `AgilityCompose` INT NOT NULL, `Gold` INT NOT NULL, `Money` INT NOT NULL);
-  INSERT INTO `tmp_Award` SELECT `ItemID`, `Count`, `ValidDate`, `StrengthenLevel`, `AttackCompose`, `DefendCompose`, `LuckCompose`, `AgilityCompose`, `Gold`, `Money` FROM `Project_Game34`.`Active_Award` WHERE `ActiveID` = p_ActiveID AND (`Sex` = v_sex OR `Sex` = 0) AND `Mark` = v_Mark;
+  INSERT INTO `tmp_Award` (`TemplateID`, `Count`, `ValidDate`, `StrengthenLevel`, `AttackCompose`, `DefendCompose`, `LuckCompose`, `AgilityCompose`, `Gold`, `Money`) SELECT `ItemID`, `Count`, `ValidDate`, `StrengthenLevel`, `AttackCompose`, `DefendCompose`, `LuckCompose`, `AgilityCompose`, `Gold`, `Money` FROM `Project_Game34`.`Active_Award` WHERE `ActiveID` = p_ActiveID AND (`Sex` = v_sex OR `Sex` = 0) AND `Mark` = v_Mark;
   IF 0 <> 0 THEN
     SET p_ReturnValue = 7;
     LEAVE proc;
@@ -2290,7 +2290,7 @@ proc: BEGIN
     DROP TEMPORARY TABLE IF EXISTS `tmp_Auction`;
   END IF;
   CREATE TEMPORARY TABLE `tmp_Auction` (`id` INT NULL AUTO_INCREMENT PRIMARY KEY, `AuctionID` INT NOT NULL, `AuctioneerID` INT NOT NULL, `AuctioneerName` VARCHAR(200) NOT NULL, `BuyerID` INT NOT NULL, `BuyerName` VARCHAR(200) NOT NULL, `ItemID` INT NOT NULL, `Price` INT NOT NULL, `PayType` INT NOT NULL, `Name` VARCHAR(200) NULL);
-  INSERT INTO `tmp_Auction` SELECT `AuctionID`, `AuctioneerID`, `AuctioneerName`, `BuyerID`, `BuyerName`, `ItemID`, `Price`, `PayType`, `Name` FROM `Auction` WHERE `IsExist` = 1 AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`BeginDate`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) > `ValidDate`;
+  INSERT INTO `tmp_Auction` (`AuctionID`, `AuctioneerID`, `AuctioneerName`, `BuyerID`, `BuyerName`, `ItemID`, `Price`, `PayType`, `Name`) SELECT `AuctionID`, `AuctioneerID`, `AuctioneerName`, `BuyerID`, `BuyerName`, `ItemID`, `Price`, `PayType`, `Name` FROM `Auction` WHERE `IsExist` = 1 AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`BeginDate`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) > `ValidDate`;
   SET v_Index = 1;
   SELECT COUNT(*) INTO v_ItemCount FROM `tmp_Auction` LIMIT 1;
   w1: WHILE v_Index <= v_ItemCount DO
@@ -5079,7 +5079,7 @@ proc: BEGIN
     DROP TEMPORARY TABLE IF EXISTS `tmp_PayMail`;
   END IF;
   CREATE TEMPORARY TABLE `tmp_PayMail` (`id` INT NULL AUTO_INCREMENT PRIMARY KEY, `MailID` INT NOT NULL, `SenderID` INT NOT NULL, `Sender` VARCHAR(200) NOT NULL, `ReceiverID` INT NOT NULL, `Receiver` VARCHAR(200) NOT NULL, `Title` VARCHAR(1000) NOT NULL, `Annex1` VARCHAR(100) NOT NULL, `Annex2` VARCHAR(100) NOT NULL, `Annex3` VARCHAR(100) NOT NULL, `Annex4` VARCHAR(100) NOT NULL, `Annex5` VARCHAR(100) NOT NULL);
-  INSERT INTO `tmp_PayMail` SELECT `ID`, `SenderID`, `Sender`, `ReceiverID`, `Receiver`, `Title`, IFNULL(`Annex1`, ''), IFNULL(`Annex2`, ''), IFNULL(`Annex3`, ''), IFNULL(`Annex4`, ''), IFNULL(`Annex5`, '') FROM `User_Messages` WHERE `IsExist` = 1 AND `Type` > 100 AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) > `ValidDate` AND `Money` > 0;
+  INSERT INTO `tmp_PayMail` (`MailID`, `SenderID`, `Sender`, `ReceiverID`, `Receiver`, `Title`, `Annex1`, `Annex2`, `Annex3`, `Annex4`, `Annex5`) SELECT `ID`, `SenderID`, `Sender`, `ReceiverID`, `Receiver`, `Title`, IFNULL(`Annex1`, ''), IFNULL(`Annex2`, ''), IFNULL(`Annex3`, ''), IFNULL(`Annex4`, ''), IFNULL(`Annex5`, '') FROM `User_Messages` WHERE `IsExist` = 1 AND `Type` > 100 AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) > `ValidDate` AND `Money` > 0;
   SET v_NewTitle = `GetTranslation`('SP_Mail_Scan.Msg1');
   SET v_NewContent = `GetTranslation`('SP_Mail_Scan.Msg2');
   START TRANSACTION;
@@ -5163,7 +5163,7 @@ proc: BEGIN
     DROP TEMPORARY TABLE IF EXISTS `tmp_PayMail`;
   END IF;
   CREATE TEMPORARY TABLE `tmp_PayMail` (`id` INT NULL AUTO_INCREMENT PRIMARY KEY, `MailID` INT NOT NULL, `SenderID` INT NOT NULL, `Sender` VARCHAR(200) NOT NULL, `ReceiverID` INT NOT NULL, `Receiver` VARCHAR(200) NOT NULL, `Title` VARCHAR(1000) NOT NULL, `Annex1` VARCHAR(100) NOT NULL, `Annex2` VARCHAR(100) NOT NULL, `Annex3` VARCHAR(100) NOT NULL, `Annex4` VARCHAR(100) NOT NULL, `Annex5` VARCHAR(100) NOT NULL);
-  INSERT INTO `tmp_PayMail` SELECT `ID`, `SenderID`, `Sender`, `ReceiverID`, `Receiver`, `Title`, IFNULL(`Annex1`, ''), IFNULL(`Annex2`, ''), IFNULL(`Annex3`, ''), IFNULL(`Annex4`, ''), IFNULL(`Annex5`, '') FROM `User_Messages` WHERE `IsExist` = 1 AND `Type` > 100 AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) > `ValidDate` AND `Money` > 0;
+  INSERT INTO `tmp_PayMail` (`MailID`, `SenderID`, `Sender`, `ReceiverID`, `Receiver`, `Title`, `Annex1`, `Annex2`, `Annex3`, `Annex4`, `Annex5`) SELECT `ID`, `SenderID`, `Sender`, `ReceiverID`, `Receiver`, `Title`, IFNULL(`Annex1`, ''), IFNULL(`Annex2`, ''), IFNULL(`Annex3`, ''), IFNULL(`Annex4`, ''), IFNULL(`Annex5`, '') FROM `User_Messages` WHERE `IsExist` = 1 AND `Type` > 100 AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) > `ValidDate` AND `Money` > 0;
   SET v_NewTitle = `GetTranslation`('SP_Mail_Scan.Msg1');
   SET v_NewContent = `GetTranslation`('SP_Mail_Scan.Msg2');
   START TRANSACTION;
@@ -6993,7 +6993,7 @@ proc: BEGIN
     DROP TEMPORARY TABLE IF EXISTS `tmp_Bag`;
   END IF;
   CREATE TEMPORARY TABLE `tmp_Bag` (`id` INT NULL AUTO_INCREMENT PRIMARY KEY, `TemplateID` INT NOT NULL, `Count` INT NOT NULL, `ValidDate` INT NOT NULL, `StrengthenLevel` INT NOT NULL, `AttackCompose` INT NOT NULL, `DefEndCompose` INT NOT NULL, `LuckCompose` INT NOT NULL, `AgilityCompose` INT NOT NULL, `IsBinds` TINYINT(1) NOT NULL, `BagType` INT NOT NULL, `MaxCount` INT NOT NULL);
-  INSERT INTO `tmp_Bag` SELECT `Bag_Init`.`TemplateID`, `Bag_Init`.`Count`, `Bag_Init`.`ValidDate`, `Bag_Init`.`StrengthenLevel`, `Bag_Init`.`AttackCompose`, `Bag_Init`.`DefEndCompose`, `Bag_Init`.`LuckCompose`, `Bag_Init`.`AgilityCompose`, `Bag_Init`.`IsBinds`, CASE `Shop_Goods`.`CategoryID` WHEN 1 THEN 0 WHEN 2 THEN 0 WHEN 3 THEN 0 WHEN 4 THEN 0 WHEN 5 THEN 0 WHEN 6 THEN 0 WHEN 7 THEN 0 WHEN 8 THEN 0 WHEN 9 THEN 0 WHEN 10 THEN 1 WHEN 11 THEN 1 WHEN 12 THEN 2 ELSE -1 END, `Shop_Goods`.`MaxCount` FROM `Bag_Init` LEFT JOIN `Project_Game34`.`Shop_Goods` ON `Bag_Init`.`TemplateID` = `Shop_Goods`.`TemplateID` WHERE `sex` = 0 OR `sex` = v_tempSex AND `Shop_Goods`.`CategoryID` IS NOT NULL;
+  INSERT INTO `tmp_Bag` (`TemplateID`, `Count`, `ValidDate`, `StrengthenLevel`, `AttackCompose`, `DefEndCompose`, `LuckCompose`, `AgilityCompose`, `IsBinds`, `BagType`, `MaxCount`) SELECT `Bag_Init`.`TemplateID`, `Bag_Init`.`Count`, `Bag_Init`.`ValidDate`, `Bag_Init`.`StrengthenLevel`, `Bag_Init`.`AttackCompose`, `Bag_Init`.`DefEndCompose`, `Bag_Init`.`LuckCompose`, `Bag_Init`.`AgilityCompose`, `Bag_Init`.`IsBinds`, CASE `Shop_Goods`.`CategoryID` WHEN 1 THEN 0 WHEN 2 THEN 0 WHEN 3 THEN 0 WHEN 4 THEN 0 WHEN 5 THEN 0 WHEN 6 THEN 0 WHEN 7 THEN 0 WHEN 8 THEN 0 WHEN 9 THEN 0 WHEN 10 THEN 1 WHEN 11 THEN 1 WHEN 12 THEN 2 ELSE -1 END, `Shop_Goods`.`MaxCount` FROM `Bag_Init` LEFT JOIN `Project_Game34`.`Shop_Goods` ON `Bag_Init`.`TemplateID` = `Shop_Goods`.`TemplateID` WHERE `sex` = 0 OR `sex` = v_tempSex AND `Shop_Goods`.`CategoryID` IS NOT NULL;
   SET v_Index = 1;
   SELECT COUNT(*) INTO v_ItemCount FROM `tmp_Bag` LIMIT 1;
   SET v_bag0 = 31;
