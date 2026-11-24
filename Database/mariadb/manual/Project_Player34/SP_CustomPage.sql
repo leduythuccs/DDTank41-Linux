@@ -16,6 +16,8 @@ proc: BEGIN
   SET p_FdShow = IF(IFNULL(p_FdShow, '') = '', '*', p_FdShow);
   SET v_where = IF(IFNULL(p_QueryWhere, '') = '', '1=1', p_QueryWhere);
   SET v_order = IF(IFNULL(p_FdOrder, '') <> '', p_FdOrder, IFNULL(p_FdKey, ''));
+  -- Callers pass T-SQL's NEWID() to shuffle the rows.
+  SET v_order = REGEXP_REPLACE(v_order, '(?i)newid\\(\\)', 'RAND()');
   SET @cp_sql = CONCAT('SELECT COUNT(*) INTO @cp_total FROM ', p_QueryStr, ' WHERE ', v_where);
   PREPARE cp_stmt FROM @cp_sql;
   EXECUTE cp_stmt;

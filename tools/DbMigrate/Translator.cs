@@ -56,6 +56,15 @@ public sealed class Translator
     private readonly string db;
     public readonly List<string> Warnings = new();
 
+    /// <summary>
+    /// Result columns that are bit in T-SQL. MariaDB has no boolean expression type (IFNULL(bit, 0) is an INT), so
+    /// Sql_DbObject turns these back into booleans; the list is stored in the _routine_bool_columns table.
+    /// </summary>
+    public readonly HashSet<string> BoolColumns = new(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>The result columns of a view (after View()), for the procedures that select from it.</summary>
+    public Dictionary<string, T> ViewColumns;
+
     private readonly Dictionary<string, (string Name, T Type)> vars = new(StringComparer.OrdinalIgnoreCase);
     private readonly List<string> hoisted = new();
     private readonly List<string> cursors = new();
@@ -151,7 +160,12 @@ public sealed class Translator
     public string View(CreateViewStatement view)
     {
         string name = view.SchemaObjectName.BaseIdentifier.Value;
-        return "CREATE OR REPLACE VIEW " + Program.Q(name) + " AS\n" + Query(view.SelectStatement.QueryExpression, null).Sql + "$$\n";
+        (string sql, ViewColumns) = QueryWithColumns(view.SelectStatement.QueryExpression);
+        foreach (var kv in ViewColumns.Where(kv => kv.Value == T.Bit))
+        {
+            BoolColumns.Add(kv.Key);
+        }
+        return "CREATE OR REPLACE VIEW " + Program.Q(name) + " AS\n" + sql + "$$\n";
     }
 
     private void AppendDeclarations(StringBuilder sb, bool transactions)
@@ -268,6 +282,10 @@ public sealed class Translator
                 return SetVariable(sv, ind);
             case SelectStatement sel:
                 return SelectStatementSql(sel, ind);
+            case UpdateStatement up when up.WithCtesAndXmlNamespaces != null:
+            case InsertStatement ins0 when ins0.WithCtesAndXmlNamespaces != null:
+            case DeleteStatement del0 when del0.WithCtesAndXmlNamespaces != null:
+                throw new UnsupportedException("WITH on UPDATE/INSERT/DELETE");
             case UpdateStatement up:
                 lastWasSelect = false;
                 return ind + Update(up.UpdateSpecification) + ";\n";
@@ -385,8 +403,53 @@ public sealed class Translator
         };
     }
 
+    /// <summary>WITH name AS (query), ...: the CTE names become known tables (with column types) for the statement.</summary>
+    private string With(WithCtesAndXmlNamespaces with)
+    {
+        if (with == null)
+        {
+            return "";
+        }
+        if (with.XmlNamespaces != null)
+        {
+            throw new UnsupportedException("WITH XMLNAMESPACES");
+        }
+        List<string> ctes = new();
+        foreach (CommonTableExpression cte in with.CommonTableExpressions)
+        {
+            (string q, Dictionary<string, T> cols) = QueryWithColumns(cte.QueryExpression);
+            string name = cte.ExpressionName.Value;
+            string columns = cte.Columns.Count > 0 ? " (" + string.Join(", ", cte.Columns.Select(c => Program.Q(c.Value))) + ")" : "";
+            ctes.Add(Program.Q(name) + columns + " AS (" + q + ")");
+            tempTables[name] = cols;
+            cteNames.Add(name);
+        }
+        return "WITH " + string.Join(", ", ctes) + " ";
+    }
+
+    private readonly HashSet<string> cteNames = new(StringComparer.OrdinalIgnoreCase);
+
     private string SelectStatementSql(SelectStatement sel, string ind)
     {
+        if (sel.ComputeClauses.Count > 0 || sel.On != null)
+        {
+            throw new UnsupportedException("SELECT ... COMPUTE / ON");
+        }
+        string with = With(sel.WithCtesAndXmlNamespaces);
+        if (with != "")
+        {
+            if (sel.Into != null || sel.QueryExpression is QuerySpecification q0 && q0.SelectElements.Any(e => e is SelectSetVariable))
+            {
+                throw new UnsupportedException("WITH ... SELECT INTO / assignment");
+            }
+            lastWasSelect = true;
+            (string withQuery, var withColumns) = QueryWithColumns(sel.QueryExpression);
+            foreach (var kv in withColumns.Where(kv => kv.Value == T.Bit))
+            {
+                BoolColumns.Add(kv.Key);
+            }
+            return ind + with + withQuery + ";\n";
+        }
         if (sel.Into != null)
         {
             lastWasSelect = false;
@@ -405,7 +468,12 @@ public sealed class Translator
             return ind + SelectAssign(qs) + "\n";
         }
         lastWasSelect = true;
-        return ind + Query(sel.QueryExpression, null).Sql + ";\n";
+        (string query, var resultColumns) = QueryWithColumns(sel.QueryExpression);
+        foreach (var kv in resultColumns.Where(kv => kv.Value == T.Bit))
+        {
+            BoolColumns.Add(kv.Key);
+        }
+        return ind + query + ";\n";
     }
 
     /// <summary>SELECT @a = x, @b = y [FROM ...]: SET without FROM, SELECT ... INTO ... LIMIT 1 with it.</summary>
@@ -606,6 +674,10 @@ public sealed class Translator
 
     private string Update(UpdateSpecification u)
     {
+        if (u.OutputClause != null || u.OutputIntoClause != null)
+        {
+            throw new UnsupportedException("UPDATE ... OUTPUT");
+        }
         List<AssignmentSetClause> varSets = u.SetClauses.OfType<AssignmentSetClause>().Where(a => a.Variable != null).ToList();
         if (varSets.Count > 0)
         {
@@ -801,6 +873,10 @@ public sealed class Translator
 
     private string Delete(DeleteSpecification d)
     {
+        if (d.OutputClause != null || d.OutputIntoClause != null)
+        {
+            throw new UnsupportedException("DELETE ... OUTPUT");
+        }
         string topLimit = d.TopRowFilter != null ? " LIMIT " + Expr(d.TopRowFilter.Expression).Sql : "";
         if (d.FromClause == null)
         {
@@ -838,6 +914,10 @@ public sealed class Translator
 
     private string Insert(InsertSpecification ins)
     {
+        if (ins.OutputClause != null || ins.OutputIntoClause != null)
+        {
+            throw new UnsupportedException("INSERT ... OUTPUT");
+        }
         if (ins.InsertOption == InsertOption.Over)
         {
             throw new UnsupportedException("INSERT OVER");
@@ -900,6 +980,10 @@ public sealed class Translator
 
     private (string Sql, Dictionary<string, T> Columns) QuerySpec(QuerySpecification qs)
     {
+        if (qs.ForClause != null || qs.WindowClause != null)
+        {
+            throw new UnsupportedException("FOR XML / WINDOW clause");
+        }
         PushScope(qs.FromClause);
         try
         {
@@ -1161,7 +1245,7 @@ public sealed class Translator
         {
             case NamedTableReference n:
                 string name = n.SchemaObject.BaseIdentifier.Value;
-                Dictionary<string, T> cols = name.StartsWith('#')
+                Dictionary<string, T> cols = name.StartsWith('#') || cteNames.Contains(name)
                     ? tempTables.GetValueOrDefault(name)
                     : schema.FindTable(string.IsNullOrEmpty(n.SchemaObject.DatabaseIdentifier?.Value) ? db : n.SchemaObject.DatabaseIdentifier.Value, name);
                 scope.Add((n.Alias?.Value ?? name, cols, name));
@@ -1486,7 +1570,23 @@ public sealed class Translator
         string Args() => string.Join(", ", a.Select(x => x.Sql));
         switch (name.ToUpperInvariant())
         {
-            case "ISNULL": return ("IFNULL(" + Args() + ")", Merge(a[0].Type, a[1].Type));
+            case "ISNULL":
+                {
+                    // T-SQL: the result has the first argument's type. MariaDB aggregates both (IFNULL(date, '2000-01-01')
+                    // is a string), so convert the replacement value to the first argument's type.
+                    T type = a[0].Type is T.Unknown or T.Null ? a[1].Type : a[0].Type;
+                    string second = a[1].Sql;
+                    if (a[1].Type != type && a[1].Type != T.Null)
+                    {
+                        second = type switch
+                        {
+                            T.DateTime => "CAST(" + second + " AS DATETIME(3))",
+                            T.String => "CAST(" + second + " AS CHAR)",
+                            _ => second,
+                        };
+                    }
+                    return ("IFNULL(" + a[0].Sql + ", " + second + ")", type);
+                }
             case "GETDATE":
             case "SYSDATETIME": return ("NOW(3)", T.DateTime);
             case "GETUTCDATE": return ("UTC_TIMESTAMP(3)", T.DateTime);

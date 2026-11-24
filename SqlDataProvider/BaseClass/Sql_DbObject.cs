@@ -37,6 +37,47 @@ namespace SqlDataProvider.BaseClass
 
         private static readonly ConcurrentDictionary<string, RoutineParam[]> Signatures = new(StringComparer.OrdinalIgnoreCase);
 
+        /// <summary>Per database: routine or view -> result columns to read as booleans (table _routine_bool_columns).</summary>
+        private static readonly ConcurrentDictionary<string, Dictionary<string, HashSet<string>>> BoolColumns = new(StringComparer.OrdinalIgnoreCase);
+
+        private static HashSet<string> BoolColumnsOf(MySqlConnection conn, string routine)
+        {
+            Dictionary<string, HashSet<string>> map = BoolColumns.GetOrAdd(conn.Database, _ =>
+            {
+                Dictionary<string, HashSet<string>> m = new(StringComparer.OrdinalIgnoreCase);
+                try
+                {
+                    using MySqlCommand cmd = new MySqlCommand("SELECT `routine`, `column_name` FROM `_routine_bool_columns`", conn);
+                    using MySqlDataReader r = cmd.ExecuteReader();
+                    while (r.Read())
+                    {
+                        if (!m.TryGetValue(r.GetString(0), out HashSet<string> set))
+                        {
+                            m[r.GetString(0)] = set = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        }
+                        set.Add(r.GetString(1));
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    ApplicationLog.WriteError("Cannot read _routine_bool_columns: " + ex.Message);
+                }
+                return m;
+            });
+            return routine != null && map.TryGetValue(ProcedureName(routine), out HashSet<string> cols) ? cols : null;
+        }
+
+        /// <summary>The routine whose result columns a call returns: SP_CustomPage returns rows of the view it is given.</summary>
+        private static HashSet<string> ResultBoolColumns(MySqlConnection conn, string procedure, SqlParameter[] parameters)
+        {
+            if (ProcedureName(procedure).Equals("SP_CustomPage", StringComparison.OrdinalIgnoreCase))
+            {
+                string view = parameters?.FirstOrDefault(p => p.ParameterName.TrimStart('@').Equals("QueryStr", StringComparison.OrdinalIgnoreCase))?.Value as string;
+                return BoolColumnsOf(conn, view);
+            }
+            return BoolColumnsOf(conn, procedure);
+        }
+
         private readonly string connectionString;
 
         public Sql_DbObject()
@@ -121,7 +162,7 @@ namespace SqlDataProvider.BaseClass
                     ? parameters.FirstOrDefault(p => p.Direction == ParameterDirection.ReturnValue)
                     : parameters.FirstOrDefault(p => p.Direction != ParameterDirection.ReturnValue
                         && ("p_" + p.ParameterName.TrimStart('@')).Equals(rp.Name, StringComparison.OrdinalIgnoreCase));
-                object value = rp.Direction == ParameterDirection.Output ? DBNull.Value : ToDb(source?.Value);
+                object value = rp.Direction == ParameterDirection.Output ? DBNull.Value : ToDb(source?.Value, rp.Type);
                 MySqlParameter target = new MySqlParameter(rp.Name, value) { Direction = rp.Direction };
                 cmd.Parameters.Add(target);
                 if (source != null && rp.Direction != ParameterDirection.Input)
@@ -135,6 +176,27 @@ namespace SqlDataProvider.BaseClass
         private static object ToDb(object value)
         {
             return value ?? DBNull.Value;
+        }
+
+        /// <summary>
+        /// SQL Server converts some values implicitly that MariaDB (strict mode) rejects: an empty string passed for a
+        /// datetime is 1900-01-01, and for a number 0.
+        /// </summary>
+        private static object ToDb(object value, string type)
+        {
+            if (value is string str && str.Trim().Length == 0)
+            {
+                if (type.StartsWith("datetime") || type.StartsWith("date"))
+                {
+                    return new DateTime(1900, 1, 1);
+                }
+                if (type.StartsWith("int") || type.StartsWith("tinyint") || type.StartsWith("smallint") || type.StartsWith("bigint")
+                    || type.StartsWith("decimal") || type.StartsWith("double") || type.StartsWith("float"))
+                {
+                    return 0;
+                }
+            }
+            return ToDb(value);
         }
 
         /// <summary>Output values typed as SQL Server returned them (MariaDB hands integers back as Int64).</summary>
@@ -213,13 +275,14 @@ namespace SqlDataProvider.BaseClass
             {
                 List<Binding> outputs = new();
                 MySqlCommand cmd = ProcedureCommand(conn, ProcedureName, SqlParameters, outputs);
+                HashSet<string> bools = ResultBoolColumns(conn, ProcedureName, SqlParameters);
                 MySqlDataReader reader = cmd.ExecuteReader();
                 ResultDataReader = new CoercingDataReader(reader, () =>
                 {
                     CopyOutputs(outputs);
                     cmd.Dispose();
                     conn.Dispose();
-                });
+                }, bools);
                 return true;
             }
             catch (MySqlException ex)
@@ -243,7 +306,8 @@ namespace SqlDataProvider.BaseClass
             {
                 List<Binding> outputs = new();
                 using MySqlCommand cmd = ProcedureCommand(conn, ProcedureName, SqlParameters, outputs, commandTimeout);
-                using (CoercingDataReader reader = new CoercingDataReader(cmd.ExecuteReader(), null))
+                HashSet<string> bools = ResultBoolColumns(conn, ProcedureName, SqlParameters);
+                using (CoercingDataReader reader = new CoercingDataReader(cmd.ExecuteReader(), null, bools))
                 {
                     do
                     {

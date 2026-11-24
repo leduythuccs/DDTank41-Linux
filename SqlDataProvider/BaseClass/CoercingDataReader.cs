@@ -11,22 +11,27 @@ namespace SqlDataProvider.BaseClass
     /// <summary>
     /// A MariaDB reader that gives the game code the value types SQL Server gave it. The code unboxes directly
     /// ((int)reader["X"]), so the types must match exactly:
-    ///   - computed integers (COUNT(*), a + b, bit operations) are BIGINT in MariaDB, INT in SQL Server: Int32;
-    ///   - SUM over integers is DECIMAL(n,0) in MariaDB, INT in SQL Server: Int32.
-    /// Columns read straight from a table keep their type (a real BIGINT column stays Int64).
+    ///   - integers that are BIGINT in MariaDB (COUNT(*), a + b, bit operations; also in views) are INT in SQL Server:
+    ///     Int32 (the callers never read a long; a value too large for an int stays Int64);
+    ///   - SUM over integers is DECIMAL(n,0) in MariaDB, INT in SQL Server: Int32;
+    ///   - columns that are bit in T-SQL but computed in MariaDB (ISNULL(IsBanChat, 0) is an INT): Boolean.
+    /// Other columns read straight from a table keep their type.
     /// When the reader closes, the procedure's output parameters are copied back (see Sql_DbObject).
     /// </summary>
     public sealed class CoercingDataReader : DbDataReader
     {
         private readonly MySqlDataReader inner;
         private readonly Action onClose;
+        private readonly ICollection<string> boolColumns;
         private Type[] targets;
         private bool closed;
 
-        public CoercingDataReader(MySqlDataReader inner, Action onClose)
+        /// <param name="boolColumns">result columns to read as booleans (from _routine_bool_columns), or null</param>
+        public CoercingDataReader(MySqlDataReader inner, Action onClose, ICollection<string> boolColumns = null)
         {
             this.inner = inner;
             this.onClose = onClose;
+            this.boolColumns = boolColumns;
             ComputeTargets();
         }
 
@@ -38,7 +43,13 @@ namespace SqlDataProvider.BaseClass
             {
                 Type type = inner.GetFieldType(i);
                 bool fromTable = !string.IsNullOrEmpty(schema?[i].BaseTableName);
-                if (type == typeof(long) && !fromTable || type == typeof(ulong) || type == typeof(uint))
+                bool integer = type == typeof(long) || type == typeof(int) || type == typeof(ulong) || type == typeof(uint)
+                    || type == typeof(short) || type == typeof(sbyte) || type == typeof(byte) || type == typeof(decimal);
+                if (integer && boolColumns != null && boolColumns.Contains(inner.GetName(i)))
+                {
+                    type = typeof(bool);
+                }
+                else if (type == typeof(long) || type == typeof(ulong) || type == typeof(uint))
                 {
                     type = typeof(int);
                 }
@@ -56,6 +67,10 @@ namespace SqlDataProvider.BaseClass
             if (value is DBNull || value.GetType() == targets[i])
             {
                 return value;
+            }
+            if (targets[i] == typeof(bool))
+            {
+                return Convert.ToBoolean(value);
             }
             if (targets[i] == typeof(int))
             {
