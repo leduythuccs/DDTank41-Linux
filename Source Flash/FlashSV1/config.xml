@@ -8,7 +8,7 @@
 <FIRSTPAGE value="http://127.0.0.1/"/>
 <REGISTER value="http://127.0.0.1/"/>
 <REQUEST_PATH value="http://127.0.0.1/Request/"/>
-<LOGIN_PATH value="http://127.0.0.1/server_list.html" siteName="风云弹弹堂"/>
+<LOGIN_PATH value="http://127.0.0.1/" siteName="风云弹弹堂"/>
 <FILL_PATH value="http://127.0.0.1/pay/"/>
 <WEEKLYSITE value="http://127.0.0.1/flash/"/>
 <POLICY_FILES>
