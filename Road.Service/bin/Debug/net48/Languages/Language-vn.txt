@@ -4124,3 +4124,5 @@ CardDataHander.Msg12:Thẻ bài này đã được trang bị.
 CardDataHander.Msg13:Thẻ bài không tồn tại.
 CardDataHander.Msg14:Thẻ của bạn đã đạt cấp cao nhất không thể tiếp tục.
 CardDataHander.Msg15:Bạn không có đủ số lượng thẻ bài để tăng cấp.
+OpenFiveSixHoleHandler.WrongDrill:Cấp mũi khoan không phù hợp để đục lỗ.
+OpenFiveSixHoleHandler.CannotOpen:Không thể đục lỗ.

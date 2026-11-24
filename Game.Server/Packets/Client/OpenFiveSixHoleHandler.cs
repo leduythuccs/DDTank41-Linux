@@ -40,174 +40,71 @@ namespace Game.Server.Packets.Client
                     client.Player.StoreBag.UpdateItem(itemAt);
                 }
                 bool val = false;
-                switch (num)
+                if (num == 5 || num == 6)
                 {
-                    case 6:
-                        if (itemByTemplateID.isDrill(itemAt.Hole6Level))
+                    int level = num == 5 ? itemAt.Hole5Level : itemAt.Hole6Level;
+                    if (itemByTemplateID.isDrill(level))
+                    {
+                        // Use every matching drill at once. A drill only fits one hole level,
+                        // so this stops at the first level-up or when the drills run out.
+                        string[] expList = GameProperties.HoleLevelUpExpList.Split('|');
+                        int exp = num == 5 ? itemAt.Hole5Exp : itemAt.Hole6Exp;
+                        client.Player.PropBag.BeginChanges();
+                        try
                         {
-                            client.Player.PropBag.RemoveCountFromStack(itemByTemplateID, 1);
-                            int num3 = random.Next(itemByTemplateID.Template.Property7, itemByTemplateID.Template.Property8);
-                            itemAt.Hole6Exp += num3;
-                            switch (itemAt.Hole6Level)
+                            while (itemByTemplateID != null && level < expList.Length)
                             {
-                                case 0:
-                                    if (itemAt.Hole6Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[0]))
-                                    {
-                                        itemAt.Hole6Level++;
-                                        itemAt.Hole6Exp = 0;
-                                        if (itemAt.Hole6Level > 0 && itemAt.Hole6 < 0)
-                                        {
-                                            itemAt.Hole6 = 0;
-
-                                        }
-                                        //GameServer.Instance.LoginServer.SendPacket(WorldMgr.SendSysNotice(eMessageType.ChatNormal, LanguageMgr.GetTranslation("OpenFiveSixHoleHandler.Success", client.Player.ZoneName, client.Player.PlayerCharacter.NickName, itemAt.Hole6Level, itemAt.TemplateID), itemAt.ItemID, itemAt.TemplateID, null));
-                                        val = true;
-                                    }
+                                bool lastOfStack = itemByTemplateID.Count <= 1;
+                                if (!client.Player.PropBag.RemoveCountFromStack(itemByTemplateID, 1))
+                                {
                                     break;
-                                case 1:
-                                    if (itemAt.Hole6Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[1]))
-                                    {
-                                        itemAt.Hole6Level++;
-                                        itemAt.Hole6Exp = 0;
-                                        if (itemAt.Hole6Level > 0 && itemAt.Hole6 < 0)
-                                        {
-                                            itemAt.Hole6 = 0;
-
-                                        }
-                                        val = true;
-                                    }
+                                }
+                                exp += random.Next(itemByTemplateID.Template.Property7, itemByTemplateID.Template.Property8);
+                                if (exp >= int.Parse(expList[level]))
+                                {
+                                    level++;
+                                    exp = 0;
+                                    val = true;
                                     break;
-                                case 2:
-                                    if (itemAt.Hole6Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[2]))
-                                    {
-                                        itemAt.Hole6Level++;
-                                        itemAt.Hole6Exp = 0;
-                                        if (itemAt.Hole6Level > 0 && itemAt.Hole6 < 0)
-                                        {
-                                            itemAt.Hole6 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
-                                case 3:
-                                    if (itemAt.Hole6Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[3]))
-                                    {
-                                        itemAt.Hole6Level++;
-                                        itemAt.Hole6Exp = 0;
-                                        if (itemAt.Hole6Level > 0 && itemAt.Hole6 < 0)
-                                        {
-                                            itemAt.Hole6 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
-                                case 4:
-                                    if (itemAt.Hole6Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[4]))
-                                    {
-                                        itemAt.Hole6Level++;
-                                        itemAt.Hole6Exp = 0;
-                                        if (itemAt.Hole6Level > 0 && itemAt.Hole6 < 0)
-                                        {
-                                            itemAt.Hole6 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
+                                }
+                                if (lastOfStack)
+                                {
+                                    // That stack is used up: carry on with the next stack of the same drill, if any.
+                                    itemByTemplateID = client.Player.PropBag.GetItemByTemplateID(0, templateId);
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            client.Player.PropBag.CommitChanges();
+                        }
+                        if (num == 5)
+                        {
+                            itemAt.Hole5Level = level;
+                            itemAt.Hole5Exp = exp;
+                            if (level > 0 && itemAt.Hole5 < 0)
+                            {
+                                itemAt.Hole5 = 0;
                             }
                         }
                         else
                         {
-                            client.Player.SendMessage("Cấp mũi khoan không phù hợp để đục lỗ.");
-                        }
-                        break;
-                    case 5:
-                        if (itemByTemplateID.isDrill(itemAt.Hole5Level))
-                        {
-                            client.Player.PropBag.RemoveCountFromStack(itemByTemplateID, 1);
-                            int num2 = random.Next(itemByTemplateID.Template.Property7, itemByTemplateID.Template.Property8);
-                            itemAt.Hole5Exp += num2;
-                            switch (itemAt.Hole5Level)
+                            itemAt.Hole6Level = level;
+                            itemAt.Hole6Exp = exp;
+                            if (level > 0 && itemAt.Hole6 < 0)
                             {
-                                case 0:
-                                    if (itemAt.Hole5Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[0]))
-                                    {
-                                        itemAt.Hole5Level++;
-                                        itemAt.Hole5Exp = 0;
-                                        if (itemAt.Hole5Level > 0 && itemAt.Hole5 < 0)
-                                        {
-                                            itemAt.Hole5 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
-                                case 1:
-                                    if (itemAt.Hole5Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[1]))
-                                    {
-                                        itemAt.Hole5Level++;
-                                        itemAt.Hole5Exp = 0;
-                                        if (itemAt.Hole5Level > 0 && itemAt.Hole5 < 0)
-                                        {
-                                            itemAt.Hole5 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
-                                case 2:
-                                    if (itemAt.Hole5Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[2]))
-                                    {
-                                        itemAt.Hole5Level++;
-                                        itemAt.Hole5Exp = 0;
-                                        if (itemAt.Hole5Level > 0 && itemAt.Hole5 < 0)
-                                        {
-                                            itemAt.Hole5 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
-                                case 3:
-                                    if (itemAt.Hole5Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[3]))
-                                    {
-                                        itemAt.Hole5Level++;
-                                        itemAt.Hole5Exp = 0;
-                                        if (itemAt.Hole5Level > 0 && itemAt.Hole5 < 0)
-                                        {
-                                            itemAt.Hole5 = 0;
-
-                                        }
-                                        val = true;
-                                    }
-                                    break;
-                                case 4:
-                                    if (itemAt.Hole5Exp >= int.Parse(GameProperties.HoleLevelUpExpList.Split('|')[4]))
-                                    {
-                                        itemAt.Hole5Level++;
-                                        itemAt.Hole5Exp = 0;
-                                        if (itemAt.Hole5Level > 0 && itemAt.Hole5 < 0)
-                                        {
-                                            itemAt.Hole5 = 0;
-
-                                        }
-                                        val = true;
-
-                                    }
-                                    break;
+                                itemAt.Hole6 = 0;
                             }
                         }
-                        else
-                        {
-                            client.Player.SendMessage("Cấp mũi khoan không phù hợp để đục lỗ.");
-
-                        }
-                        break;
-                    default:
-                        Console.WriteLine("不存在宝珠孔： " + num);
-                        break;
+                    }
+                    else
+                    {
+                        client.Player.SendMessage(LanguageMgr.GetTranslation("OpenFiveSixHoleHandler.WrongDrill"));
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("不存在宝珠孔： " + num);
                 }
                 client.Player.StoreBag.UpdateItem(itemAt);
                 GSPacketIn gSPacketIn = new GSPacketIn(217);
@@ -218,7 +115,7 @@ namespace Game.Server.Packets.Client
             }
             else
             {
-                client.Player.SendMessage("Không thể đục lỗ.");
+                client.Player.SendMessage(LanguageMgr.GetTranslation("OpenFiveSixHoleHandler.CannotOpen"));
             }
             return 0;
         }
