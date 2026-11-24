@@ -97,6 +97,7 @@ def main():
                 info.compress_type = i.compress_type
                 info.external_attr = i.external_attr
                 dst.writestr(info, data[i.filename])
+        shutil.copymode(ARCHIVE, tmp)  # mkstemp creates the file as 0600
         shutil.move(tmp, ARCHIVE)
     print(("patched " if changed_any else "ok      ") + os.path.relpath(ARCHIVE))
 
