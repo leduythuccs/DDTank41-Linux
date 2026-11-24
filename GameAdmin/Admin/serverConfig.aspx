@@ -30,6 +30,10 @@
             <td class="check"><input type="checkbox" id="WishBeadAlwaysSucceed" class="gameOption" disabled="disabled" /></td>
             <td><label for="WishBeadAlwaysSucceed">Dát vàng bằng Châu báu chúc phúc luôn thành công</label><br /><span class="key">WishBeadAlwaysSucceed</span></td>
         </tr>
+        <tr>
+            <td class="check"><input type="checkbox" id="StrengthenAlwaysSucceed" class="gameOption" disabled="disabled" /></td>
+            <td><label for="StrengthenAlwaysSucceed">Cường hóa luôn thành công</label><br /><span class="key">StrengthenAlwaysSucceed</span></td>
+        </tr>
     </table>
     <div id="configMsg"></div>
     <script type="text/javascript">

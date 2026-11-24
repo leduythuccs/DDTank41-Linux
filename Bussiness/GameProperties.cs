@@ -79,6 +79,9 @@ namespace Bussiness
         [ConfigProperty("ItemAdvanceAlwaysSucceed", "Item advance with the advance stone always succeeds", false)]
 		public static bool ItemAdvanceAlwaysSucceed;
 
+        [ConfigProperty("StrengthenAlwaysSucceed", "Strengthening always succeeds", true)]
+		public static bool StrengthenAlwaysSucceed;
+
         [ConfigProperty("WishBeadAlwaysSucceed", "Gilding with a wish bead always succeeds", false)]
 		public static bool WishBeadAlwaysSucceed;
 

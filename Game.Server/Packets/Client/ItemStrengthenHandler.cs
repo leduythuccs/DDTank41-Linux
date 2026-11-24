@@ -15,8 +15,6 @@ namespace Game.Server.Packets.Client
 
         private static RandomSafe random = new RandomSafe();
 
-        private const bool AlwaysSucceeds = true;
-
         public int HandlePacket(GameClient client, GSPacketIn packet)
         {
             if (countConnect >= 3000)
@@ -120,8 +118,7 @@ namespace Game.Server.Packets.Client
                     {
                         num8 = 0;
                     }
-                    // Strengthening always succeeds on this server (the rate above is no longer rolled).
-                    if (AlwaysSucceeds || num7 > (double)num8)
+                    if (GameProperties.StrengthenAlwaysSucceed || num7 > (double)num8)
                     {
                         pkg.WriteByte(0);
                         pkg.WriteBoolean(val: true);

@@ -7,6 +7,7 @@ using Bussiness;
 using Bussiness.CenterService;
 using Bussiness.Managers;
 using Bussiness.Protocol;
+using Game.Base.Config;
 using log4net;
 using SqlDataProvider.Data;
 
@@ -276,9 +277,10 @@ namespace GameAdmin.Web
             nameof(GameProperties.TexpNoDailyLimit),
             nameof(GameProperties.ItemAdvanceAlwaysSucceed),
             nameof(GameProperties.WishBeadAlwaysSucceed),
+            nameof(GameProperties.StrengthenAlwaysSucceed),
         };
 
-        /// <summary>The current value of each game option; an option missing from Server_Config is off.</summary>
+        /// <summary>The current value of each game option; an option missing from Server_Config has its GameProperties default.</summary>
         public static Dictionary<string, bool> GetGameOptions()
         {
             Dictionary<string, bool> options = new Dictionary<string, bool>();
@@ -286,9 +288,15 @@ namespace GameAdmin.Web
             foreach (string name in GameOptions)
             {
                 ServerProperty property = business.GetServerPropertyByKey(name);
-                options[name] = property != null && bool.TryParse(property.Value, out bool on) && on;
+                options[name] = property != null && bool.TryParse(property.Value, out bool on) ? on : DefaultOf(name);
             }
             return options;
+        }
+
+        private static bool DefaultOf(string name)
+        {
+            ConfigPropertyAttribute attribute = typeof(GameProperties).GetField(name)?.GetCustomAttribute<ConfigPropertyAttribute>();
+            return attribute?.DefaultValue is bool value && value;
         }
 
         /// <summary>
