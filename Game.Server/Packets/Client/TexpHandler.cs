@@ -53,42 +53,59 @@ namespace Game.Server.Packets.Client
             }
             else
             {
-                client.Player.OnUsingItem(templateID, 1);
-                client.Player.StoreBag.RemoveTemplate(templateID, 1);
+                // One click uses the whole stack in the slot, as far as the daily limit allows and until
+                // the stat reaches its cap (character level + 5, as the client checks).
+                int perPotion = item.Template.Property2;
+                int exp = ExerciseMgr.getExp(selectIndex, info);
+                int capLevel = Math.Min(client.Player.PlayerCharacter.Grade + 5, ExerciseMgr.GetMaxLevel());
+                int capExp = ExerciseMgr.FindExercise(capLevel)?.GP ?? int.MaxValue;
+                int used = 0;
+                while (used < item.Count && info.texpCount + used < limitCount && exp + used * perPotion < capExp)
+                {
+                    used++;
+                }
+                if (used == 0)
+                {
+                    client.Out.SendMessage(eMessageType.GM_NOTICE, "Cấp tu luyện này đã đạt mức cao nhất!");
+                    return 0;
+                }
+                client.Player.OnUsingItem(templateID, used);
+                client.Player.StoreBag.RemoveCountFromStack(item, used);
+                int gain = perPotion * used;
                 switch (selectIndex)
                 {
                     case 0:
                         oldExp = info.hpTexpExp;
-                        info.hpTexpExp += item.Template.Property2;
-                        client.Player.OnUsingItem(45005, 1);
+                        info.hpTexpExp += gain;
+                        client.Player.OnUsingItem(45005, used);
                         break;
                     case 1:
                         oldExp = info.attTexpExp;
-                        info.attTexpExp += item.Template.Property2;
-                        client.Player.OnUsingItem(45001, 1);
+                        info.attTexpExp += gain;
+                        client.Player.OnUsingItem(45001, used);
                         text = "Tấn Công";
                         break;
                     case 2:
                         oldExp = info.defTexpExp;
-                        info.defTexpExp += item.Template.Property2;
-                        client.Player.OnUsingItem(45002, 1);
+                        info.defTexpExp += gain;
+                        client.Player.OnUsingItem(45002, used);
                         text = "Phòng Thủ";
                         break;
                     case 3:
                         oldExp = info.spdTexpExp;
-                        info.spdTexpExp += item.Template.Property2;
-                        client.Player.OnUsingItem(45003, 1);
+                        info.spdTexpExp += gain;
+                        client.Player.OnUsingItem(45003, used);
                         text = "Nhanh Nhẹn";
                         break;
                     case 4:
                         oldExp = info.lukTexpExp;
-                        info.lukTexpExp += item.Template.Property2;
-                        client.Player.OnUsingItem(45004, 1);
+                        info.lukTexpExp += gain;
+                        client.Player.OnUsingItem(45004, used);
                         text = "May Mắn";
                         break;
                 }
-                info.texpCount++;
-                info.texpTaskCount++;
+                info.texpCount += used;
+                info.texpTaskCount += used;
                 client.Player.PlayerCharacter.Texp = info;
                 using (PlayerBussiness db = new PlayerBussiness())
                 {
