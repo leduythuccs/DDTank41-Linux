@@ -371,7 +371,8 @@ namespace Game.Logic.Phy.Object
 									{
 										continue;
 									}
-									damage = damage * m_owner.PetEffects.PetBaseAtt / 300;
+									// PetBaseAtt is the % in the skill description ("gây 50% sát thương"); the original divided by 300.
+									damage = damage * m_owner.PetEffects.PetBaseAtt / 100;
 									critical = m_owner.MakeCriticalDamage(p, damage);
 									if (m_owner is Player)
 									{

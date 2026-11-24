@@ -180,6 +180,9 @@ Bugs fixed that I found while playing, and ask Claude to fix
 - **Battle stuck at 91% loading:** the pet skill "Hơi Thở Băng Giá" uses a ball with no explosion set, so
   the client waited forever for a file that does not exist. Fixed in the ball list and in
   `Database/mariadb/fixes.sql`.
+- **Pet auto-attack never happened** for most pets: the skill's damage was 0 in the data (34 skills) or tuned
+  for a hidden division by 3. Every auto-attack skill now deals the % its description says, set in
+  `Database/mariadb/fixes.sql`. The skill has to be equipped in one of the pet's 3 skill slots.
 - **Database moved to MariaDB:** SQL Server needs about 2 GB of RAM and has no ARM build. The
   procedures were translated to MariaDB (see [Database](#database)).
 - **Old code, newer database:** some stored procedures in the restored database expect different
