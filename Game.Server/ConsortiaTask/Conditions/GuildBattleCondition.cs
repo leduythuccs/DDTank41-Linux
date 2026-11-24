@@ -19,7 +19,7 @@ namespace Game.Server.ConsortiaTask.Conditions
             lock (ConsortiaTaskMgr.Consortiums)
             {
                 //if (game.GameType != eGameType.Guild) return;
-                if (game.GameType == eGameType.Guild)
+                if (Game.Server.Quests.GuildWarRules.Counts(game))
                 {
                     var consortiaTaskConditionInfo = Consortia?.Task.Conditions.Find(c => c.Type == 2);
                     //if (Player.CurrentRoom.Host != Player || consortiaTaskConditionInfo == null) return;

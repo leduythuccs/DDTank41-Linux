@@ -278,6 +278,7 @@ namespace GameAdmin.Web
             nameof(GameProperties.ItemAdvanceAlwaysSucceed),
             nameof(GameProperties.WishBeadAlwaysSucceed),
             nameof(GameProperties.StrengthenAlwaysSucceed),
+            nameof(GameProperties.FreeMatchCountsAsGuildWar),
         };
 
         /// <summary>The current value of each game option; an option missing from Server_Config has its GameProperties default.</summary>

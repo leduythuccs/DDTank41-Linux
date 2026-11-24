@@ -29,7 +29,7 @@ namespace Game.Server.Quests
 			switch (abstractGame_0.GameType)
 			{
 			case eGameType.Free:
-				if ((m_info.Para1 == 0 || m_info.Para1 == -1) && base.Value > 0)
+				if ((m_info.Para1 == 0 || m_info.Para1 == -1 || (m_info.Para1 == 1 && GuildWarRules.Counts(abstractGame_0))) && base.Value > 0)
 				{
 					base.Value--;
 				}

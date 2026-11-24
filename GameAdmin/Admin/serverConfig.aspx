@@ -34,6 +34,10 @@
             <td class="check"><input type="checkbox" id="StrengthenAlwaysSucceed" class="gameOption" disabled="disabled" /></td>
             <td><label for="StrengthenAlwaysSucceed">Cường hóa luôn thành công</label><br /><span class="key">StrengthenAlwaysSucceed</span></td>
         </tr>
+        <tr>
+            <td class="check"><input type="checkbox" id="FreeMatchCountsAsGuildWar" class="gameOption" disabled="disabled" /></td>
+            <td><label for="FreeMatchCountsAsGuildWar">Mọi trận đấu tự do (kể cả chơi một mình) đều được tính là chiến hội cho nhiệm vụ và nhiệm vụ hội</label><br /><span class="key">FreeMatchCountsAsGuildWar</span></td>
+        </tr>
     </table>
     <div id="configMsg"></div>
     <script type="text/javascript">
