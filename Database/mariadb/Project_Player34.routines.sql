@@ -2193,7 +2193,7 @@ proc: BEGIN
   SET p_ReturnValue = 0;
   SET v_SenderID = 0;
   SET v_Sender = `GetTranslation`('SP_Auction_Delete.Sender');
-  SET v_ReceiverID = '';
+  SET v_ReceiverID = 0;
   SET v_Receiver = '';
   SET v_Title = `GetTranslation`('SP_Auction_Delete.Title');
   SET v_Content = `GetTranslation`('SP_Auction_Delete.Content');
@@ -5059,7 +5059,7 @@ proc: BEGIN
   SET p_NoticeUserID = '';
   SET v_SenderID = 0;
   SET v_Sender = `GetTranslation`('SP_Mail_Scan.Sender');
-  SET v_ReceiverID = '';
+  SET v_ReceiverID = 0;
   SET v_Receiver = '';
   SET v_Title = `GetTranslation`('SP_Mail_Scan.Title');
   SET v_Content = `GetTranslation`('SP_Mail_Scan.Content');
@@ -5143,7 +5143,7 @@ proc: BEGIN
   SET p_NoticeUserID = '';
   SET v_SenderID = 0;
   SET v_Sender = `GetTranslation`('SP_Mail_Scan.Sender');
-  SET v_ReceiverID = '';
+  SET v_ReceiverID = 0;
   SET v_Receiver = '';
   SET v_Title = `GetTranslation`('SP_Mail_Scan.Title');
   SET v_Content = `GetTranslation`('SP_Mail_Scan.Content');

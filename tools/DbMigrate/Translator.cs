@@ -428,6 +428,12 @@ public sealed class Translator
     private string Assign(string name, T type, AssignmentKind kind, ScalarExpression value)
     {
         (string sql, T vt) = Expr(value);
+        if (kind == AssignmentKind.Equals && IsNumeric(type) && value is StringLiteral text)
+        {
+            // T-SQL converts a string constant to the variable's number type ('' is 0); MariaDB in strict mode refuses it.
+            string trimmed = text.Value.Trim();
+            sql = trimmed.Length == 0 ? "0" : decimal.TryParse(trimmed, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out _) ? trimmed : sql;
+        }
         return kind switch
         {
             AssignmentKind.Equals => sql,
@@ -964,16 +970,16 @@ public sealed class Translator
         {
             target += " (" + string.Join(", ", ins.Columns.Select(c => Program.Q(c.MultiPartIdentifier.Identifiers.Last().Value))) + ")";
         }
+        else if (InsertColumns(ins.Target) is List<string> columns)
+        {
+            target += " (" + string.Join(", ", columns.Select(Program.Q)) + ")";
+        }
         switch (ins.InsertSource)
         {
             case ValuesInsertSource v when v.IsDefaultValues:
                 return target + " VALUES ()";
             case ValuesInsertSource v:
                 scopes.Push(new());
-        else if (InsertColumns(ins.Target) is List<string> columns)
-        {
-            target += " (" + string.Join(", ", columns.Select(Program.Q)) + ")";
-        }
                 try
                 {
                     return target + " VALUES " + string.Join(", ", v.RowValues.Select(r => "(" + string.Join(", ", r.ColumnValues.Select(c => Expr(c).Sql)) + ")"));
