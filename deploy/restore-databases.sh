@@ -6,7 +6,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 set -a; . ./.env; set +a
-CONTAINER=ddtank-mariadb
+CONTAINER="${DDTANK_MARIADB_CONTAINER:-ddtank-mariadb}"
 FORCE="${1:-}"
 
 sql() { docker exec -i -e MYSQL_PWD="$MARIADB_ROOT_PASSWORD" "$CONTAINER" mariadb -uroot "$@"; }

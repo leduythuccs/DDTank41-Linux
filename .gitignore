@@ -11,3 +11,4 @@ resource/
 resource-cache/
 /resource-cache
 __pycache__/
+/tools/DbTest/out/

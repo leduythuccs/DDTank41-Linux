@@ -20,7 +20,7 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CONTAINER = "ddtank-mssql"
+CONTAINER = os.environ.get("DDTANK_MSSQL_CONTAINER", "ddtank-mssql")
 DATABASE = "Project_Player34"
 
 # procedure -> list of (parameter, mode); mode "keep" = NULL default + ISNULL(@p, col), else a default literal
