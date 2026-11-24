@@ -28,7 +28,10 @@ for db in Project_Player34 Project_Game34 Db_Membership; do
   for part in schema data routines; do
     sql < "../Database/mariadb/$db.$part.sql"
   done
+  loaded=1
 done
+# Fixes to the original data (see the file).
+[ "${loaded:-}" = 1 ] && sql < ../Database/mariadb/fixes.sql
 
 # Application login (least privilege: the game databases only, not the whole server).
 password=$(printf '%s' "$DDTANK_DB_PASSWORD" | sed "s/'/''/g; s/\\\\/\\\\\\\\/g")
