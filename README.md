@@ -31,16 +31,15 @@ Nothing else: the image builds the servers itself. It runs on x86_64 and arm64 (
 ```bash
 git clone <this repo> && cd DDTank41/deploy/docker
 
-# 1. Settings: writes .env with random passwords. Give the address players will open.
-./init-env.sh http://<server ip or domain>:16200
+# 1. Init the env with random passwords
+./init-env.sh http://127.0.0.1:16200
 
-# 2. Build and start. The first start builds the image and creates the databases (a few minutes).
+# 2. Build and start the docker
 docker compose up -d --build
 docker compose logs -f game        # wait for "All services are running"
 ```
 
-Open `http://<server ip>:16200/index.htm`, click **Đăng ký nhanh** to create an account, then log in.
-The first time you load the game is slow, because the art is downloaded and cached (see [Game art](#game-art)).
+Open `http://127.0.0.1:16200/index.htm`, click **Đăng ký nhanh** to create an account, then log in.
 
 Only port **16200** has to be reachable from the internet (open it in the firewall). The game socket goes
 through the web site, so no other port is needed.
@@ -56,17 +55,16 @@ Everyday commands, from `deploy/docker`:
 
 ### Settings (deploy/docker/.env)
 
-`init-env.sh` writes this file; edit it and run `docker compose up -d` to apply. It holds passwords: it is
-git-ignored, never commit it.
+`init-env.sh` writes this file; you could edit it and run `docker compose up -d` to apply.
 
 | Variable | Meaning |
 |---|---|
-| `DDTANK_PUBLIC_URL` | The address players open, e.g. `http://203.0.113.5:16200`. The client loads everything from it. |
+| `DDTANK_PUBLIC_URL` | The address players open, e.g. `http://127.0.0.1:16200`, or a domain: `http://example.com` |
 | `DDTANK_ADMIN_PASSWORD` | Admin site password. |
 | `MARIADB_ROOT_PASSWORD`, `DDTANK_DB_PASSWORD` | MariaDB `root` and the `ddtank` user the servers use. Read only when the databases are created: changing them later does not change the database. |
-| `DDTANK_RESOURCE_UPSTREAM` | Where art and sound files are downloaded from when they are not cached. Without it the game has no images. |
-| `DDTANK_RUFFLE_URL` | Optional. The Ruffle build the game page loads; default 0.8.0 (0.7.1 stalls at 85% while loading). |
-| `DDTANK_ADMIN_BIND`, `DDTANK_DB_BIND` | Optional. `0.0.0.0` makes the admin site / MariaDB reachable from the internet. Default `127.0.0.1`: use an SSH tunnel. |
+| `DDTANK_RESOURCE_UPSTREAM` | Where art and sound files are downloaded from when they are not cached. Default to VNG CDN |
+| `DDTANK_RUFFLE_URL` | Optional. The Ruffle build the game page loads; default 0.8.0. |
+| `DDTANK_ADMIN_BIND`, `DDTANK_DB_BIND` | Optional. Default `127.0.0.1` |
 | `DDTANK_TZ` | Optional. Time zone of the game (daily resets, events), default `Asia/Ho_Chi_Minh`. |
 
 ### Ports
@@ -82,22 +80,17 @@ All in the 162xx range:
 | 16203, 16205, 16206 | Center: login and server coordination. | inside the container |
 | 16204 | Fighting: matchmaking and battles. | inside the container |
 
-To use the admin site or MariaDB from your computer, open an SSH tunnel:
-`ssh -L 16201:127.0.0.1:16201 -L 16207:127.0.0.1:16207 <server>`, then go to <http://127.0.0.1:16201/>.
-
 ### Behind nginx (domain and HTTPS)
 
 To serve the game on a domain, let nginx forward it to port 16200:
 
 1. In `.env`, set `DDTANK_PUBLIC_URL` to the address players open, without the port, e.g.
    `DDTANK_PUBLIC_URL=https://game.example.com`. Then `docker compose up -d`.
-2. Forward everything to 16200. The game socket is a WebSocket under `/socket/`: it needs the upgrade headers
-   and a long timeout, or nginx cuts quiet players off after 60 seconds.
+2. Forward everything to 16200. The game socket is a WebSocket under `/socket/`.
 
 ```nginx
 server {
     server_name game.example.com;
-    # listen 443 ssl; + certificates (e.g. certbot --nginx)
 
     location / {
         proxy_pass http://127.0.0.1:16200;
@@ -118,16 +111,6 @@ server {
 ```
 
 With `https://` in `DDTANK_PUBLIC_URL`, the client uses `wss://` for the game socket by itself.
-
-### Moving an existing database
-
-On the first start, MariaDB loads `deploy/docker/seed/*.sql` if there are any, instead of the original data.
-To move the accounts and characters of a local server (the MariaDB of
-[Development without Docker](#development-without-docker)) to a new one, run `deploy/docker/export-db.sh`
-on the old machine. It writes `deploy/docker/seed/ddtank.sql`: copy `deploy/docker/seed/` to the same place on
-the new server before its first `docker compose up`.
-
-The containers run as user 1654, which owns `deploy/docker/data/` on the host: use `sudo` to delete files there.
 
 ## Database
 
