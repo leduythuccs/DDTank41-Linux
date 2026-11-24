@@ -20,6 +20,14 @@ public static class Program
     public static int Main(string[] args)
     {
         string what = args.Length > 0 ? args[0] : "all";
+        if (what == "routines")
+        {
+            return Routines.Run(args[1], args.Length > 2 ? args[2] : "Database/mariadb", args.Length > 3 ? args[3] : null);
+        }
+        if (what == "analyze")
+        {
+            return Analyze.Run(args[1], args.Length > 2 ? args[2] : null);
+        }
         string outDir = args.Length > 1 ? args[1] : "Database/mariadb";
         Directory.CreateDirectory(outDir);
         foreach (string db in Databases)
@@ -31,6 +39,22 @@ public static class Program
             {
                 File.WriteAllText(Path.Combine(outDir, db + ".schema.sql"), SchemaWriter.Write(db, tables), new UTF8Encoding(false));
                 Console.WriteLine($"{db}: {tables.Count} tables -> {db}.schema.sql");
+            }
+            if (what is "tsql")
+            {
+                // The original T-SQL of the procedures, views and functions, one file each (for the translator).
+                string dir = Path.Combine(outDir, "tsql", db);
+                Directory.CreateDirectory(dir);
+                int n = 0;
+                using SqlCommand cmd = new SqlCommand(@"SELECT o.name, o.type, m.definition FROM sys.sql_modules m
+                    JOIN sys.objects o ON o.object_id = m.object_id WHERE o.is_ms_shipped = 0 AND o.type IN ('P','V','FN','IF','TF')", conn);
+                using SqlDataReader r = cmd.ExecuteReader();
+                while (r.Read())
+                {
+                    File.WriteAllText(Path.Combine(dir, r.GetString(0) + "." + r.GetString(1).Trim() + ".sql"), r.GetString(2), new UTF8Encoding(false));
+                    n++;
+                }
+                Console.WriteLine($"{db}: {n} modules -> {dir}");
             }
             if (what is "data" or "all")
             {
