@@ -68,11 +68,13 @@ CREATE TABLE `Mem_Paths` (
 
 DROP TABLE IF EXISTS `Mem_ResetPwd`;
 CREATE TABLE `Mem_ResetPwd` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `UserId` INT NOT NULL,
   `SaleEntry` CHAR(36) NULL,
   `GetTime` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
   `IsActived` TINYINT(1) NULL DEFAULT 0,
-  `ApplicationId` INT NULL
+  `ApplicationId` INT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Mem_Right`;
@@ -89,15 +91,18 @@ CREATE TABLE `Mem_Right` (
 
 DROP TABLE IF EXISTS `Mem_Roles`;
 CREATE TABLE `Mem_Roles` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ApplicationId` VARCHAR(50) NULL,
   `RoleId` INT NULL,
   `RoleName` TEXT NULL,
   `LowerRoleName` TEXT NULL,
-  `Description` TEXT NULL
+  `Description` TEXT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Mem_UserInfo`;
 CREATE TABLE `Mem_UserInfo` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ApplicationId` VARCHAR(20) NULL,
   `UserId` TEXT NULL,
   `Password` VARCHAR(128) NULL,
@@ -119,7 +124,8 @@ CREATE TABLE `Mem_UserInfo` (
   `FailedPasswordAnswerAttemptCount` INT NULL,
   `FailedPasswordAnswerAttemptWindowstart` DATETIME(3) NULL,
   `Comment` LONGTEXT NULL,
-  `UserSex` TINYINT(1) NULL
+  `UserSex` TINYINT(1) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Mem_UserRight`;
@@ -134,6 +140,7 @@ CREATE TABLE `Mem_UserRight` (
 
 DROP TABLE IF EXISTS `Mem_Users`;
 CREATE TABLE `Mem_Users` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ApplicationId` VARCHAR(20) NULL,
   `UserId` TEXT NULL,
   `UserName` TEXT NULL,
@@ -141,13 +148,16 @@ CREATE TABLE `Mem_Users` (
   `MobileAlias` VARCHAR(200) NULL,
   `IsAnonymous` TINYINT(1) NULL,
   `LastActivityDate` DATETIME(3) NULL,
-  `LoginTime` INT NULL
+  `LoginTime` INT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Mem_UsersInRoles`;
 CREATE TABLE `Mem_UsersInRoles` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `UserID` INT NULL,
-  `RoleID` INT NULL
+  `RoleID` INT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Mem_Users_Save`;
@@ -178,6 +188,7 @@ CREATE TABLE `Pay_Card` (
 
 DROP TABLE IF EXISTS `Pay_Exchange`;
 CREATE TABLE `Pay_Exchange` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `Id` INT NULL,
   `OrderId` VARCHAR(100) NULL,
   `UserId` VARCHAR(50) NULL,
@@ -188,18 +199,21 @@ CREATE TABLE `Pay_Exchange` (
   `EnterTime` DATETIME(3) NULL,
   `EnterServer` VARCHAR(50) NULL,
   `EnterUserId` VARCHAR(50) NULL,
-  `Remark` VARCHAR(200) NULL
+  `Remark` VARCHAR(200) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Pay_History`;
 CREATE TABLE `Pay_History` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `Id` INT NULL,
   `Order_Id` VARCHAR(20) NULL,
   `Money` DECIMAL(18,2) NULL,
   `User_Id` VARCHAR(50) NULL,
   `Enter_Ip` VARCHAR(20) NULL,
   `Enter_Time` DATETIME(3) NULL,
-  `Pay_Info` VARCHAR(100) NULL
+  `Pay_Info` VARCHAR(100) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Pay_Info`;
@@ -222,10 +236,12 @@ CREATE TABLE `Pay_Info` (
 
 DROP TABLE IF EXISTS `Pay_Select`;
 CREATE TABLE `Pay_Select` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `id` INT NULL,
   `PaywayId` VARCHAR(20) NULL,
   `PayName` VARCHAR(200) NULL,
-  `IsOpen` TINYINT(1) NULL
+  `IsOpen` TINYINT(1) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Pay_Way`;

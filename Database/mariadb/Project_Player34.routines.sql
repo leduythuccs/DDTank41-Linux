@@ -4371,7 +4371,7 @@ proc: BEGIN
     FETCH `Employee_Cursor` INTO v_ConsortiaID;
   END WHILE w1;
   CLOSE `Employee_Cursor`;
-  SELECT * FROM `Consortia` ORDER BY `FightPower` DESC LIMIT 50;
+  SELECT * FROM `Consortia` ORDER BY `FightPower` DESC, `ConsortiaID` LIMIT 50;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Consortia_Users_All`$$
@@ -4656,7 +4656,7 @@ DROP PROCEDURE IF EXISTS `SP_Get_EliteScorePlayers`$$
 CREATE PROCEDURE `SP_Get_EliteScorePlayers`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT `UserID`, `NickName`, `EliteScore`, `Grade` FROM `Sys_Users_Detail` WHERE `EliteScore` > 1 ORDER BY `EliteScore` DESC;
+  SELECT `UserID`, `NickName`, `EliteScore`, `Grade` FROM `Sys_Users_Detail` WHERE `EliteScore` > 1 ORDER BY `EliteScore` DESC, `UserID`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Get_Marry_Apply`$$
@@ -4685,7 +4685,7 @@ DROP PROCEDURE IF EXISTS `SP_Get_Rank_Caddy`$$
 CREATE PROCEDURE `SP_Get_Rank_Caddy`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT `Sys_Users_Detail`.`NickName`, `Sys_Users_Detail`.`badLuckNumber`, `Sys_Users_Detail`.`UserID` FROM `Sys_Users_Detail` WHERE `Sys_Users_Detail`.`UserID` = `Sys_Users_Detail`.`UserID` ORDER BY `Sys_Users_Detail`.`badLuckNumber` DESC LIMIT 10;
+  SELECT `Sys_Users_Detail`.`NickName`, `Sys_Users_Detail`.`badLuckNumber`, `Sys_Users_Detail`.`UserID` FROM `Sys_Users_Detail` WHERE `Sys_Users_Detail`.`UserID` = `Sys_Users_Detail`.`UserID` ORDER BY `Sys_Users_Detail`.`badLuckNumber` DESC, `UserID` LIMIT 10;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Get_SingleFarm`$$
@@ -4896,21 +4896,21 @@ DROP PROCEDURE IF EXISTS `SP_Luckstar_Activity_Rank_All`$$
 CREATE PROCEDURE `SP_Luckstar_Activity_Rank_All`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `LuckStarRankInfo` WHERE `useStarNum` > 0 ORDER BY `useStarNum` DESC;
+  SELECT * FROM `LuckStarRankInfo` WHERE `useStarNum` > 0 ORDER BY `useStarNum` DESC, `ID`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Mail_BySenderID`$$
 CREATE PROCEDURE `SP_Mail_BySenderID`(IN p_UserID INT, OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `User_Messages` WHERE `SenderID` = p_UserID AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) < 240 AND `Type` IN (1, 6, 10, 101) ORDER BY `SendDate` LIMIT 21;
+  SELECT * FROM `User_Messages` WHERE `SenderID` = p_UserID AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) < 240 AND `Type` IN (1, 6, 10, 101) ORDER BY `SendDate`, `ID` LIMIT 21;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Mail_ByUserID`$$
 CREATE PROCEDURE `SP_Mail_ByUserID`(IN p_UserID INT, OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `User_Messages` WHERE `IsExist` = 1 AND `ReceiverID` = p_UserID AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) < `ValidDate` ORDER BY `SendDate`;
+  SELECT * FROM `User_Messages` WHERE `IsExist` = 1 AND `ReceiverID` = p_UserID AND TIMESTAMPDIFF(HOUR, DATE_FORMAT(`SendTime`, '%Y-%m-%d %H:00:00'), DATE_FORMAT(NOW(3), '%Y-%m-%d %H:00:00')) < `ValidDate` ORDER BY `SendDate`, `ID`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Mail_Delete`$$
@@ -5711,7 +5711,7 @@ CREATE PROCEDURE `SP_Sys_Update_Consortia_List`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC`;
-  CREATE TEMPORARY TABLE `tmp_TempC` AS SELECT `LastDayRiches`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `LastDayRiches` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `LastDayRiches` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempC` AS SELECT `LastDayRiches`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `LastDayRiches` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `LastDayRiches` DESC, `ConsortiaID`;
   UPDATE `Consortia`, `tmp_TempC` SET `Consortia`.`Repute` = `tmp_TempC`.`SId` WHERE `Consortia`.`ConsortiaID` = `tmp_TempC`.`ConsortiaID`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC`;
 END$$
@@ -5728,7 +5728,7 @@ CREATE PROCEDURE `SP_Sys_Update_OfferList`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempD`;
-  CREATE TEMPORARY TABLE `tmp_TempD` AS SELECT `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `ReputeOffer` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `ReputeOffer` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempD` AS SELECT `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `ReputeOffer` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `ReputeOffer` DESC, `UserID`;
   INSERT INTO `Sys_Users_Order` (`UserId`) SELECT `UserId` FROM `tmp_TempD` WHERE NOT EXISTS (SELECT `Userid` FROM `Sys_Users_Order` AS `A` WHERE `tmp_TempD`.`UserId` = `A`.`Userid`);
   UPDATE `Sys_Users_Order`, `tmp_TempD` SET `Sys_Users_Order`.`ReputeOffer` = `tmp_TempD`.`SId` WHERE `Sys_Users_Order`.`UserId` = `tmp_TempD`.`UserId`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempD`;
@@ -5746,7 +5746,7 @@ CREATE PROCEDURE `SP_Sys_Update_Users_List`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempB`;
-  CREATE TEMPORARY TABLE `tmp_TempB` AS SELECT `GP`, `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `GP` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `GP` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempB` AS SELECT `GP`, `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `GP` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `GP` DESC, `UserID`;
   INSERT INTO `Sys_Users_Order` (`UserId`) SELECT `UserId` FROM `tmp_TempB` WHERE NOT EXISTS (SELECT `Userid` FROM `Sys_Users_Order` AS `A` WHERE `tmp_TempB`.`UserId` = `A`.`Userid`);
   UPDATE `Sys_Users_Order`, `tmp_TempB` SET `Sys_Users_Order`.`Repute` = `tmp_TempB`.`SId` WHERE `Sys_Users_Order`.`UserId` = `tmp_TempB`.`UserId`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempB`;
@@ -5757,25 +5757,25 @@ CREATE PROCEDURE `SP_Sys_Update_Users_Rank_Date`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempB`;
-  CREATE TEMPORARY TABLE `tmp_TempB` AS SELECT `FightPower`, `ConsortiaID`, `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `FightPower` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `FightPower` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempB` AS SELECT `FightPower`, `ConsortiaID`, `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `FightPower` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `FightPower` DESC, `UserID`;
   INSERT INTO `Sys_Users_Rank_Date` (`UserID`) SELECT `UserId` FROM `tmp_TempB` WHERE NOT EXISTS (SELECT `Userid` FROM `Sys_Users_Rank_Date` AS `A` WHERE `tmp_TempB`.`UserId` = `A`.`Userid`);
   UPDATE `Sys_Users_Rank_Date`, `tmp_TempB` SET `Sys_Users_Rank_Date`.`FightPower` = `tmp_TempB`.`SId`, `Sys_Users_Rank_Date`.`PrevFightPower` = `tmp_TempB`.`SId`, `Sys_Users_Rank_Date`.`ConsortiaID` = `tmp_TempB`.`ConsortiaID` WHERE `Sys_Users_Rank_Date`.`UserId` = `tmp_TempB`.`UserId`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempB`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_Tempc`;
-  CREATE TEMPORARY TABLE `tmp_Tempc` AS SELECT `GP`, `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `GP` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `GP` DESC;
+  CREATE TEMPORARY TABLE `tmp_Tempc` AS SELECT `GP`, `UserId` * 1 AS `UserId`, ROW_NUMBER() OVER (ORDER BY `GP` DESC) AS `SId` FROM `Sys_Users_Detail` ORDER BY `GP` DESC, `UserID`;
   INSERT INTO `Sys_Users_Rank_Date` (`UserID`) SELECT `UserId` FROM `tmp_Tempc` WHERE NOT EXISTS (SELECT `Userid` FROM `Sys_Users_Rank_Date` AS `A` WHERE `tmp_Tempc`.`UserId` = `A`.`Userid`);
   UPDATE `Sys_Users_Rank_Date`, `tmp_Tempc` SET `Sys_Users_Rank_Date`.`GP` = `tmp_Tempc`.`SId`, `Sys_Users_Rank_Date`.`PrevGP` = `tmp_Tempc`.`SId` WHERE `Sys_Users_Rank_Date`.`UserId` = `tmp_Tempc`.`UserId`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_Tempc`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC1`;
-  CREATE TEMPORARY TABLE `tmp_TempC1` AS SELECT `Riches`, `ChairmanID`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `Riches` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `Riches` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempC1` AS SELECT `Riches`, `ChairmanID`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `Riches` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `Riches` DESC, `ConsortiaID`;
   UPDATE `Sys_Users_Rank_Date`, `tmp_TempC1` SET `Sys_Users_Rank_Date`.`ConsortiaRiches` = `tmp_TempC1`.`SId`, `Sys_Users_Rank_Date`.`ConsortiaPrevRiches` = `tmp_TempC1`.`SId` WHERE `Sys_Users_Rank_Date`.`UserId` = `tmp_TempC1`.`ChairmanID`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC1`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC2`;
-  CREATE TEMPORARY TABLE `tmp_TempC2` AS SELECT `FightPower`, `ChairmanID`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `FightPower` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `FightPower` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempC2` AS SELECT `FightPower`, `ChairmanID`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `FightPower` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `FightPower` DESC, `ConsortiaID`;
   UPDATE `Sys_Users_Rank_Date`, `tmp_TempC2` SET `Sys_Users_Rank_Date`.`ConsortiaFightPower` = `tmp_TempC2`.`SId`, `Sys_Users_Rank_Date`.`ConsortiaPrevFightPower` = `tmp_TempC2`.`SId` WHERE `Sys_Users_Rank_Date`.`UserId` = `tmp_TempC2`.`ChairmanID`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC2`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC3`;
-  CREATE TEMPORARY TABLE `tmp_TempC3` AS SELECT `Level`, `ChairmanID`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `Level` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `Level` DESC;
+  CREATE TEMPORARY TABLE `tmp_TempC3` AS SELECT `Level`, `ChairmanID`, `ConsortiaID` * 1 AS `ConsortiaID`, ROW_NUMBER() OVER (ORDER BY `Level` DESC) AS `SId` FROM `Consortia` WHERE `IsExist` <> 0 ORDER BY `Level` DESC, `ConsortiaID`;
   UPDATE `Sys_Users_Rank_Date`, `tmp_TempC3` SET `Sys_Users_Rank_Date`.`ConsortiaLevel` = `tmp_TempC3`.`SId`, `Sys_Users_Rank_Date`.`ConsortiaPrevLevel` = `tmp_TempC3`.`SId` WHERE `Sys_Users_Rank_Date`.`UserId` = `tmp_TempC3`.`ChairmanID`;
   DROP TEMPORARY TABLE IF EXISTS `tmp_TempC3`;
 END$$
@@ -5990,7 +5990,7 @@ proc: BEGIN
   DECLARE v_Repute INT DEFAULT NULL;
   DECLARE v_UserID INT DEFAULT NULL;
   DECLARE v__fetch_status INT DEFAULT 0;
-  DECLARE `Employee_Cursor` CURSOR FOR SELECT `UserID` FROM `Sys_Users_Detail` WHERE `FightPower` > 0 ORDER BY `FightPower` DESC;
+  DECLARE `Employee_Cursor` CURSOR FOR SELECT `UserID` FROM `Sys_Users_Detail` WHERE `FightPower` > 0 ORDER BY `FightPower` DESC, `UserID`;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET v__fetch_status = -1;
   SET p_ReturnValue = 0;
   OPEN `Employee_Cursor`;
@@ -6128,7 +6128,7 @@ DROP PROCEDURE IF EXISTS `SP_UserMatch_All_DESC`$$
 CREATE PROCEDURE `SP_UserMatch_All_DESC`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT `UserID`, `totalPrestige` FROM `Sys_User_Match_Info` ORDER BY `totalPrestige` DESC;
+  SELECT `UserID`, `totalPrestige` FROM `Sys_User_Match_Info` ORDER BY `totalPrestige` DESC, `UserID`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_UserPet_Update`$$

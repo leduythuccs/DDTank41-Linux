@@ -112,6 +112,24 @@ public sealed class Table
     public List<Column> Columns = new();
     public List<Index> Indexes = new();
     public long NextIdentity;
+
+    /// <summary>Hidden column added to tables without a primary key, numbered in the original row order.</summary>
+    public const string RowColumn = "_row";
+
+    /// <summary>
+    /// The columns that order rows which tie on an ORDER BY, as SQL Server's scan order would: the primary key; for a
+    /// table without one, its IDENTITY column, else the hidden _row column (see SchemaWriter).
+    /// </summary>
+    public List<string> TieKey()
+    {
+        Index pk = Indexes.FirstOrDefault(i => i.Primary);
+        if (pk != null)
+        {
+            return pk.Columns.Select(c => c.Column).ToList();
+        }
+        Column id = Columns.FirstOrDefault(c => c.Identity);
+        return new List<string> { id != null ? id.Name : RowColumn };
+    }
 }
 
 public static class Catalog
@@ -253,6 +271,15 @@ public static class SchemaWriter
             if (pk != null)
             {
                 lines.Add("  PRIMARY KEY (" + string.Join(", ", pk.Columns.Select(k => Program.Q(k.Column))) + ")");
+            }
+            else if (!t.Columns.Any(c => c.Identity))
+            {
+                // SQL Server returns a heap's rows in the order they were stored, also between rows that tie on an
+                // ORDER BY (shop items with the same sort value). MariaDB promises no order there, so such tables get
+                // a hidden key numbered in load order, which the translated procedures add to their ORDER BY.
+                // INVISIBLE: SELECT * and INSERT without a column list do not see it.
+                lines.Insert(0, "  " + Program.Q(Table.RowColumn) + " BIGINT NOT NULL AUTO_INCREMENT INVISIBLE");
+                lines.Add("  PRIMARY KEY (" + Program.Q(Table.RowColumn) + ")");
             }
             HashSet<string> names = new(StringComparer.OrdinalIgnoreCase);
             foreach (Index i in t.Indexes.Where(i => !i.Primary))

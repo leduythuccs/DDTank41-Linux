@@ -14,6 +14,9 @@ public sealed class Schema
     public readonly Dictionary<string, Dictionary<string, List<Param>>> Procedures = new(StringComparer.OrdinalIgnoreCase);
     public readonly Dictionary<string, Dictionary<string, T>> Functions = new(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>Per database and table: the columns that order tied rows (Table.TieKey).</summary>
+    public readonly Dictionary<string, Dictionary<string, List<string>>> PrimaryKeys = new(StringComparer.OrdinalIgnoreCase);
+
     /// <summary>Per database and table: the columns in order, without the IDENTITY column (only tables that have one).</summary>
     public readonly Dictionary<string, Dictionary<string, List<string>>> NonIdentityColumns = new(StringComparer.OrdinalIgnoreCase);
 
@@ -32,6 +35,7 @@ public sealed class Schema
             map[t.Name] = t.Columns.ToDictionary(c => c.Name, c => Translator.TypeOf(c.Type), StringComparer.OrdinalIgnoreCase);
         }
         Tables[db] = map;
+        PrimaryKeys[db] = tables.ToDictionary(t => t.Name, t => t.TieKey(), StringComparer.OrdinalIgnoreCase);
         NonIdentityColumns[db] = tables.Where(t => t.Columns.Any(c => c.Identity))
             .ToDictionary(t => t.Name, t => t.Columns.Where(c => !c.Identity).Select(c => c.Name).ToList(), StringComparer.OrdinalIgnoreCase);
     }
@@ -1105,7 +1109,7 @@ public sealed class Translator
         {
             sql += " HAVING " + Bool(qs.HavingClause.SearchCondition);
         }
-        sql += OrderBy(qs.OrderByClause, null);
+        sql += OrderBy(qs.OrderByClause, null) + TieBreak(qs);
         sql += Offset(qs.OffsetClause);
         return sql;
     }
@@ -1131,6 +1135,31 @@ public sealed class Translator
         }
         return " ORDER BY " + string.Join(", ", o.OrderByElements.Select(e => Expr(e.Expression).Sql + (e.SortOrder == SortOrder.Descending ? " DESC" : "")));
     }
+    /// <summary>
+    /// Rows that tie on the ORDER BY come back from SQL Server in clustered index order (the order it scanned them);
+    /// MariaDB promises no order for them. For a query on one table, the primary key is added after the ORDER BY
+    /// columns, so the game gets the rows in the order it got from SQL Server (shop items with the same sort value).
+    /// </summary>
+    private string TieBreak(QuerySpecification qs)
+    {
+        if (qs.OrderByClause == null || qs.GroupByClause != null || qs.UniqueRowFilter == UniqueRowFilter.Distinct
+            || qs.FromClause?.TableReferences.Count != 1 || qs.FromClause.TableReferences[0] is not NamedTableReference n
+            || n.SchemaObject.BaseIdentifier.Value.StartsWith('#'))
+        {
+            return "";
+        }
+        string tableDb = string.IsNullOrEmpty(n.SchemaObject.DatabaseIdentifier?.Value) ? db : n.SchemaObject.DatabaseIdentifier.Value;
+        if (!schema.PrimaryKeys.TryGetValue(tableDb, out var keys) || !keys.TryGetValue(n.SchemaObject.BaseIdentifier.Value, out List<string> pk))
+        {
+            return "";
+        }
+        HashSet<string> ordered = qs.OrderByClause.OrderByElements.Select(e => e.Expression)
+            .OfType<ColumnReferenceExpression>().Select(c => c.MultiPartIdentifier.Identifiers.Last().Value).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        string prefix = n.Alias != null ? Program.Q(n.Alias.Value) + "." : "";
+        List<string> extra = pk.Where(c => !ordered.Contains(c)).Select(c => prefix + Program.Q(c)).ToList();
+        return extra.Count == 0 ? "" : ", " + string.Join(", ", extra);
+    }
+
 
     private string Offset(OffsetClause o)
     {

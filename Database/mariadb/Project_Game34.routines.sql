@@ -641,7 +641,7 @@ DROP PROCEDURE IF EXISTS `SP_Get_EventRewardGoods`$$
 CREATE PROCEDURE `SP_Get_EventRewardGoods`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Event_Reward_Goods` ORDER BY `ActivityType`, `SubActivityType`;
+  SELECT * FROM `Event_Reward_Goods` ORDER BY `ActivityType`, `SubActivityType`, `_row`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Get_EventRewardGoods_Type`$$
@@ -655,7 +655,7 @@ DROP PROCEDURE IF EXISTS `SP_Get_EventRewardInfo`$$
 CREATE PROCEDURE `SP_Get_EventRewardInfo`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Event_Reward_Info` ORDER BY `ActivityType`, `SubActivityType`;
+  SELECT * FROM `Event_Reward_Info` ORDER BY `ActivityType`, `SubActivityType`, `_row`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Get_EventRewardInfo_Type`$$
@@ -1331,7 +1331,7 @@ DROP PROCEDURE IF EXISTS `SP_Items_All_ASC`$$
 CREATE PROCEDURE `SP_Items_All_ASC`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Shop_Goods` ORDER BY `CategoryID`;
+  SELECT * FROM `Shop_Goods` ORDER BY `CategoryID`, `TemplateID`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Items_Category_All`$$
@@ -1387,7 +1387,7 @@ DROP PROCEDURE IF EXISTS `SP_Maps_All`$$
 CREATE PROCEDURE `SP_Maps_All`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Game_Map` ORDER BY `ID` DESC;
+  SELECT * FROM `Game_Map` ORDER BY `ID` DESC, `_row`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_Maps_Server_All`$$
@@ -1499,7 +1499,7 @@ DROP PROCEDURE IF EXISTS `SP_PveInfos_All`$$
 CREATE PROCEDURE `SP_PveInfos_All`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Pve_Info` ORDER BY `Type`, `Ordering`;
+  SELECT * FROM `Pve_Info` ORDER BY `Type`, `Ordering`, `ID`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_QQtipsMessages_All`$$
@@ -1633,7 +1633,7 @@ DROP PROCEDURE IF EXISTS `SP_Shop_All`$$
 CREATE PROCEDURE `SP_Shop_All`(OUT p_ReturnValue INT)
 proc: BEGIN
   SET p_ReturnValue = 0;
-  SELECT * FROM `Shop` ORDER BY `sort` DESC;
+  SELECT * FROM `Shop` ORDER BY `sort` DESC, `_row`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SP_StrengThenExp_All`$$

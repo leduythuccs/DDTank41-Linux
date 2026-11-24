@@ -146,7 +146,7 @@ proc: BEGIN
   DECLARE v_ApplicationId INT DEFAULT NULL;
   SET p_ReturnValue = 0;
   SELECT `ApplicationId` INTO v_ApplicationId FROM `Mem_Application` WHERE `ApplicationName` = p_ApplicationName LIMIT 1;
-  SELECT `Id`, `ApplicationId`, `ModuleId`, `ModuleName`, `ParModuleId`, `AddTime`, `Description` FROM `Mem_Module` WHERE `ApplicationId` = v_ApplicationId ORDER BY CAST(`ModuleId` AS CHAR(10));
+  SELECT `Id`, `ApplicationId`, `ModuleId`, `ModuleName`, `ParModuleId`, `AddTime`, `Description` FROM `Mem_Module` WHERE `ApplicationId` = v_ApplicationId ORDER BY CAST(`ModuleId` AS CHAR(10)), `ModuleId`;
 END$$
 
 DROP PROCEDURE IF EXISTS `Mem_NotUserRight_List`$$

@@ -5,6 +5,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS `Achievement`;
 CREATE TABLE `Achievement` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `PlaceID` INT NOT NULL,
   `Title` VARCHAR(100) NOT NULL,
@@ -20,7 +21,8 @@ CREATE TABLE `Achievement` (
   `AchievementPoint` INT NOT NULL,
   `IsActive` INT NOT NULL,
   `PicID` INT NOT NULL,
-  `IsShare` TINYINT(1) NOT NULL
+  `IsShare` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `AchievementCondition`;
@@ -35,11 +37,13 @@ CREATE TABLE `AchievementCondition` (
 
 DROP TABLE IF EXISTS `Achievement_Goods`;
 CREATE TABLE `Achievement_Goods` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `AchievementID` INT NOT NULL,
   `RewardType` INT NOT NULL,
   `RewardPara` TEXT NOT NULL,
   `RewardValueId` INT NOT NULL,
-  `RewardCount` INT NOT NULL
+  `RewardCount` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Active`;
@@ -119,6 +123,7 @@ CREATE TABLE `Activity_System_Item` (
 
 DROP TABLE IF EXISTS `AreaConfig`;
 CREATE TABLE `AreaConfig` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `AreaID` INT NOT NULL DEFAULT 0,
   `AreaServer` VARCHAR(150) NOT NULL DEFAULT '',
   `AreaName` VARCHAR(150) NOT NULL DEFAULT '',
@@ -128,11 +133,13 @@ CREATE TABLE `AreaConfig` (
   `Password` VARCHAR(150) NOT NULL DEFAULT '',
   `RequestLink` VARCHAR(150) NULL,
   `ResourceLink` VARCHAR(150) NULL,
-  `Version` VARCHAR(150) NULL
+  `Version` VARCHAR(150) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Ball`;
 CREATE TABLE `Ball` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `Name` VARCHAR(200) NULL,
   `Power` DOUBLE NOT NULL,
@@ -154,16 +161,19 @@ CREATE TABLE `Ball` (
   `BombSound` VARCHAR(50) NULL,
   `Delay` INT NOT NULL,
   `ActionType` INT NOT NULL,
-  `HasTunnel` TINYINT(1) NOT NULL
+  `HasTunnel` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `BallConfig`;
 CREATE TABLE `BallConfig` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `TemplateID` INT NOT NULL,
   `Common` INT NULL,
   `CommonAddWound` INT NULL,
   `CommonMultiBall` INT NULL,
-  `Special` INT NULL
+  `Special` INT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `CardUpdateCondition`;
@@ -284,6 +294,7 @@ CREATE TABLE `ClothPropertyTemplateInfo` (
 
 DROP TABLE IF EXISTS `Communal_Active`;
 CREATE TABLE `Communal_Active` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ActiveID` INT NOT NULL DEFAULT 1,
   `BeginTime` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `EndTime` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -293,7 +304,8 @@ CREATE TABLE `Communal_Active` (
   `AddPropertyByMoney` VARCHAR(50) NULL,
   `AddPropertyByProp` VARCHAR(50) NULL,
   `IsReset` TINYINT(1) NOT NULL DEFAULT 0,
-  `IsSendAward` TINYINT(1) NOT NULL DEFAULT 0
+  `IsSendAward` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Communal_Active_Award`;
@@ -398,6 +410,7 @@ CREATE TABLE `Consortia_TaskConfig` (
 
 DROP TABLE IF EXISTS `DailyLeagueAwardItems`;
 CREATE TABLE `DailyLeagueAwardItems` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `Class` INT NOT NULL,
   `TemplateID` INT NOT NULL,
@@ -408,22 +421,27 @@ CREATE TABLE `DailyLeagueAwardItems` (
   `AgilityCompose` INT NULL DEFAULT 0,
   `IsBind` TINYINT(1) NULL DEFAULT 1,
   `ValidDate` INT NULL DEFAULT 0,
-  `Count` INT NOT NULL
+  `Count` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `DailyLeagueAwardList`;
 CREATE TABLE `DailyLeagueAwardList` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `Class` INT NOT NULL,
   `Grade` INT NOT NULL,
   `Score` INT NOT NULL,
-  `Rank` INT NULL DEFAULT 0
+  `Rank` INT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `DailyLeagueLevel`;
 CREATE TABLE `DailyLeagueLevel` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `Level` INT NOT NULL,
   `Name` TEXT NOT NULL,
-  `Score` INT NOT NULL
+  `Score` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Daily_Award`;
@@ -501,17 +519,20 @@ CREATE TABLE `Event_Award_Item` (
 
 DROP TABLE IF EXISTS `Event_Live`;
 CREATE TABLE `Event_Live` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `EventID` INT NULL,
   `Description` TEXT NULL,
   `CondictionType` INT NULL,
   `Condiction_Para1` INT NULL,
   `Condiction_Para2` INT NULL,
   `StartDate` DATETIME(3) NULL,
-  `EndDate` DATETIME(3) NULL
+  `EndDate` DATETIME(3) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Event_LiveGoods`;
 CREATE TABLE `Event_LiveGoods` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `EventID` INT NOT NULL,
   `TemplateID` INT NOT NULL,
   `ValidDate` INT NULL DEFAULT 7,
@@ -521,11 +542,13 @@ CREATE TABLE `Event_LiveGoods` (
   `DefendCompose` INT NULL DEFAULT 0,
   `AgilityCompose` INT NULL DEFAULT 0,
   `LuckCompose` INT NULL DEFAULT 0,
-  `IsBind` TINYINT(1) NULL DEFAULT 1
+  `IsBind` TINYINT(1) NULL DEFAULT 1,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Event_Reward_Goods`;
 CREATE TABLE `Event_Reward_Goods` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ActivityType` INT NOT NULL,
   `SubActivityType` INT NOT NULL,
   `TemplateId` INT NOT NULL,
@@ -536,14 +559,17 @@ CREATE TABLE `Event_Reward_Goods` (
   `AgilityCompose` INT NULL DEFAULT 0,
   `IsBind` TINYINT(1) NULL DEFAULT 1,
   `ValidDate` INT NULL DEFAULT 0,
-  `Count` INT NULL DEFAULT 1
+  `Count` INT NULL DEFAULT 1,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Event_Reward_Info`;
 CREATE TABLE `Event_Reward_Info` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ActivityType` INT NOT NULL,
   `SubActivityType` INT NOT NULL,
-  `Condition` INT NOT NULL
+  `Condition` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `ExerciseInfo`;
@@ -560,12 +586,14 @@ CREATE TABLE `ExerciseInfo` (
 
 DROP TABLE IF EXISTS `Fair_Battle_Reward_Temp`;
 CREATE TABLE `Fair_Battle_Reward_Temp` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `Prestige` INT NOT NULL,
   `Level` INT NOT NULL,
   `Name` VARCHAR(50) NULL,
   `PrestigeForWin` INT NOT NULL,
   `PrestigeForLose` INT NOT NULL,
-  `Title` VARCHAR(50) NULL
+  `Title` VARCHAR(50) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Fight_Rate`;
@@ -640,6 +668,7 @@ CREATE TABLE `Fusion` (
 
 DROP TABLE IF EXISTS `Game_Map`;
 CREATE TABLE `Game_Map` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `Name` VARCHAR(50) NULL,
   `PosX` VARCHAR(200) NULL,
@@ -659,7 +688,8 @@ CREATE TABLE `Game_Map` (
   `Pic` VARCHAR(200) NULL,
   `Remark` VARCHAR(50) NULL,
   `BackMusic` VARCHAR(200) NULL,
-  `Type` INT NOT NULL
+  `Type` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `GoldEquipTemplateLoad`;
@@ -774,8 +804,10 @@ CREATE TABLE `Item_Refinery` (
 
 DROP TABLE IF EXISTS `Item_Refinery_Strengthen`;
 CREATE TABLE `Item_Refinery_Strengthen` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `StrengthenLevel` INT NULL,
-  `Rock` INT NULL
+  `Rock` INT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Item_Strengthen`;
@@ -828,6 +860,7 @@ CREATE TABLE `LoadUserBox` (
 
 DROP TABLE IF EXISTS `Login_Award_Item_Template`;
 CREATE TABLE `Login_Award_Item_Template` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL DEFAULT 0,
   `Type` INT NOT NULL DEFAULT 0,
   `RewardItemID` INT NOT NULL DEFAULT 0,
@@ -839,7 +872,8 @@ CREATE TABLE `Login_Award_Item_Template` (
   `AttackCompose` INT NOT NULL DEFAULT 0,
   `DefendCompose` INT NOT NULL DEFAULT 0,
   `AgilityCompose` INT NOT NULL DEFAULT 0,
-  `LuckCompose` INT NOT NULL DEFAULT 0
+  `LuckCompose` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `LuckyStart_Topten_Award`;
@@ -860,9 +894,11 @@ CREATE TABLE `LuckyStart_Topten_Award` (
 
 DROP TABLE IF EXISTS `Map_Server`;
 CREATE TABLE `Map_Server` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ServerID` INT NOT NULL,
   `OpenMap` LONGTEXT NOT NULL,
-  `IsSpecial` INT NOT NULL
+  `IsSpecial` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Map_Week`;
@@ -895,6 +931,7 @@ CREATE TABLE `Mission_Info` (
 
 DROP TABLE IF EXISTS `Mission_Info_Backup`;
 CREATE TABLE `Mission_Info_Backup` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `Id` INT NOT NULL,
   `Name` VARCHAR(100) NOT NULL,
   `TotalCount` INT NOT NULL,
@@ -910,7 +947,8 @@ CREATE TABLE `Mission_Info_Backup` (
   `Param2` INT NULL,
   `TakeCard` INT NULL,
   `TryAgain` TINYINT(1) NOT NULL,
-  `TryAgainCost` INT NOT NULL
+  `TryAgainCost` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `New_Title`;
@@ -930,6 +968,7 @@ CREATE TABLE `New_Title` (
 
 DROP TABLE IF EXISTS `NPC_Info`;
 CREATE TABLE `NPC_Info` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `Name` VARCHAR(50) NOT NULL,
   `Level` INT NOT NULL,
@@ -964,7 +1003,8 @@ CREATE TABLE `NPC_Info` (
   `CurrentBallId` INT NOT NULL,
   `speed` INT NOT NULL,
   `MagicAttack` INT NOT NULL DEFAULT 0,
-  `MagicDefence` INT NOT NULL DEFAULT 0
+  `MagicDefence` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Old_Player_Award_Info`;
@@ -1150,6 +1190,7 @@ CREATE TABLE `QQtips_Messages` (
 
 DROP TABLE IF EXISTS `Quest`;
 CREATE TABLE `Quest` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `QuestID` INT NOT NULL,
   `Title` TEXT NULL,
@@ -1181,22 +1222,26 @@ CREATE TABLE `Quest` (
   `AutoEquip` TINYINT(1) NOT NULL DEFAULT 0,
   `Rank` TEXT NULL,
   `StarLev` INT NOT NULL DEFAULT 0,
-  `NotMustCount` INT NOT NULL DEFAULT 0
+  `NotMustCount` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Quest_Condiction`;
 CREATE TABLE `Quest_Condiction` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `QuestID` INT NOT NULL,
   `CondictionID` INT NOT NULL,
   `CondictionType` INT NOT NULL,
   `CondictionTitle` VARCHAR(200) NOT NULL,
   `Para1` INT NOT NULL,
   `Para2` INT NOT NULL,
-  `isOpitional` TINYINT(1) NOT NULL DEFAULT 0
+  `isOpitional` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Quest_Goods`;
 CREATE TABLE `Quest_Goods` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `QuestID` INT NOT NULL,
   `RewardItemID` INT NOT NULL,
   `IsSelect` TINYINT(1) NOT NULL,
@@ -1208,27 +1253,32 @@ CREATE TABLE `Quest_Goods` (
   `AgilityCompose` INT NULL DEFAULT 0,
   `LuckCompose` INT NULL DEFAULT 0,
   `IsCount` TINYINT(1) NULL DEFAULT 1,
-  `IsBind` TINYINT(1) NULL DEFAULT 1
+  `IsBind` TINYINT(1) NULL DEFAULT 1,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Quest_Rate`;
 CREATE TABLE `Quest_Rate` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `BindMoneyRate` VARCHAR(50) NOT NULL,
   `ExpRate` VARCHAR(50) NOT NULL,
   `GoldRate` VARCHAR(50) NOT NULL,
   `ExploitRate` VARCHAR(50) NOT NULL,
-  `CanOneKeyFinishTime` INT NOT NULL
+  `CanOneKeyFinishTime` INT NOT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Rate`;
 CREATE TABLE `Rate` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ServerID` INT NOT NULL,
   `Rate` DECIMAL(6,2) NOT NULL,
   `BeginDay` DATETIME(3) NOT NULL,
   `EndDay` DATETIME(3) NOT NULL,
   `BeginTime` DATETIME(3) NOT NULL,
   `EndTime` DATETIME(3) NOT NULL,
-  `Type` INT NOT NULL DEFAULT 0
+  `Type` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Rune_Template`;
@@ -1288,6 +1338,7 @@ CREATE TABLE `Sets_Build_Temp` (
 
 DROP TABLE IF EXISTS `Shop`;
 CREATE TABLE `Shop` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` DOUBLE NULL,
   `ShopID` DOUBLE NULL,
   `GroupID` DOUBLE NULL,
@@ -1325,7 +1376,8 @@ CREATE TABLE `Shop` (
   `StartDate` DATETIME(3) NULL,
   `EndDate` DATETIME(3) NULL,
   `LimitGrade` INT NULL DEFAULT 0,
-  `CanBuy` TINYINT(1) NOT NULL DEFAULT 0
+  `CanBuy` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `ShopGoodsShowList`;
@@ -1400,6 +1452,7 @@ CREATE TABLE `Shop_Goods` (
 
 DROP TABLE IF EXISTS `Shop_Goods_Box`;
 CREATE TABLE `Shop_Goods_Box` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NOT NULL,
   `TemplateId` INT NOT NULL,
   `IsSelect` TINYINT(1) NOT NULL,
@@ -1413,7 +1466,8 @@ CREATE TABLE `Shop_Goods_Box` (
   `LuckCompose` INT NOT NULL DEFAULT 0,
   `Random` INT NOT NULL,
   `IsTips` INT NOT NULL DEFAULT 0,
-  `IsLogs` TINYINT(1) NOT NULL DEFAULT 0
+  `IsLogs` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Shop_Goods_Categorys`;
@@ -1466,6 +1520,7 @@ CREATE TABLE `Sub_Active_List` (
 
 DROP TABLE IF EXISTS `SuitTemplateInfo`;
 CREATE TABLE `SuitTemplateInfo` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `SuitId` INT NOT NULL,
   `SuitName` TEXT NOT NULL,
   `EqipCount1` INT NULL,
@@ -1482,20 +1537,25 @@ CREATE TABLE `SuitTemplateInfo` (
   `Skill4` VARCHAR(200) NULL,
   `EqipCount5` INT NULL,
   `SkillDescribe5` TEXT NULL,
-  `Skill5` VARCHAR(200) NULL
+  `Skill5` VARCHAR(200) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Suit_TemplateID`;
 CREATE TABLE `Suit_TemplateID` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `ID` INT NULL,
   `ContainEquip` TEXT NULL,
-  `PartName` TEXT NULL
+  `PartName` TEXT NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `TempTable`;
 CREATE TABLE `TempTable` (
+  `_row` BIGINT NOT NULL AUTO_INCREMENT INVISIBLE,
   `id` INT NULL,
-  `value` VARCHAR(50) NULL
+  `value` VARCHAR(50) NULL,
+  PRIMARY KEY (`_row`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_as_ci;
 
 DROP TABLE IF EXISTS `Totem_Honor_Template`;
