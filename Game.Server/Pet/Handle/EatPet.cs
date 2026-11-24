@@ -73,18 +73,17 @@ namespace Game.Server.Pet.Handle
             else
             {
                 count = packet.ReadInt();
-                decimal removeNeedCount = 1;
                 decimal needWeaponExp = PetMoePropertyMgr.getNeedExp(weaponExp, weaponLevel);
                 decimal needClothesExp = PetMoePropertyMgr.getNeedExp(clothesExp, clothesLevel);
                 decimal needHatExp = PetMoePropertyMgr.getNeedExp(hatExp, hatLevel);
                 decimal needEatExp = 0;
                 ItemInfo info = player.GetItemByTemplateID(eatItem);
-                totalPoint += count * info.Template.Property2;
-                if (info == null) 
+                if (info == null || count <= 0)
                 {
                     player.SendMessage("Không đủ số lượng đá manh hóa!");
                     return false; 
                 }
+                totalPoint += count * info.Template.Property2;
                 
                 switch (amor)
                 {
@@ -105,7 +104,8 @@ namespace Game.Server.Pet.Handle
                 if (totalPoint > needEatExp)
                 {
                     count = (int)Math.Ceiling(needEatExp / info.Template.Property2);
-                    totalPoint = (int)removeNeedCount * info.Template.Property2;
+                    // Only the stones needed for the next level are used, and each of them counts.
+                    totalPoint = count * info.Template.Property2;
                 }
 
                 if (player.RemoveTemplate(eatItem, count))
