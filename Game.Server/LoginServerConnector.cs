@@ -72,6 +72,9 @@ namespace Game.Server
                         case 10:
                             HandleSystemNotice(pkg);
                             break;
+                        case 11:
+                            HandleReload(pkg);
+                            break;
                         case 13:
                             HandleUpdatePlayerMarriedState(pkg);
                             break;
@@ -907,6 +910,10 @@ namespace Game.Server
                     break;
                 case eReloadType.fairbattlereward:
                     result = FairBattleRewardMgr.ReLoad();
+                    break;
+                case eReloadType.gameproperties:
+                    GameProperties.Refresh();
+                    result = true;
                     break;
             }
             packet.WriteInt(GameServer.Instance.Configuration.ServerID);

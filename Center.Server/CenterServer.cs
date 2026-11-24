@@ -781,6 +781,10 @@ namespace Center.Server
 					ServerMgr.ReLoadServerList();
 					SendConfigState();
 				}
+				else if (type == eReloadType.gameproperties)
+				{
+					GameProperties.Refresh();
+				}
 				GSPacketIn pkg = new GSPacketIn(11);
 				pkg.WriteInt((int)type);
 				SendToALL(pkg, null);

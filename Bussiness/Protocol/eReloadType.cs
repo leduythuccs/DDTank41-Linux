@@ -28,5 +28,7 @@ namespace Bussiness.Protocol
         totemhonor = 68,
         totem = 69,
         fairbattlereward = 46,
+        // re-read GameProperties (the Server_Config table)
+        gameproperties = 70,
     }
 }
