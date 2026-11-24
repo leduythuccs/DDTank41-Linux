@@ -4120,3 +4120,7 @@ FigSpiritUpGradeHandler.Msg:Chiến hồn không đủ!
 
 Game.Server.GameUtils.ConsortiaBag.Sender:  Két sắt Guild trả lại
 Game.Server.GameUtils.ConsortiaBag.Title: Vật phẩm từ két sắt
+CardDataHander.Msg12:Thẻ bài này đã được trang bị.
+CardDataHander.Msg13:Thẻ bài không tồn tại.
+CardDataHander.Msg14:Thẻ của bạn đã đạt cấp cao nhất không thể tiếp tục.
+CardDataHander.Msg15:Bạn không có đủ số lượng thẻ bài để tăng cấp.

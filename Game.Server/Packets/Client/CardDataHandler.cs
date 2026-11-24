@@ -58,7 +58,7 @@ internal class CardDataHandler : IPacketHandler
                         }
                         else
                         {
-                            client.Player.SendMessage("Thẻ bài này đã được trang bị.");
+                            client.Player.SendMessage(LanguageMgr.GetTranslation("CardDataHander.Msg12"));
                         }
                     }
                 }
@@ -94,14 +94,14 @@ internal class CardDataHandler : IPacketHandler
                     {
                         if (count <= 0 || count > itemInfo.Count)
                         {
-                            client.Player.SendMessage("Thẻ bài không tồn tại.");
+                            client.Player.SendMessage(LanguageMgr.GetTranslation("CardDataHander.Msg13"));
                             return 0;
                         }
                         int property = itemInfo.Template.Property5;
                         ItemTemplateInfo itemTemplateInfo = ItemMgr.FindItemTemplate(property);
                         if (itemTemplateInfo == null || itemTemplateInfo.CategoryID != 26)
                         {
-                            client.Player.SendMessage("Thẻ bài không tồn tại.");
+                            client.Player.SendMessage(LanguageMgr.GetTranslation("CardDataHander.Msg13"));
                             return 0;
                         }
                         client.Player.EquipBag.RemoveCountFromStack(itemInfo, itemInfo.Count);
@@ -115,7 +115,7 @@ internal class CardDataHandler : IPacketHandler
                     }
                     else
                     {
-                        client.Player.SendMessage("Thẻ bài không tồn tại.");
+                        client.Player.SendMessage(LanguageMgr.GetTranslation("CardDataHander.Msg13"));
                     }
                     break;
                 }
@@ -131,51 +131,60 @@ internal class CardDataHandler : IPacketHandler
                     {
                         break;
                     }
-                    if (itemAt.Level < CardMgr.MaxLevel())
+                    if (itemAt.Level >= CardMgr.MaxLevel())
+                    {
+                        client.Player.SendMessage(LanguageMgr.GetTranslation("CardDataHander.Msg14"));
+                        break;
+                    }
+                    // Spend every card the player has in one click, levelling up as often as the exp allows.
+                    bool used = false;
+                    bool levelled = false;
+                    Random rnd = new Random();
+                    while (itemAt.Level < CardMgr.MaxLevel())
                     {
                         CardUpdateConditionInfo cardUpdateCondition = CardMgr.GetCardUpdateCondition(itemAt.Level + 1);
-                        if (cardUpdateCondition != null && itemAt.Count >= cardUpdateCondition.UpdateCardCount)
+                        if (cardUpdateCondition == null || itemAt.Count < cardUpdateCondition.UpdateCardCount)
                         {
-                            Random random = new Random();
-                            itemAt.Count -= cardUpdateCondition.UpdateCardCount;
-                            itemAt.CardGP += random.Next(cardUpdateCondition.MinExp, cardUpdateCondition.MaxExp);
-                            if (itemAt.CardGP >= cardUpdateCondition.Exp)
+                            break;
+                        }
+                        used = true;
+                        itemAt.Count -= cardUpdateCondition.UpdateCardCount;
+                        itemAt.CardGP += rnd.Next(cardUpdateCondition.MinExp, cardUpdateCondition.MaxExp);
+                        if (itemAt.CardGP >= cardUpdateCondition.Exp)
+                        {
+                            CardUpdateInfo cardUpdateInfo = CardMgr.GetCardUpdateInfo(itemAt.TemplateID, cardUpdateCondition.Level);
+                            if (cardUpdateInfo == null)
                             {
-                                CardUpdateInfo cardUpdateInfo = CardMgr.GetCardUpdateInfo(itemAt.TemplateID, cardUpdateCondition.Level);
-                                if (cardUpdateInfo != null)
-                                {
-                                    itemAt.Level++;
-                                    itemAt.Attack += cardUpdateInfo.Attack;
-                                    itemAt.Defence += cardUpdateInfo.Defend;
-                                    itemAt.Agility += cardUpdateInfo.Agility;
-                                    itemAt.Luck += cardUpdateInfo.Lucky;
-                                    itemAt.Damage += cardUpdateInfo.Damage;
-                                    itemAt.Guard += cardUpdateInfo.Guard;
-                                    UsersCardInfo cardEquip = cardBag.GetCardEquip(itemAt.TemplateID);
-                                    if (cardEquip != null)
-                                    {
-                                        cardEquip.CopyProp(itemAt);
-                                        cardBag.UpdateCard(cardEquip);
-                                        client.Player.EquipBag.UpdatePlayerProperties();
-                                        client.Player.OnEquipCardEvent();
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine("cardUpInfo is null - " + itemAt.TemplateID + " - " + cardUpdateCondition.Level + " - exp: " + cardUpdateCondition.Exp);
-                                }
+                                Console.WriteLine("cardUpInfo is null - " + itemAt.TemplateID + " - " + cardUpdateCondition.Level + " - exp: " + cardUpdateCondition.Exp);
+                                break;
                             }
-                            cardBag.UpdateCard(itemAt);
-                        }
-                        else
-                        {
-                            client.Player.SendMessage("Bạn không có đủ số lượng thẻ bài để tăng cấp.");
+                            itemAt.Level++;
+                            itemAt.Attack += cardUpdateInfo.Attack;
+                            itemAt.Defence += cardUpdateInfo.Defend;
+                            itemAt.Agility += cardUpdateInfo.Agility;
+                            itemAt.Luck += cardUpdateInfo.Lucky;
+                            itemAt.Damage += cardUpdateInfo.Damage;
+                            itemAt.Guard += cardUpdateInfo.Guard;
+                            levelled = true;
                         }
                     }
-                    else
+                    if (!used)
                     {
-                        client.Player.SendMessage("Thẻ của bạn đã đạt cấp cao nhất không thể tiếp tục.");
+                        client.Player.SendMessage(LanguageMgr.GetTranslation("CardDataHander.Msg15"));
+                        break;
                     }
+                    if (levelled)
+                    {
+                        UsersCardInfo cardEquip = cardBag.GetCardEquip(itemAt.TemplateID);
+                        if (cardEquip != null)
+                        {
+                            cardEquip.CopyProp(itemAt);
+                            cardBag.UpdateCard(cardEquip);
+                            client.Player.EquipBag.UpdatePlayerProperties();
+                            client.Player.OnEquipCardEvent();
+                        }
+                    }
+                    cardBag.UpdateCard(itemAt);
                     break;
                 }
             case 4:
