@@ -1,0 +1,15 @@
+warning USED   Project_Player34/SP_Active_PullDown: SELECT mixes @v = @v + x with other assignments: evaluated on one row (fine when the WHERE picks one row)
+manual  USED   Project_Player34/SP_CustomPage
+FAILED  unused Project_Player34/SP_CustomPage_Test: EXEC of unknown procedure sp_executesql
+FAILED  unused Project_Player34/SP_Sys_BackUpData: statement BackupDatabaseStatement
+warning unused Project_Player34/SP_Users_Register: SELECT mixes @v = @v + x with other assignments: evaluated on one row (fine when the WHERE picks one row)
+FAILED  unused Project_Player34/Sp_Fetch_List: dynamic SQL (EXEC string / sp_executesql)
+FAILED  unused Project_Player34/Sp_Sys_DataBaseSet: statement AlterDatabaseSetStatement
+FAILED  unused Project_Player34/Split: table-valued function
+manual  USED   Project_Game34/SP_CustomPage
+FAILED  unused Project_Game34/SP_CustomPage_Test: EXEC of unknown procedure sp_executesql
+FAILED  unused Project_Game34/SP_Get_GameScript: dynamic SQL (EXEC string / sp_executesql)
+FAILED  unused Project_Game34/Sp_Fetch_List: dynamic SQL (EXEC string / sp_executesql)
+FAILED  unused Project_Game34/Split: table-valued function
+FAILED  unused Db_Membership/Pay_Card_Create: statement SetRowCountStatement
+FAILED  unused Db_Membership/tp_Fetch_List: dynamic SQL (EXEC string / sp_executesql)
