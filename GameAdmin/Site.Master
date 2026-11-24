@@ -372,6 +372,7 @@
                     EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal" >
                     <Items>
                         <asp:MenuItem NavigateUrl="~/Admin/sendMail5Item.aspx" Text="SendMail"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/serverConfig.aspx" Text="Cấu hình"/>
                     </Items>
                 </asp:Menu>
             </div>

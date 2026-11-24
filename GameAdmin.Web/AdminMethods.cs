@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Net;
 using System.Reflection;
 using Bussiness;
+using Bussiness.CenterService;
 using Bussiness.Managers;
+using Bussiness.Protocol;
 using log4net;
 using SqlDataProvider.Data;
 
@@ -265,6 +267,61 @@ namespace GameAdmin.Web
             return "<script type=\"text/javascript\">$(function() {$('#show_smartpaginator').smartpaginator({ totalrecords: " + total
                 + ",length: " + length + ", recordsperpage: " + perPage + ", controlClass:'pager2', onchange: function (newPage) {"
                 + onChange + "}});});</script>";
+        }
+
+        /// <summary>The Server_Config options the "Cấu hình" page (Admin/serverConfig.aspx) can switch on and off.</summary>
+        private static readonly string[] GameOptions =
+        {
+            nameof(GameProperties.CardResetAlwaysMax),
+            nameof(GameProperties.TexpNoDailyLimit),
+            nameof(GameProperties.ItemAdvanceAlwaysSucceed),
+            nameof(GameProperties.WishBeadAlwaysSucceed),
+        };
+
+        /// <summary>The current value of each game option; an option missing from Server_Config is off.</summary>
+        public static Dictionary<string, bool> GetGameOptions()
+        {
+            Dictionary<string, bool> options = new Dictionary<string, bool>();
+            using ServiceBussiness business = new ServiceBussiness();
+            foreach (string name in GameOptions)
+            {
+                ServerProperty property = business.GetServerPropertyByKey(name);
+                options[name] = property != null && bool.TryParse(property.Value, out bool on) && on;
+            }
+            return options;
+        }
+
+        /// <summary>
+        /// Saves one game option, then asks the center server to make every server re-read Server_Config.
+        /// Saved is false for an unknown option or a database error; Reloaded is false when the center
+        /// server could not be reached (the value then applies at the next game server start).
+        /// </summary>
+        public static object SetGameOption(string Name, bool Value)
+        {
+            if (Array.IndexOf(GameOptions, Name) < 0)
+            {
+                return new { Saved = false, Reloaded = false };
+            }
+            bool saved;
+            using (ServiceBussiness business = new ServiceBussiness())
+            {
+                saved = business.UpdateServerPropertyByKey(Name, Value.ToString());
+            }
+            bool reloaded = false;
+            if (saved)
+            {
+                log.InfoFormat("Game option {0} = {1}", Name, Value);
+                try
+                {
+                    using CenterServiceClient center = new CenterServiceClient();
+                    reloaded = center.Reload(eReloadType.gameproperties.ToString());
+                }
+                catch (Exception e)
+                {
+                    log.Warn("Reloading the game options on the servers failed", e);
+                }
+            }
+            return new { Saved = saved, Reloaded = reloaded };
         }
 
         private static string NotBuiltYet()
