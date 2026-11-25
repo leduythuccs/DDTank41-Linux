@@ -75,8 +75,13 @@ namespace Game.Server.Battle
         private static void smethod_0(object object_0, object object_1)
         {
 			BattleServer battleServer = object_0 as BattleServer;
+			if (battleServer == null)
+			{
+				log.Warn("Disconnect notification received without a battle server.");
+				return;
+			}
 			log.WarnFormat("Disconnect from battle server {0}:{1}", battleServer.Ip, battleServer.Port);
-			if (battleServer == null || !AutoReconnect || !m_list.Contains(battleServer))
+			if (!AutoReconnect || !m_list.Contains(battleServer))
 			{
 				return;
 			}

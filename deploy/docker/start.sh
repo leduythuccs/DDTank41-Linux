@@ -48,7 +48,6 @@ settings() {
     Road.Service)
       add Port $GAME
       add LoginServerPort $CENTER
-      add FightServerPort $FIGHT
       add CenterServiceAddress "$CENTER_ADDRESS"
       ;;
     Tank.Web)
@@ -88,12 +87,11 @@ for svc in Center.Service Fighting.Service Road.Service Tank.Web GameAdmin.Web; 
 done
 umask 022
 
-# Road.Service reads battle.xml to connect to Fighting.Service.  Keep this internal
-# Docker address in sync with the Fighting.Service Port above (16204).
-cat > "/app/Road.Service/battle.xml" <<'EOF'
+# Road.Service finds Fighting.Service only through battle.xml (BattleMgr.Setup), not appSettings.
+cat > "/app/Road.Service/battle.xml" <<EOF
 <?xml version="1.0" encoding="utf-8" ?>
 <list>
-	<server id="4" ip="127.0.0.1" port="16204" key="1,7road" />
+	<server id="4" ip="127.0.0.1" port="$FIGHT" key="1,7road" />
 </list>
 EOF
 
