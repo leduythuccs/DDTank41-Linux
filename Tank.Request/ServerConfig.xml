@@ -507,4 +507,19 @@
   <Item Name="TimeX2" Value="2" />
   <Item Name="WorldBossID1" Value="4" />
   <Item Name="WorldBossID2" Value="1" />
+  <Item Name="ItemDevelopPrice" Value="35" />
+  <Item Name="WorldBossID" Value="1" />
+  <Item Name="GuildBattleStartTime" Value="2016/1/1 20:30:00" />
+  <Item Name="GuildBattleStartDay" Value="Saturday" />
+  <Item Name="StartEventOldPlayer" Value="2021-01-01 20:55:27.270" />
+  <Item Name="EndEventOldPlayer" Value="2021-02-01 20:55:27.270" />
+  <Item Name="WishBeadAlwaysSucceed" Value="True" />
+  <Item Name="CardResetAlwaysMax" Value="True" />
+  <Item Name="TexpNoDailyLimit" Value="True" />
+  <Item Name="ItemAdvanceAlwaysSucceed" Value="True" />
+  <Item Name="HoleMaxLevel5" Value="False" />
+  <Item Name="StrengthenAlwaysSucceed" Value="True" />
+  <Item Name="FreeMatchCountsAsGuildWar" Value="True" />
+  <Item Name="SkipCheckCode" Value="False" />
+  <Item Name="BotMatchIgnoreAimTime" Value="False" />
 </Result>

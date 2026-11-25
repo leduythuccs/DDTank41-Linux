@@ -60,5 +60,15 @@
     <Item ID="58" Exp="1609026" Attack="500" Agility="500" Defence="748" Lucky="500" Blood="7340" />
     <Item ID="59" Exp="1709026" Attack="514" Agility="514" Defence="770" Lucky="514" Blood="7560" />
     <Item ID="60" Exp="1809026" Attack="528" Agility="528" Defence="792" Lucky="528" Blood="7780" />
+    <Item ID="61" Exp="1909026" Attack="542" Agility="542" Defence="814" Lucky="542" Blood="8000" />
+    <Item ID="62" Exp="2009026" Attack="556" Agility="556" Defence="836" Lucky="556" Blood="8220" />
+    <Item ID="63" Exp="2109026" Attack="570" Agility="570" Defence="858" Lucky="570" Blood="8440" />
+    <Item ID="64" Exp="2209026" Attack="584" Agility="584" Defence="880" Lucky="584" Blood="8660" />
+    <Item ID="65" Exp="2309026" Attack="598" Agility="598" Defence="902" Lucky="598" Blood="8880" />
+    <Item ID="66" Exp="2409026" Attack="612" Agility="612" Defence="924" Lucky="612" Blood="9100" />
+    <Item ID="67" Exp="2509026" Attack="626" Agility="626" Defence="946" Lucky="626" Blood="9320" />
+    <Item ID="68" Exp="2609026" Attack="640" Agility="640" Defence="968" Lucky="640" Blood="9540" />
+    <Item ID="69" Exp="2709026" Attack="654" Agility="654" Defence="990" Lucky="654" Blood="9760" />
+    <Item ID="70" Exp="2809026" Attack="668" Agility="668" Defence="1012" Lucky="668" Blood="9980" />
   </ItemTemplate>
 </Result>
