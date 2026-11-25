@@ -2965,6 +2965,7 @@ public class GamePlayer : IGamePlayer
             Out.SendUpdateInventorySlot(FightBag, updatedSlots);
             UpdateWeaklessGuildProgress();
             UpdateItemForUser(1);
+            m_questInventory.SkipFightPropQuests();
             ChecVipkExpireDay();
             UpdateLevel();
             UpdatePet(m_petBag.GetPetIsEquip());

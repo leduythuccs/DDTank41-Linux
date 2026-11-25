@@ -19,8 +19,8 @@
     <!-- ButtonEnterGame -->
     <component classname="com.pickgliss.ui.controls.SimpleBitmapButton" stylename="choicefigure.ButtonEnterGame" backStyle="asset.choicefigure.btnEnterGame_up" x="390" y="523" width="219" height="84" />
     <!-- old 528 -->
-    <component classname="com.pickgliss.ui.controls.SimpleBitmapButton" stylename="choicefigure.ButtonEnterGame.new" backStyle="asset.choicefigure.btnEnterGame_old" x="258" y="523" width="219" height="84" visible="false" />
-    <component classname="com.pickgliss.ui.controls.SimpleBitmapButton" stylename="choicefigure.ButtonEnterGame.old" backStyle="asset.choicefigure.btnEnterGame_new" x="390" y="523" width="219" height="84" visible="true"/> 
+    <component classname="com.pickgliss.ui.controls.SimpleBitmapButton" stylename="choicefigure.ButtonEnterGame.new" backStyle="asset.choicefigure.btnEnterGame_new" x="252" y="523" width="213" height="73" visible="true" />
+    <component classname="com.pickgliss.ui.controls.SimpleBitmapButton" stylename="choicefigure.ButtonEnterGame.old" backStyle="asset.choicefigure.btnEnterGame_old" x="495" y="523" width="261" height="73" visible="true"/> 
     <!--component classname="com.pickgliss.ui.controls.SimpleBitmapButton" stylename="choicefigure.ButtonEnterGame.old" backStyle="asset.choicefigure.btnEnterGame_new" x="600" y="523" width="219" height="84" visible="true"/--> 
     <component classname="com.pickgliss.ui.controls.BaseButton" stylename="choicefigure.clearBtn" backStyle="asset.choicefigure.deleteAsset" x="630" y="454" />
     <component classname="com.pickgliss.ui.image.ScaleFrameImage" stylename="choicefigure.checkNameStateAsset" resourceLink="asset.choicefigure.hook" x="675" y="447" />

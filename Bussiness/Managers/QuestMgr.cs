@@ -114,6 +114,12 @@ namespace Bussiness.Managers
 			return result;
 		}
 
+		/// <summary>A snapshot of every loaded quest.</summary>
+		public static List<QuestInfo> GetAllQuests()
+		{
+			return new List<QuestInfo>(QuestMgr.m_questinfo.Values);
+		}
+
 		public static QuestInfo GetSingleQuest(int id)
 		{
 			QuestInfo result;

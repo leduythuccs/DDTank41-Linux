@@ -104,6 +104,11 @@ namespace Tank.Request
                                 {
                                     value = true;
                                     message = LanguageMgr.GetTranslation("Tank.Request.VisualizeRegister.Success");
+                                    // "Người Chơi Cũ" on the character creation screen.
+                                    if (para["OldPlayer"] == "true")
+                                    {
+                                        db.SetOldPlayer(name);
+                                    }
                                 }
                             }
                             //}

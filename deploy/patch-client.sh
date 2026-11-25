@@ -30,11 +30,18 @@
 #                  the weapon tooltip shows the strengthen bonus on the damage again, e.g. "60(+216)" like
 #                  hats and clothes: the decompiled code overwrote it with an unset variable.
 #
+# 1.png is the character creation module. It starts with a 37-byte "road7<md5>" header that Loading.swf
+# compares with md5.xml; the header is put back unchanged, so md5.xml needs no change. Its classes are
+# compiled from "Source Flash/src-register", which holds only the patched classes (decompiled from 1.png):
+#   register.view.MainFigureView
+#                  sends OldPlayer=true with VisualizeRegister.ashx after the "Người Chơi Cũ" button, so the
+#                  server marks the character as an old player and skips its fight-item newbie quests. Both
+#                  buttons skip the intro tutorial (3.png), as the only button did before.
+#
 # Usage: FFDEC=/path/to/ffdec.jar deploy/patch-client.sh     (needs java and python3)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 FFDEC="${FFDEC:?set FFDEC to the path of ffdec.jar}"
-SWF="Source Flash/FlashSV1/2.png"
 CLASSES=(
   phy.maps.Tile
   ddt.data.analyze.ItemTempleteAnalyzer
@@ -53,32 +60,45 @@ CLASSES=(
   ddt.view.tips.GoodTip
 )
 
+REGISTER_CLASSES=(
+  register.view.MainFigureView
+)
+
 work="$(mktemp -d)"
 trap 'rm -rf "$work"' EXIT
 
-# CWS (zlib) -> FWS for FFDec
-python3 - "$SWF" "$work/in.swf" <<'EOF'
+# patch_swf <file> <header bytes before the SWF> <source folder> <class>...
+patch_swf() {
+  local file="$1" head="$2" root="$3"
+  shift 3
+  # CWS (zlib) -> FWS for FFDec
+  python3 - "$file" "$work/in.swf" "$head" <<'EOF'
 import sys, zlib
-d = open(sys.argv[1], "rb").read()
+d = open(sys.argv[1], "rb").read()[int(sys.argv[3]):]
 assert d[:3] == b"CWS", "expected a CWS file"
 open(sys.argv[2], "wb").write(b"FWS" + d[3:8] + zlib.decompress(d[8:]))
 EOF
 
-cur="$work/in.swf"
-for cls in "${CLASSES[@]}"; do
-  src="Source Flash/src/${cls//.//}.as"
-  out="$work/$cls.swf"
-  java -jar "$FFDEC" -replace "$cur" "$out" "$cls" "$src" 2>&1 | grep -v -e "EXPERIMENTAL" -e "^Replacing" || true
-  [ -s "$out" ] || { echo "replacing $cls failed"; exit 1; }
-  cur="$out"
-done
+  local cur="$work/in.swf" cls src out
+  for cls in "$@"; do
+    src="$root/${cls//.//}.as"
+    out="$work/$cls.swf"
+    java -jar "$FFDEC" -replace "$cur" "$out" "$cls" "$src" 2>&1 | grep -v -e "EXPERIMENTAL" -e "^Replacing" || true
+    [ -s "$out" ] || { echo "replacing $cls failed"; exit 1; }
+    cur="$out"
+  done
 
-# FWS -> CWS, header length updated
-python3 - "$cur" "$SWF" <<'EOF'
+  # FWS -> CWS, header length updated, the bytes before the SWF put back
+  python3 - "$cur" "$file" "$head" <<'EOF'
 import sys, zlib, struct
 d = open(sys.argv[1], "rb").read()
+head = open(sys.argv[2], "rb").read()[:int(sys.argv[3])]
 body = d[8:]
-out = b"CWS" + d[3:4] + struct.pack("<I", 8 + len(body)) + zlib.compress(body, 9)
+out = head + b"CWS" + d[3:4] + struct.pack("<I", 8 + len(body)) + zlib.compress(body, 9)
 open(sys.argv[2], "wb").write(out)
 print(f"wrote {sys.argv[2]} ({len(out)} bytes)")
 EOF
+}
+
+patch_swf "Source Flash/FlashSV1/2.png" 0 "Source Flash/src" "${CLASSES[@]}"
+patch_swf "Source Flash/FlashSV1/1.png" 37 "Source Flash/src-register" "${REGISTER_CLASSES[@]}"

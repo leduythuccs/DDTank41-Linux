@@ -351,40 +351,7 @@ namespace Game.Server.Quests
                                 }
                                 continue;
                             }
-                            switch (item.TemplateID)
-                            {
-                                case 10001:
-                                    m_player.PlayerCharacter.openFunction(Step.PICK_TWO_TWENTY);
-                                    break;
-                                case 10003:
-                                    m_player.PlayerCharacter.openFunction(Step.POP_WIN);
-                                    break;
-                                case 10004:
-                                    m_player.PlayerCharacter.openFunction(Step.FIFTY_OPEN);
-                                    m_player.AddGift(eGiftType.MONEY);
-                                    m_player.AddGift(eGiftType.BIG_EXP);
-                                    m_player.AddGift(eGiftType.PET_EXP);
-                                    break;
-                                case 10005:
-                                    m_player.PlayerCharacter.openFunction(Step.FORTY_OPEN);
-                                    break;
-                                case 10006:
-                                    m_player.PlayerCharacter.openFunction(Step.THIRTY_OPEN);
-                                    break;
-                                case 10007:
-                                    m_player.PlayerCharacter.openFunction(Step.POP_TWO_TWENTY);
-                                    m_player.AddGift(eGiftType.SMALL_EXP);
-                                    break;
-                                case 10008:
-                                    m_player.PlayerCharacter.openFunction(Step.GAIN_TEN_PERSENT);
-                                    break;
-                                case 10024:
-                                    m_player.PlayerCharacter.openFunction(Step.PICK_ONE);
-                                    break;
-                                case 10025:
-                                    m_player.PlayerCharacter.openFunction(Step.PLANE_OPEN);
-                                    break;
-                            }
+                            this.UnlockFightProp(item.TemplateID);
                         }
                         foreach (ItemInfo item in farmBg)
                         {
@@ -607,6 +574,129 @@ namespace Game.Server.Quests
                     }
                     this.m_clearList.Clear();
                 }
+            }
+        }
+
+        /// <summary>
+        /// A fight item (category 10) given by a quest is not added to a bag: it unlocks the item in the fight
+        /// prop bar (a WeaklessGuildProgress step the client checks), and some of them come with gifts.
+        /// Returns false when <paramref name="templateId"/> unlocks nothing.
+        /// </summary>
+        private bool UnlockFightProp(int templateId)
+        {
+            switch (templateId)
+            {
+                case 10001:
+                    m_player.PlayerCharacter.openFunction(Step.PICK_TWO_TWENTY);
+                    break;
+                case 10003:
+                    m_player.PlayerCharacter.openFunction(Step.POP_WIN);
+                    break;
+                case 10004:
+                    m_player.PlayerCharacter.openFunction(Step.FIFTY_OPEN);
+                    m_player.AddGift(eGiftType.MONEY);
+                    m_player.AddGift(eGiftType.BIG_EXP);
+                    m_player.AddGift(eGiftType.PET_EXP);
+                    break;
+                case 10005:
+                    m_player.PlayerCharacter.openFunction(Step.FORTY_OPEN);
+                    break;
+                case 10006:
+                    m_player.PlayerCharacter.openFunction(Step.THIRTY_OPEN);
+                    break;
+                case 10007:
+                    m_player.PlayerCharacter.openFunction(Step.POP_TWO_TWENTY);
+                    m_player.AddGift(eGiftType.SMALL_EXP);
+                    break;
+                case 10008:
+                    m_player.PlayerCharacter.openFunction(Step.GAIN_TEN_PERSENT);
+                    break;
+                case 10024:
+                    m_player.PlayerCharacter.openFunction(Step.PICK_ONE);
+                    break;
+                case 10025:
+                    m_player.PlayerCharacter.openFunction(Step.PLANE_OPEN);
+                    break;
+                default:
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// For a player who chose "old player" when creating the character: completes the newbie quests whose
+        /// rewards unlock fight items (the "Tranh đoạt báu vật" chain): unlocks those items and gives their gifts,
+        /// EXP and gold. Quests already finished are left alone, so this runs once.
+        /// </summary>
+        public void SkipFightPropQuests()
+        {
+            if (!m_player.PlayerCharacter.IsOldPlayer)
+            {
+                return;
+            }
+            lock (this.m_lock)
+            {
+                List<int> finished = new List<int>();
+                this.BeginChanges();
+                try
+                {
+                    foreach (QuestInfo quest in QuestMgr.GetAllQuests())
+                    {
+                        List<QuestAwardInfo> awards = QuestMgr.GetQuestGoods(quest);
+                        if (awards == null || quest.CanRepeat || this.IsQuestFinish(quest.ID)
+                            || !awards.Exists(a => IsFightPropUnlock(a.RewardItemID)))
+                        {
+                            continue;
+                        }
+                        foreach (QuestAwardInfo award in awards)
+                        {
+                            this.UnlockFightProp(award.RewardItemID);
+                        }
+                        // The quest's EXP matters: the next quests need a higher level (319 needs level 2), so
+                        // without it a level 1 player has no quest left to take.
+                        if (quest.RewardGP != 0)
+                        {
+                            m_player.AddGP(quest.RewardGP);
+                        }
+                        if (quest.RewardGold != 0)
+                        {
+                            m_player.AddGold(quest.RewardGold);
+                        }
+                        BaseQuest active = this.FindQuest(quest.ID);
+                        if (active != null)
+                        {
+                            active.Data.IsComplete = true;
+                            active.Data.CompletedDate = DateTime.Now;
+                            this.RemoveQuest(active);
+                        }
+                        this.SetQuestFinish(quest.ID);
+                        finished.Add(quest.ID);
+                    }
+                    if (finished.Count > 0)
+                    {
+                        PlayerInfo character = m_player.PlayerCharacter;
+                        character.QuestSite = this.m_states;
+                        character.WeaklessGuildProgressStr = Base64.encodeByteArray(character.weaklessGuildProgress);
+                        this.SaveToDatabase();
+                        log.InfoFormat("Old player {0}: skipped newbie quests {1}", character.ID, string.Join(",", finished));
+                    }
+                }
+                finally
+                {
+                    this.CommitChanges();
+                }
+            }
+        }
+
+        private static bool IsFightPropUnlock(int templateId)
+        {
+            switch (templateId)
+            {
+                case 10001: case 10003: case 10004: case 10005: case 10006:
+                case 10007: case 10008: case 10024: case 10025:
+                    return true;
+                default:
+                    return false;
             }
         }
 

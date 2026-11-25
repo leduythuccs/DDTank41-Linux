@@ -9,6 +9,9 @@ XML files that the client loads at startup) where it is older than the game code
   * store.xml, HoleExpModel: holes 5 and 6 stop at level 4 in the client (maxLv/oprationLv 4), while the
     game server goes to level 5 with Mũi khoan cấp 5. Raise the client to 5, with the server's exp list
     (HoleLevelUpExpList in Server_Config).
+  * choicefigure.xml, choicefigure.ButtonEnterGame.new / .old: the character creation screen showed one
+    button, the .old one drawn with the "Tân Thủ" picture. Show both, each with its own picture: "Tân Thủ"
+    (new player, as before) and "Người Chơi Cũ" (old player: skips the newbie quests that unlock fight items).
 
 The loose copies next to xml.png get the same edit. Safe to run repeatedly.
 Usage: deploy/patch-ui-config.py
@@ -31,16 +34,22 @@ PATCHES = {
     ],
 }
 
-# file -> list of (stylename, {attribute: value}) for <custom> elements
+# file -> list of (element, stylename, {attribute: value})
 ATTRIBUTES = {
     "store.xml": [
-        ("HoleExpModel", {"maxLv": "5", "oprationLv": "5", "explist": "400|600|700|800|1200"}),
+        ("custom", "HoleExpModel", {"maxLv": "5", "oprationLv": "5", "explist": "400|600|700|800|1200"}),
+    ],
+    "choicefigure.xml": [
+        ("component", "choicefigure.ButtonEnterGame.new",
+         {"backStyle": "asset.choicefigure.btnEnterGame_new", "x": "252", "width": "213", "height": "73", "visible": "true"}),
+        ("component", "choicefigure.ButtonEnterGame.old",
+         {"backStyle": "asset.choicefigure.btnEnterGame_old", "x": "495", "width": "261", "height": "73", "visible": "true"}),
     ],
 }
 
 
-def patch_attributes(text, stylename, values):
-    m = re.search(r'<custom\b[^>]*\bstylename="' + re.escape(stylename) + r'"[^>]*>', text)
+def patch_attributes(text, element_name, stylename, values):
+    m = re.search(r'<' + element_name + r'\b[^>]*\bstylename="' + re.escape(stylename) + r'"[^>]*>', text)
     if not m:
         raise RuntimeError(f"{stylename} not found")
     element = m.group(0)
@@ -68,8 +77,8 @@ def patch_file_text(name, text):
     for stylename, fore in PATCHES.get(name, []):
         text, c = patch_text(text, stylename, fore)
         changed |= c
-    for stylename, values in ATTRIBUTES.get(name, []):
-        text, c = patch_attributes(text, stylename, values)
+    for element_name, stylename, values in ATTRIBUTES.get(name, []):
+        text, c = patch_attributes(text, element_name, stylename, values)
         changed |= c
     return text, changed
 

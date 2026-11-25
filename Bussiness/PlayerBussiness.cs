@@ -4216,6 +4216,24 @@ namespace Bussiness
             }
         }
 
+        /// <summary>
+        /// Marks the character of <paramref name="userName"/> as an old player: chosen on the character creation screen,
+        /// it turns the newbie guide off and makes the game server skip the newbie quests that unlock fight items.
+        /// </summary>
+        public bool SetOldPlayer(string userName)
+        {
+            try
+            {
+                return db.Exesqlcomm("UPDATE `Sys_Users_Detail` SET `IsOldPlayer` = 1 WHERE `UserName` = @UserName",
+                    new SqlParameter[] { new SqlParameter("@UserName", userName) });
+            }
+            catch (Exception exception)
+            {
+                BaseBussiness.log.Error("SetOldPlayer", exception);
+                return false;
+            }
+        }
+
         public bool RegisterUser(string UserName, string NickName, string Password, bool Sex, int Money, int GiftToken, int Gold)
         {
             bool flag = false;
