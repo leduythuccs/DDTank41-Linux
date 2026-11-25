@@ -915,6 +915,9 @@ namespace Game.Server
                     GameProperties.Refresh();
                     result = true;
                     break;
+                case eReloadType.edictum:
+                    result = WorldMgr.ReloadEdictum();
+                    break;
             }
             packet.WriteInt(GameServer.Instance.Configuration.ServerID);
             packet.WriteBoolean(result);

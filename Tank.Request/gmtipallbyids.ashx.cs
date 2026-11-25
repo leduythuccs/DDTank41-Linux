@@ -44,7 +44,7 @@ namespace Tank.Request
                         {
                             info.ID = int.Parse(ids[0]);
                             //if (ids.Contains(info.ID.ToString()))
-                            if (info.EndDate.Date > DateTime.Now.Date)
+                            if (info.EndDate.Date > DateTime.Now.Date && info.BeginDate.Date <= DateTime.Now.Date)
                             {
                                 result.Add(FlashUtils.CreateEdictum(info));
                             }

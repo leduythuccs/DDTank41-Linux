@@ -119,6 +119,7 @@ namespace GameAdmin.Web
                 return "";
             });
             MapPage(app, renderer, new[] { "/Admin/serverConfig.aspx" }, "Admin/serverConfig.aspx", (query, labels) => "");
+            MapPage(app, renderer, new[] { "/Admin/notice.aspx" }, "Admin/notice.aspx", (query, labels) => "");
             MapPage(app, renderer, new[] { "/Admin/popup.aspx" }, "Admin/popup.aspx", (query, labels) => pages.Popup(query["IDs"], query["keys"], labels));
             MapPage(app, renderer, new[] { "/Admin/popupInfo.aspx" }, "Admin/popupInfo.aspx", (query, labels) => pages.PopupInfo(query["IDs"], query["keys"], labels));
             MapPage(app, renderer, new[] { "/Admin/customItem.aspx" }, "Admin/customItem.aspx", (query, labels) => pages.CustomItem(query["IDs"], query["keys"], labels));

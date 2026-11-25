@@ -333,6 +333,86 @@ namespace GameAdmin.Web
             return new { Saved = saved, Reloaded = reloaded };
         }
 
+        /// <summary>The server notices (Edictum_List) for the "Thông báo" page (Admin/notice.aspx).</summary>
+        public static object GetEdictums()
+        {
+            using ProduceBussiness business = new ProduceBussiness();
+            List<object> list = new List<object>();
+            foreach (EdictumInfo info in business.GetAllEdictum())
+            {
+                list.Add(new
+                {
+                    info.ID,
+                    info.Title,
+                    Text = (info.Text ?? "").Replace("\r\n", "\n"),
+                    BeginDate = info.BeginDate.ToString("yyyy-MM-dd"),
+                    EndDate = info.EndDate.ToString("yyyy-MM-dd"),
+                });
+            }
+            return list;
+        }
+
+        /// <summary>
+        /// Adds (ID 0) or updates a server notice, then asks the game servers to reload the notice list.
+        /// Players see a notice from BeginDate until the day before EndDate, when they log in.
+        /// </summary>
+        public static object SaveEdictum(int ID, string Title, string Text, string BeginDate, string EndDate)
+        {
+            if (string.IsNullOrWhiteSpace(Title)
+                || !DateTime.TryParse(BeginDate, out DateTime begin) || !DateTime.TryParse(EndDate, out DateTime end))
+            {
+                return new { Saved = false, Reloaded = false };
+            }
+            EdictumInfo info = new EdictumInfo
+            {
+                ID = ID,
+                Title = Title.Trim(),
+                // only \n: the Flash client breaks the line at \r and again at \n, so \r\n shows a blank line
+                Text = (Text ?? "").Replace("\r\n", "\n").Replace("\r", "\n"),
+                BeginDate = begin.Date,
+                EndDate = end.Date,
+            };
+            bool saved;
+            using (ProduceBussiness business = new ProduceBussiness())
+            {
+                saved = business.SaveEdictum(info);
+            }
+            if (saved)
+            {
+                log.InfoFormat("Server notice {0} saved: {1}", ID == 0 ? "(new)" : ID.ToString(), info.Title);
+            }
+            return new { Saved = saved, Reloaded = saved && ReloadEdictums() };
+        }
+
+        public static object DeleteEdictum(int ID)
+        {
+            bool deleted;
+            using (ProduceBussiness business = new ProduceBussiness())
+            {
+                deleted = business.DeleteEdictum(ID);
+            }
+            if (deleted)
+            {
+                log.InfoFormat("Server notice {0} deleted", ID);
+            }
+            return new { Saved = deleted, Reloaded = deleted && ReloadEdictums() };
+        }
+
+        /// <summary>The game servers keep the list of notices (not their text): false when the center server is not reachable.</summary>
+        private static bool ReloadEdictums()
+        {
+            try
+            {
+                using CenterServiceClient center = new CenterServiceClient();
+                return center.Reload(eReloadType.edictum.ToString());
+            }
+            catch (Exception e)
+            {
+                log.Warn("Reloading the server notices on the game servers failed", e);
+                return false;
+            }
+        }
+
         private static string NotBuiltYet()
         {
             return "<script type=\"text/javascript\">tb_showMiniPanel();</script>";

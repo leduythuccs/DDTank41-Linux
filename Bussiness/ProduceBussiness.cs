@@ -733,6 +733,45 @@ namespace Bussiness
 			return list.ToArray();
         }
 
+        /// <summary>Adds a server notice (ID 0) or updates the notice with that ID.</summary>
+        public bool SaveEdictum(EdictumInfo info)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@ID", info.ID),
+                    new SqlParameter("@Title", info.Title ?? ""),
+                    new SqlParameter("@Text", info.Text ?? ""),
+                    new SqlParameter("@BeginDate", info.BeginDate),
+                    new SqlParameter("@EndDate", info.EndDate),
+                };
+                return info.ID == 0
+                    ? db.Exesqlcomm("INSERT INTO `Edictum_List` (`Title`, `BeginDate`, `BeginTime`, `EndDate`, `EndTime`, `Text`, `IsExist`) "
+                        + "VALUES (@Title, @BeginDate, @BeginDate, @EndDate, @EndDate, @Text, 0)", parameters)
+                    : db.Exesqlcomm("UPDATE `Edictum_List` SET `Title` = @Title, `Text` = @Text, `BeginDate` = @BeginDate, `BeginTime` = @BeginDate, "
+                        + "`EndDate` = @EndDate, `EndTime` = @EndDate WHERE `ID` = @ID", parameters);
+            }
+            catch (Exception exception)
+            {
+                log.Error("SaveEdictum", exception);
+                return false;
+            }
+        }
+
+        public bool DeleteEdictum(int id)
+        {
+            try
+            {
+                return db.Exesqlcomm("DELETE FROM `Edictum_List` WHERE `ID` = @ID", new SqlParameter[] { new SqlParameter("@ID", id) });
+            }
+            catch (Exception exception)
+            {
+                log.Error("DeleteEdictum", exception);
+                return false;
+            }
+        }
+
         public EdictumInfo[] GetAllEdictum()
         {
 			List<EdictumInfo> list = new List<EdictumInfo>();

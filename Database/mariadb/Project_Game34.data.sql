@@ -9415,7 +9415,7 @@ INSERT INTO `Drop_Item` (`Id`, `DropId`, `ItemId`, `ValueDate`, `IsBind`, `Rando
 (6643,50058,35330101,0,0,0,1,1,1,1),
 (6644,101,12084,0,1,3000,1,1,0,0);
 INSERT INTO `Edictum_List` (`ID`, `Title`, `BeginDate`, `BeginTime`, `EndDate`, `EndTime`, `Text`, `IsExist`) VALUES
-(4,'Thông Tin Máy Chủ','2010-09-13 04:28:30.000','2010-09-13 04:28:30.000','2050-09-13 04:28:34.000','2050-09-13 04:28:34.000','- Phiên bản hiện tại: 3.8.1\r\n- Nhận làm server game gunny offline hoặc online giá cả thương lượng\r\n- Bán tệp tin server game gunny để làm server game giá cả thương lượng\r\nFb cá nhân: https://www.facebook.com/CyR.Diggory/\r\nFanpage: https://www.facebook.com/newgun.net',0);
+(4,'Thông Tin Máy Chủ','2010-09-13 04:28:30.000','2010-09-13 04:28:30.000','2050-09-13 04:28:34.000','2050-09-13 04:28:34.000','- Phiên bản hiện tại: 3.8.1\r\n- Github: https://github.com/leduythuccs/DDTank41-Linux',0);
 INSERT INTO `Event_Award_Item` (`ID`, `ActivityType`, `TemplateID`, `Count`, `ValidDate`, `IsBinds`, `StrengthenLevel`, `AttackCompose`, `DefendCompose`, `AgilityCompose`, `LuckCompose`, `Random`, `IsSelect`) VALUES
 (1,4,17004,1,7,1,0,0,0,0,0,100,0),
 (2,4,8214,1,7,1,0,0,0,0,0,50,0),

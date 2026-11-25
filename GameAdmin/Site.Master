@@ -373,6 +373,7 @@
                     <Items>
                         <asp:MenuItem NavigateUrl="~/Admin/sendMail5Item.aspx" Text="SendMail"/>
                         <asp:MenuItem NavigateUrl="~/Admin/serverConfig.aspx" Text="Cấu hình"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/notice.aspx" Text="Thông báo"/>
                     </Items>
                 </asp:Menu>
             </div>

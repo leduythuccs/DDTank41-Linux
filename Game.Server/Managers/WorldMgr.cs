@@ -90,11 +90,8 @@ namespace Game.Server.Managers
             bool result = false;
             try
             {
-                Dictionary<int, EdictumInfo> dictionary = smethod_0();
-                if (dictionary.Values.Count > 0)
-                {
-                    Interlocked.Exchange(ref dictionary_2, dictionary);
-                }
+                // An empty list is kept too: it means every notice was deleted.
+                Interlocked.Exchange(ref dictionary_2, smethod_0());
                 result = true;
                 return result;
             }
@@ -762,7 +759,7 @@ namespace Game.Server.Managers
             {
                 DateTime date = value.EndDate.Date;
                 DateTime date2 = DateTime.Now.Date;
-                if (date > date2)
+                if (date > date2 && value.BeginDate.Date <= date2)
                 {
                     list.Add(value);
                 }

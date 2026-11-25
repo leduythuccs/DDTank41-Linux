@@ -30,5 +30,7 @@ namespace Bussiness.Protocol
         fairbattlereward = 46,
         // re-read GameProperties (the Server_Config table)
         gameproperties = 70,
+        // re-read the server notices (the Edictum_List table)
+        edictum = 71,
     }
 }
