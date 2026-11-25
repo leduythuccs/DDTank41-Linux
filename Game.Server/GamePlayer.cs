@@ -1197,6 +1197,10 @@ public class GamePlayer : IGamePlayer
 
     public bool isPassCheckCode()
     {
+        if (GameProperties.SkipCheckCode)
+        {
+            return true;
+        }
         int checkmoney = this.count_random.Next(10, 15);//7, 9); //30 ~ 40 trận sẽ hiện mã captcha
         int checkgp = this.count_random.Next(30, 40);
         int checkfunction = this.count_random.Next(7, 10);

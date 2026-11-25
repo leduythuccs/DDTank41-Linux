@@ -85,6 +85,9 @@ namespace Bussiness
         [ConfigProperty("FreeMatchCountsAsGuildWar", "Every free PvP match also counts as a guild war for quests and guild tasks", false)]
 		public static bool FreeMatchCountsAsGuildWar;
 
+        [ConfigProperty("SkipCheckCode", "Never show the anti-bot captcha (pick the number) to players", false)]
+		public static bool SkipCheckCode;
+
         [ConfigProperty("WishBeadAlwaysSucceed", "Gilding with a wish bead always succeeds", false)]
 		public static bool WishBeadAlwaysSucceed;
 
