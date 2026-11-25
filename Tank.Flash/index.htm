@@ -140,7 +140,7 @@
                 $('#DynamicContent').corner("keep");
                 $("#TB_overlayBG").fadeIn();//.css({ display: "block" });
                 $("#DynamicContent").fadeIn();
-                $("#loading").html("Hệ thống đang sử lý!<br/><br/><img alt=\"\"  src=\"images/loading.gif\" />");
+                $("#loading").html("Hệ thống đang xử lý!<br/><br/><img alt=\"\"  src=\"images/loading.gif\" />");
                 var top = Math.max($(window).height() / 2 - $("#DynamicContent")[0].offsetHeight / 2, 0);
                 var left = Math.max($(window).width() / 2 - $("#DynamicContent")[0].offsetWidth / 2, 0);
                 $("#DynamicContent").css('top', top + "px");
@@ -189,7 +189,7 @@
                             <form  autocomplete="on"> 
                                 <h1>Đăng nhập</h1> 
                                 <p> 
-                                    <label for="username" class="uname" data-icon="u" > Tài khoàn </label>
+                                    <label for="username" class="uname" data-icon="u" > Tài khoản </label>
                                     <input id="username" name="username" required="required" type="text" placeholder="vd. account"/>
                                 </p>
                                 <p> 
@@ -282,7 +282,7 @@
 
     <div id="DynamicContent">
 	<div id="loading" >
-      Ðang sử lý, xin chờ trong giây lát!
+      Đang xử lý, xin chờ trong giây lát!
 	  <img alt=""  src="images/loading.gif" />
      </div>               		
 	</div>

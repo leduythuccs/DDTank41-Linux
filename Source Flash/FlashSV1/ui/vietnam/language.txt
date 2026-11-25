@@ -43,7 +43,7 @@ core.MarriedTipLatterTextWife:Vợ của {0}
 tank.game.danderStripTip.pow:POW
 core.crossZone.PrivateChatToUnable:Không cùng máy chủ, không thể chat mật.
 core.crossZone.ViewGoodInfoUnable:Không thể xem khi liên server.
-tank.auctionHouse.controller.AuctionHouseListError:Tải danh sách đấu gia thất bại!
+tank.auctionHouse.controller.AuctionHouseListError:Tải danh sách đấu giá thất bại!
 tank.auctionHouse.view.AuctionBrowseView.sure:Bạn xác nhận mua vật phẩm này
 tank.auctionHouse.view.AuctionBrowseView.Auction:Giá mua nhỏ hơn giá khởi
 tank.auctionHouse.view.AuctionBrowseView.stipple:Xu
@@ -86,7 +86,7 @@ choosecharacter.ChooseCharacterView.input:Hãy nhập tên nhân vật
 tank.RenameFrame.Consortia.FailWord:Tên chứa từ cấm
 tank.RenameFrame.Consortia.space:Tên không được trống
 tank.RenameFrame.Consortia.string:Tên chứa ký tự cấm  
-tank.RenameFrame.Consortia.input:Mới nhập tên nhân vật
+tank.RenameFrame.Consortia.input:Mời nhập tên nhân vật
 choosecharacter.ChooseSexPanel:Chọn giới tính
 tank.game.actions.ChangePlayerAction: ☎■■■■Đến lượt bạn■■■■☎,☏□□□□Đến lượt bạn
 tank.game.actions.SelfPlayerWalkAction:Thể lực không đủ
@@ -99,7 +99,7 @@ tank.game.ToolStripView.suicide1:Bạn chắc chắn muốn tự sát chứ?
 tank.game.WebSpeedView.frame:Số frame
 tank.game.WebSpeedView.delay:Trì hoãn
 tank.game.WebSpeedView.explain1:Khi kết nối máy chủ, nếu hiện màu đỏ liên tục tức đường truyền không tốt
-tank.game.WebSpeedView.explain2:Nếu hình ảnh game hiển thị bị giựt, có thể điểu chỉnh<FONT COLOR='#0099FF'> thiết lập hiển thị</FONT> để khắc phục.
+tank.game.WebSpeedView.explain2:Nếu hình ảnh game hiển thị bị giựt, có thể điều chỉnh<FONT COLOR='#0099FF'> thiết lập hiển thị</FONT> để khắc phục.
 tank.game.BuffName11:Trong phó bản Huyệt ma kiến,tăng giới hạn máu.
 tank.game.BuffName12:Tăng công kích
 tank.game.BuffName13:Tỉnh giấc
@@ -108,7 +108,7 @@ tank.game.BuffName15:Siêu thể lực
 tank.game.BuffName16:Xả giận
 tank.game.BuffName17:Quyền năng
 tank.game.BuffName18:Siêu năng lượng
-tank.game.BuffName19:Khiêng hy vọng
+tank.game.BuffName19:Khiên hy vọng
 tank.game.BuffName20:Hiệu ứng công kích
 tank.game.BuffName21:Bốc lửa
 tank.game.BuffName22:Hàn băng
@@ -138,8 +138,8 @@ tank.game.BuffTip17:Tăng {0} điểm cho từng thuộc tính công kích, phò
 tank.game.BuffTip18:Giới hạn máu tăng {0} điểm.
 tank.game.BuffTip19:Khi bị tấn công,giảm {0} điểm sát thương
 tank.game.BuffTip20:Khi đánh trúng đích tăng sát thương {0}%.
-tank.game.BuffTip21:Ngay khi bắt đầu đi phó bản,sẽ có {0} đểm pow.
-tank.game.BuffTip22:Mỗi lần bị sát thương phỏng,sẽ giảm được {0} điểm sát thương.
+tank.game.BuffTip21:Ngay khi bắt đầu đi phó bản,sẽ có {0} điểm pow.
+tank.game.BuffTip22:Mỗi lần bị sát thương bỏng,sẽ giảm được {0} điểm sát thương.
 tank.game.BuffTip23:Đứng vững trước tiếng gầm của boss rồng.
 tank.game.BuffTip24:Thuộc tính phòng ngự tăng {0}%.
 tank.game.BuffTip25:Mỗi hiệp nếu trúng sát thương độc sẽ giảm {0} điểm.
@@ -171,7 +171,7 @@ tank.roomlist.RoomListIICreateRoomView.name:Không được để phòng trống
 tank.roomlist.RoomListIICreateRoomView.string:Tên phòng có kí tự không phù
 tank.roomlist.RoomListIICreateRoomView.set:Hãy đặt mật mã phòng của bạn
 tank.roomlist.RoomListIICreateRoomView.set1:Hãy chọn hình thức chiến đấu
-tank.roomlist.RoomListIICreateRoomView.set2:Hãy chọn lọai phòng
+tank.roomlist.RoomListIICreateRoomView.set2:Hãy chọn loại phòng
 tank.roomlist.RoomListIIFindRoomPanel.search:Tìm phòng
 tank.roomlist.RoomListIIFindRoomPanel.id:Mời nhập ID phòng
 tank.roomlist.RoomListIIFindRoomPanel.room:Phòng không tồn tại
@@ -205,8 +205,8 @@ store.view.fusion.AccessoryDragInArea.overdue:Vật phẩm này đã quá hạn
 store.view.fusion.LoadStrengthenListError:Tải danh sách cường hóa thất bại!
 store.view.fusion.AccessoryDragInArea.more:Bạn không thể cho thêm vào  nữa
 store.view.fusion.AccessoryDragInArea.move:Đã đủ trang bị hoặc trang bị gốc chưa có thuộc tính để di chuyển!
-store.view.fusion.TransferItemCell.object:Lọai hình trang bị này không phù hợp
-store.view.fusion.TransferItemCell.current:Lọai hình hiện tại không phù hợp
+store.view.fusion.TransferItemCell.object:Loại hình trang bị này không phù hợp
+store.view.fusion.TransferItemCell.current:Loại hình hiện tại không phù hợp
 store.view.fusion.TransferItemCell.put:Bỏ vào trang bị có vị trí tương đương
 store.view.fusion.AccessoryFrame.add:Phụ liệu
 store.view.fusion.AccessoryItemCell.overdue:Vật phẩm này đã quá hạn
@@ -267,7 +267,7 @@ tank.data.auctionHouse.AuctionGoodsInfo.long:Dài
 tank.data.auctionHouse.AuctionGoodsInfo.very:Quá dài
 tank.data.channel.ChannelType.current:Trước
 tank.data.channel.ChannelType.house:Guild
-tank.data.player.SelfInfo.this:Lọai vật phẩm này không thể trang bị
+tank.data.player.SelfInfo.this:Loại vật phẩm này không thể trang bị
 tank.data.player.SelfInfo.object:Không đồng dạng, không thể trang bị
 tank.data.player.SelfInfo.need:Đẳng cấp không đủ, không thể trang bị
 tank.data.EmailInfo.test:Cộng Hòa Xã Hội Chủ Nghĩa Việt Nam
@@ -298,7 +298,7 @@ tank.manager.MailManager.back:Trở về thư thành công
 tank.manager.MailManager.return:Trả về thư thất bại
 tank.manager.MapManager.random:Map bất kì
 tank.manager.MapManager.loader:Tải thông tin Map thất bại
-tank.manager.PlayerManager.one:Giuld {0} đã thông qua đơn của bạn
+tank.manager.PlayerManager.one:Guild {0} đã thông qua đơn của bạn
 tank.consortia.club.CreatConsortiaFrame.titleText:Tạo Guild
 tank.manager.PlayerManager.your:Guild của bạn đã bị giải tán
 tank.manager.PlayerManager.hit:Bạn đã bị đuổi ra khỏi Guild
@@ -307,7 +307,7 @@ tank.manager.PlayerManager.come: Mời bạn vào &lt;{0}&gt; Guild
 tank.manager.PlayerManager.sure:Xác nhận
 tank.manager.PlayerManager.refuse:Từ chối
 tank.manager.PlayerManager.forbid:Bạn đã bị cấm {0} phát ngôn
-tank.manager.RoomManager.type:Tạm thời không có lọai phòng thích hợp
+tank.manager.RoomManager.type:Tạm thời không có loại phòng thích hợp
 tank.manager.RoomManager.break:Xin lỗi, kết nối thất bại, hãy thử lại sau!
 tank.manager.RoomManager.false:Xin lỗi, kết nối thất bại, hãy thử lại sau!
 tank.manager.StateManager.save:Lưu văn bản, lần sau không cần tải lại
@@ -340,7 +340,7 @@ tank.view.bagII.GoodsTipPanel.z:Tấn công
 tank.view.bagII.GoodsTipPanel.x:Phòng thủ
 tank.view.bagII.GoodsTipPanel.q:Nhanh nhẹn
 tank.view.bagII.GoodsTipPanel.b:May mắn
-tank.view.bagII.GoodsTipPanel.use:Hiệu lực vĩnh cữu
+tank.view.bagII.GoodsTipPanel.use:Hiệu lực vĩnh cửu
 tank.view.bagII.GoodsTipPanel.less:Còn lại
 tank.view.bagII.GoodsTipPanel.time:Hiệu lực
 tank.view.bagII.GoodsTipPanel.over:Đã quá hạn
@@ -365,10 +365,10 @@ tank.game.ToolStripView.suicide:Tự sát
 tank.game.ToolStripView.task:Nhiệm vụ (Q)
 tank.roomlist.RoomListIIRoomBtnPanel.createRoom:Tạo phòng
 tank.roomlist.RoomListIIRoomBtnPanel.fastjojn:Nhập tổ đội nhanh
-tank.roomlist.RoomListIIRoomBtnPanel.fastjojnQj:Nhập đọat cờ nhanh
+tank.roomlist.RoomListIIRoomBtnPanel.fastjojnQj:Nhập đoạt cờ nhanh
 tank.roomlist.RoomListIIRoomBtnPanel.findRoom:Tìm phòng
 tank.roomlist.RoomListIIRoomBtnPanel.waitRoomList:Danh sách phòng chờ
-tank.roomlist.RoomListIIRoomBtnPanel.allRoom:Danh sách tòan bộ phòng
+tank.roomlist.RoomListIIRoomBtnPanel.allRoom:Danh sách toàn bộ phòng
 tank.view.common.BellowStripViewII.shop:Cửa hàng
 tank.view.common.BellowStripViewII.bag: Túi (B)
 tank.view.common.BellowStripViewII.email: Thư (R)
@@ -382,7 +382,7 @@ FPSView.as.InviteAlertPanel.ModeLabel: Kiểu trò chơi
 FPSView.as.InviteAlertPanel.name:Tên Phòng
 FPSView.as.InviteAlertPanel.mode:Mô hình:
 FPSView.as.InviteAlertPanel.free:Đội tự do
-FPSView.as.InviteAlertPanel.duoqi:Đọat cờ
+FPSView.as.InviteAlertPanel.duoqi:Đoạt cờ
 tank.invite.InviteView.request:Mời
 FPSView.as.InviteAlertPanel.yaoqingni:Mời bạn vào phòng
 FPSView.as.InviteAlertPanel.map:Tên Map:
@@ -401,7 +401,7 @@ tank.view.scenechatII.SceneChatIIController.say2:]Bạn nói với {0} nói
 tank.view.scenechatII.SceneChatIIController.say4:[{0}
 tank.view.scenechatII.SceneChatIIFastReply.say1:Chào mọi người, mình mới đ
 tank.view.scenechatII.SceneChatIIFastReply.say2:Ngươi muốn chết theo kiểu nào, ta chiều!
-tank.view.scenechatII.SceneChatIIFastReply.say3:Đụng ta rồi, cho gươi biết
+tank.view.scenechatII.SceneChatIIFastReply.say3:Đụng ta rồi, cho ngươi biết
 tank.view.scenechatII.SceneChatIIFastReply.say4:Vậy cũng được hả, có lộn k
 tank.view.scenechatII.SceneChatIIFastReply.say5:Coi như ngươi giỏi, hết nó
 tank.view.scenechatII.SceneChatIIFastReply.say6:Đốt hết đi cái thế giới nh
@@ -409,7 +409,7 @@ tank.view.scenechatII.SceneChatIIFastReply.say7:Sao lúc nào tui cũng bị th
 tank.view.scenechatII.SceneChatIIFastReply.say8:Trời, bắn  máy bay à?
 tank.view.scenechatII.SceneChatIIFastReply.say9:Mất hết cảm giác rồi, cần
 tank.view.scenechatII.SceneChatIIFastReply.say10:Xin lỗi, tay run mắt mờ.
-tank.view.scenechatII.SceneChatIIFastReply.say11:Chuẩn! Lợi hại! Cho 1 tràn pháo tay!!
+tank.view.scenechatII.SceneChatIIFastReply.say11:Chuẩn! Lợi hại! Cho 1 tràng pháo tay!!
 tank.view.scenechatII.SceneChatIIFastReply.say12:Ta trù, không trúng! Không trúng!!
 tank.view.scenechatII.SceneChatIIModel.channel1:Trước
 tank.view.scenechatII.SceneChatIIModel.channel2:Guild
@@ -428,17 +428,17 @@ tank.view.im.IMConsortiaList.dengji:Đẳng cấp Guild:
 tank.view.im.IMConsortiaList.paiming:Xếp hạng Guild:
 tank.view.im.IMController.yitianjia:Đã thêm {0} vào danh sách bạn bè, bắt đầu chat?
 tank.view.im.IMController.hi:[{0}]đã thêm bạn vào danh sách bạn bè. Xác nhận?
-tank.auctionHouse.controller.AuctionHouseController:Không có vật phẩm lọai
+tank.auctionHouse.controller.AuctionHouseController:Không có vật phẩm loại
 tank.view.im.IMController.chongfu:Không thể thêm lại lần nữa
 tank.view.im.IMController.friend:Đã thêm bạn
 tank.view.task.TaskCanAcceptView.nextInfo:Tiếp theo
 tank.view.task.TaskCanAcceptView.finishTask:Tiếp nhận
 tank.view.task.TaskCatalogContentView.dropTask:Bỏ
 tank.view.task.TaskCatalogContentView.finishTask:Hoàn thành
-tank.view.task.TaskCatalogContentView.over:(Hòan thành)
+tank.view.task.TaskCatalogContentView.over:(Hoàn thành)
 tank.view.task.TaskCatalogContentView.tip:Nhắc nhở
 tank.view.task.TaskCatalogContentView.dropTaskII:Xác nhận bỏ nhiệm vụ này
-tank.view.task.TaskCatalogContentView.dropTaskIII:Nhiệm vụ chưa hòan thành
+tank.view.task.TaskCatalogContentView.dropTaskIII:Nhiệm vụ chưa hoàn thành
 tank.view.task.TaskCatalogContentView.chooseYourAward:Sau khi chọn quà bấm nút nhận quà
 tank.view.tutorial.EnterTutorialFrame.lodingTip:Đang tải khối.
 tank.view.emailII.BagFrame.selectBag:Hãy chọn đồ trong túi làm phụ kiện
@@ -449,13 +449,13 @@ tank.view.emailII.EmailIIDiamondView.moneyDeficient:Tiền Xu của bạn không
 tank.view.emailII.EmailIIStripView.sender:Người gửi:
 tank.view.emailII.EmailIIStripView.validity:Còn:
 tank.view.emailII.EmailIIStripView.day:Ngày
-tank.view.emailII.EmaillIIBagCell.isBinds:đã Vật phẩm này bị khóa
+tank.view.emailII.EmaillIIBagCell.isBinds:Vật phẩm này đã bị khóa
 tank.view.emailII.EmaillIIBagCell.RemainDate:Vật phẩm này đã quá hạn
 tank.view.emailII.WritingView.sender:Mời điền tên người nhận
 tank.view.emailII.WritingView.annex.tip:Kèm thêm
 tank.view.emailII.WritingView.NickName:Không thể gửi thư cho mình
 tank.view.emailII.WritingView.topic:Mời điền chủ đề thư
-tank.view.emailII.WritingView.contentLength:Bạn được nhập nội dung không qúa 300 chữ
+tank.view.emailII.WritingView.contentLength:Bạn được nhập nội dung không quá 300 chữ
 tank.view.emailII.WritingView.annex:Thư có thu phí cần đính kèm file
 tank.view.emailII.WritingView.money_txt:Thư có thu phí cần điền số tiền
 tank.view.emailII.LoadSendInfoError:Tải thông tin thư gửi đi thất bại!
@@ -472,7 +472,7 @@ shop.ShopIITryDressView.repeal:Quay lại hình dáng cũ
 shop.ShopIITryDressView.returnToBegin1:Bỏ hóa trang
 shop.ShopIITryDressView.returnToBegin2:Chọn lại hình dáng ban đầu
 road.ui.controls.TabPanel.zhi: index Trị của phải từ 0 đến {0}
-road.ui.controls.TabPanel.zhijian: Trong khỏang
+road.ui.controls.TabPanel.zhijian: Trong khoảng
 tank.game.ToolStripView.limit:Máu ít hơn 30% không thể tự sát
 tank.room.RoomIIPlayerItem.chat:Chat riêng
 tank.room.RoomIIPlayerItem.look:Kiểm tra
@@ -525,7 +525,7 @@ tank.consortia.consortiadiplomatism.ConsortiaDiplomatismView.inputPlease:Mời n
 tank.consortia.consortiadiplomatism.ConsortiaDiplomatismView.text:Nhóc con lười biếng quá
 tank.consortia.myconsortia.frame.AlienationConsortiaFrame.titleText:Chuyển nhường guild
 tank.consortia.myconsortia.frame.LoadMyconsortiaInfoError:Tải điều kiện guild thất bại!
-tank.consortia.myconsortia.frame.LoadMemberInfoError:Tải thong tin danh sách thành viên guild thất bại!
+tank.consortia.myconsortia.frame.LoadMemberInfoError:Tải thông tin danh sách thành viên guild thất bại!
 tank.consortia.myconsortia.frame.LoadMyconsortiaLevelError:Tải thông tin cấp guild thất bại!
 tank.consortia.myconsortia.frame.LoadMyconsortiaListError:Tải thông tin danh sách thất bại!
 tank.consortia.myconsortia.frame.LoadApplyRecordError:Tải nhật ký xin gia nhập guild thất bại!
@@ -648,21 +648,21 @@ tank.game.ArrowViewIII.big:Kính phóng to[T]
 tank.game.ArrowViewIII.alpha:Điều chỉnh độ trong suốt trong trò chơi
 tank.game.ArrowViewIII.send:Chuyển đi [F]
 tank.game.ArrowViewIII.give:Chuyển đến điểm rơi của vị trí tấn công, 2 lượt 1 lần.
-tank.game.GameView.team:Đồng đội đang hành động, bạn có thể dung đạo cụ để hỗ trợ
+tank.game.GameView.team:Đồng đội đang hành động, bạn có thể dùng đạo cụ để hỗ trợ
 tank.game.ToolStripView.itemTemplateInfo.Name:Nộ Khí [B]
 tank.game.ToolStripView.itemTemplateInfo.Description:Nhấp vào nút Pow để tấn công, không dùng chung với súng 3 tia
 tank.game.ToolStripView.itemTemplateInfo.Name2:Pow 2 [R]
-tank.game.ToolStripView.itemTemplateInfo.Description2:Nhấp chọn lửa phẩn nộ để có thể dùng pow 2 và không dùng chung với súng 3 tia
+tank.game.ToolStripView.itemTemplateInfo.Description2:Nhấp chọn lửa phẫn nộ để có thể dùng pow 2 và không dùng chung với súng 3 tia
 tank.room.RoomIIMapSetPanel.room:Thiết lập phòng
 tank.roomlist.RoomListIICreateRoomView.titleText:Tạo phòng
-tank.roomlist.RoomListIICreateRoomView.contest:Phòng đấu không thể đọat cờ
+tank.roomlist.RoomListIICreateRoomView.contest:Phòng đấu không thể đoạt cờ
 tank.roomlist.RoomListIIFindRoomPanel.room.info:Số phòng bạn nhập không tồn tại
 tank.tofflist.view.TofflistLeftCurrentCharcter.cdr:Chủ guild
 tank.tofflist.view.TofflistLeftInfo.no:Không có guild
 Crazytank.load:Tải gói ngôn ngữ thất bại
 Crazytank.TankStartApp.login:Đăng nhập thất bại
 tank.consortia.myconsortia.frame.MyConsortiaUpgrade.titleTxt:Nâng cấp Guild
-tank.view.movement.MovementLeftView.action:Họat động
+tank.view.movement.MovementLeftView.action:Hoạt động
 tank.manager.PlayerManager.player:<{0}> gia nhập guild
 tank.game.ToolStripView.start:Sau khi bắt đầu {0} phút,mới được tự sát
 tank.view.ExitHint.hint.text:Thoát bị trừ kinh nghiệm,công trạng
@@ -674,7 +674,7 @@ shop.ShopIIBtnPanel.message.free:Không thể tặng
 tank.manager.PlayerManager.contributionSelf:Bạn góp cho Guild {0} điểm tài sản
 tank.manager.PlayerManager.contributionOther:<{0}>góp cho Guild  {1} điểm tài sản
 tank.manager.PlayerManager.youUpgrade: Bạn được <{0}> lên cấp <{1}>
-tank.manager.PlayerManager.upgradeSelf:Bạn được <{0}>l ên cấp <{1}>
+tank.manager.PlayerManager.upgradeSelf:Bạn được <{0}> lên cấp <{1}>
 tank.manager.PlayerManager.upgradeOther:<{0}> tăng <{1}> thành <{2}>
 tank.manager.PlayerManager.youDemotion:Bạn bị <{0}> hạ thành <{1}>
 tank.manager.PlayerManager.demotionSelf:Bạn bị <{0}> hạ thành <{1}>
@@ -703,7 +703,7 @@ tank.view.changeColor.lackCard:Biến sắc mất {0} lễ kim, tiếp tục kh�
 tank.view.changeColor.sexAlert:Giới tính không hợp
 tank.view.buff.freeCard:Kích hoạt chức năng 15 ngày mất {0} xu, tiếp tục không?
 tank.view.buff.doubleExp:Kích hoạt chức năng này tốn {0} xu, tiếp tục không?
-tank.view.buff.preventKick:Kích họat chức năng 30 ngày mất {0} xu, tiếp tục không?
+tank.view.buff.preventKick:Kích hoạt chức năng 30 ngày mất {0} xu, tiếp tục không?
 tank.view.buff.addPrice:Nạp thêm cho chức năng này mất {0} xu, tiếp tục không?
 tank.gameover.DisableGetCard:Không sát thương đối thủ, không thể lật bài
 tank.view.buffInfo.outDate: {0} của bạn hết hạn sau {1} phút
@@ -877,7 +877,7 @@ songti:Arial
 accept:Nhận
 refuse:Từ chối
 tank.view.common.church.ProposeResponseFrame.titleText:Cầu hôn
-tank.view.common.church.ProposeResponseFrame.msg:Bạn từ chơi lời cầu hôn của <{0}>! 
+tank.view.common.church.ProposeResponseFrame.msg:Bạn từ chối lời cầu hôn của <{0}>! 
 tank.view.common.AddPricePanel.label:         Vật phẩm này hết hạn, mời tiếp phí
 tank.view.common.CheckCodePanel.titleText:Mã kiểm tra
 tank.view.continuation.ContinuationItem.initCom:Chọn thời gian tiếp phí
@@ -891,13 +891,13 @@ tank.view.emailII.WritingView.backTime:Thời gian trả thư: 1 giờ
 tank.view.emailII.WritingView.backTime2:Thời gian trả thư: 6 giờ
 tank.view.tutorial.EnterTutorialFrame.loaderComplete:Xin đợi lát sau hãy vào mục giúp đỡ tân thủ
 tank.game.DanderStrip.tip:POW  là mức Nộ của người chơi, người chơi tấn công hay bị tấn công đều tích lũy nộ khí. Khi nộ khí đầy, có thể sử dụng POW để tấn công với uy lực mạnh hơn
-duoqi:Đọat cờ
+duoqi:Đoạt cờ
 nextPage:Trang sau
 lastPage:Trang cuối
 prePage:Trang trước
 firstPage:Trang 1
 tank.roomlist.RoomListIICreateRoomView.DESCRIPTION:Hình thức thi đấu ngẫu nhiên chọn đối thủ, là hình thức chính của trò chơi.
-tank.roomlist.RoomListIICreateRoomView.DESCRIPTION2:Hiình thức huấn luyện có thể chọn đối thủ, phần thưởng ít
+tank.roomlist.RoomListIICreateRoomView.DESCRIPTION2:Hình thức huấn luyện có thể chọn đối thủ, phần thưởng ít
 shop.DataError.NoGood:Dữ liệu sai,không tìm thấy vật phẩm
 shop.ShopIISaveFigurePanel.okBtn.label:Trả phí
 shop.ShopIISaveFigurePanel.cancelBtn.label:Không trả
@@ -970,13 +970,13 @@ tank.view.bagII.GoodsTipPanel.holeenable:(Đã kích hoạt)
 tank.view.bagII.GoodsTipPanel.holeLv:(Lỗ cấp {0})
 tank.dungeon.help.hited:Đã đánh bại
 tank.dungeon.tryagain.title:chơi thêm 1 lần
-tank.dungeon.tryagain.content:   Thách đâu cửa ải lần nữa<br><FONT COLOR='#FF0000' SIZE='13'> Nếu chọn thách đấu lại sẽ tốn 500 xu</FONT>
+tank.dungeon.tryagain.content:   Thách đấu cửa ải lần nữa<br><FONT COLOR='#FF0000' SIZE='13'> Nếu chọn thách đấu lại sẽ tốn 500 xu</FONT>
 tank.invite.InvitePlayerItem.levelInadequate:Đẳng cấp người chơi này và đẳng cấp phòng không phù hợp
 tank.roomlist.RoomListIIPveBGView.levelCheck:đẳng cấp của bạn và đẳng cấp phòng không phù hợp, xin chọn lại
 tank.view.common.shortcutBuyItem:mua{0}sẽ trừ {1} xu,tiếp tục không?
 tank.gameover.payConfirm.title:mua 1 lần lật bài
-tank.gameover.payConfirm.contentCommon:Lần lật bài này sẽ trừ 486 xu (VIP sẽ giảm 49 xu),\nđồng ký không?
-tank.gameover.payConfirm.contentVip:VIP thân mến,lần lật bài này chỉ trừ\n 437 xu(đã giảm 49 xu),đồng ký không?
+tank.gameover.payConfirm.contentCommon:Lần lật bài này sẽ trừ 486 xu (VIP sẽ giảm 49 xu),\nđồng ý không?
+tank.gameover.payConfirm.contentVip:VIP thân mến,lần lật bài này chỉ trừ\n 437 xu(đã giảm 49 xu),đồng ý không?
 tank.missionsettle.dungeon.leaveConfirm.title:thoát phó bản
 tank.missionsettle.dungeon.leaveConfirm.contents:<font color='#ff0000'> Phó bản chưa kết thúc, thoát lúc  này sẽ không nhận được phần thưởng khi hoàn thành! </font>
 tank.missionsettle.explore.leaveConfirm.title:thoát chiến đấu
@@ -1040,14 +1040,14 @@ tank.view.personalinfoII.recovery:hộ giáp
 tank.view.personalinfoII.recoveryDetail:giảm sát thương lúc chiến đấu .
 tank.view.personalinfoII.hp:máu
 tank.view.personalinfoII.hpDetail:máu nhiều nhất .
-tank.view.personalinfoII.attact:công kich
+tank.view.personalinfoII.attact:công kích
 tank.view.personalinfoII.attactDetail:nâng cao tất cả sát thương tạo ra khi chiến đấu nhưng sẽ giảm tốc độ tấn công
 tank.view.personalinfoII.defense:phòng ngự
 tank.view.personalinfoII.defenseDetail:giảm sát thương lúc chiến đấu.
 tank.view.personalinfoII.agility:nhanh nhẹn
-tank.view.personalinfoII.agilityDetail:nâng cao bạn tốc độ công kich, còn nâng cao thể lực
+tank.view.personalinfoII.agilityDetail:nâng cao bạn tốc độ công kích, còn nâng cao thể lực
 tank.view.personalinfoII.luck:may mắn
-tank.view.personalinfoII.luckDetail:nâng cao tỉ xuất bạo kích.
+tank.view.personalinfoII.luckDetail:nâng cao tỉ suất bạo kích.
 tank.view.personalinfoII.energy:thể lực
 tank.view.personalinfoII.energyDetail:Di chuyển và sử dụng item sẽ tiêu hao thể lực
 tank.view.personalinfoII.damage:sát thương
@@ -1163,7 +1163,7 @@ tank.loginstate.inputUserName:mời nhập tên người dùng！
 tank.loginstate.inputGuildName:mời nhập tên GUILD！
 tank.loginstate.CharacterNameNull:tên nhân vật không thể để trống！
 tank.loginstate.guildNameNull:tên GUILD không thể để trống！
-tank.loginstate.characterNameExist:tên nhân vật <{0}>đã có, mời chỉnh sửa tên nhân vật ,trước khi tên nhân vật chưa chỉnh sữa, nhân vật này không thể vào trò chơi 
+tank.loginstate.characterNameExist:tên nhân vật <{0}>đã có, mời chỉnh sửa tên nhân vật ,trước khi tên nhân vật chưa chỉnh sửa, nhân vật này không thể vào trò chơi 
 tank.loginstate.characterModify:tên nhân vật chỉnh sửa 
 tank.loginstate.inputCharacterName:mời nhập tên nhân vật！
 tank.loginstate.guildNameExist:tên GUILD<{0}>đã có, mời chỉnh sửa tên GUILD, khi tên GUILD chưa chỉnh sửa, không thể vào trò chơi 
@@ -1262,12 +1262,12 @@ tank.view.ConsortiaReworkNameView.consortiaNameAlert5:Tên hội có từ cấm
 tank.view.ConsortiaReworkNameView.consortiaNameAlert6:Tên hội không được có khoảng trắng
 tank.view.ConsortiaReworkNameView.consortiaNameAlert7:Hãy nhập tên
 tank.manager.crossdisable:Loa thế giới tạm chưa mở
-tank.game.deputyWeapon.canNotUse2:Số lần sử dụng khiêng gà của bạn trong trận đã hết
-tank.game.deputyWeapon.canNotUse3:Số lần sử dụng khiêng Bolo bala trong trận đã hết
+tank.game.deputyWeapon.canNotUse2:Số lần sử dụng khiên gà của bạn trong trận đã hết
+tank.game.deputyWeapon.canNotUse3:Số lần sử dụng khiên Bolo bala trong trận đã hết
 tank.view.emailII.ReadingView.useHelp:Hướng dẫn
 tank.game.BloodStrip.tip:Khi hết máu sẽ biến thành hồn ma, hãy tăng cấp để tăng máu
 tank.gameover.gainDoubleEXP:Sử dụng thẻ nhân đôi kinh nghiệm được x2 kinh nghiệm.
-tank.game.PowerStrip.tip:người chơi di duyển,sử dụng vật phẩm sẽ tiêu hao thể lực. Khi thể lực về 0, không thể di chuyển và không thể sử dụng vật phẩm.
+tank.game.PowerStrip.tip:người chơi di chuyển,sử dụng vật phẩm sẽ tiêu hao thể lực. Khi thể lực về 0, không thể di chuyển và không thể sử dụng vật phẩm.
 #2.30versio:#2.30version
 tank.fightLib.AwardBox.FullBag:túi đã đầy,vật phẩm chứa trong hộp thư.
 tank.fightLib.questionInfo:Hiện tại có {0} câu, đáp đúng {1} có thể thông qua. \n Đã đáp đúng được {2}/{1} câu,còn dư {3} câu.
@@ -1279,9 +1279,9 @@ tank.fightLib.Lesson.Message2:Phải vượt qua được độ khó cao cấp b
 tank.fightLib.Lesson.17Grade:Phải đạt cấp 17 mới có thể thực hiện độ khó trung cấp {0}.
 tank.fightLib.Lesson.20Grade:Phải đạt cấp 20 mới có thể thực hiện độ khó trung cấp {0}.
 tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command1:Chào mừng đến với bài học sơ cấp về đo khoảng cách.
-tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command2:Trong bản đồ nhỏ có một khung trắng có thể dịch chuyển được, bạn hãy hử xem.
+tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command2:Trong bản đồ nhỏ có một khung trắng có thể dịch chuyển được, bạn hãy thử xem.
 tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command3:Đúng như thế. Từ cạnh trái khung trắng sang cạnh phải chúng ta xem là 1 màn hình
-tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command5:1 màn hình chia thành 10 phần bằng nhau, mỗi 1 phần là 1 đơn vị. Dùng chuột để đ kéo khung trắng để đo khoảng cách với đối thủ. Sau đây chúng tôi sẽ làm mẫu
+tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command5:1 màn hình chia thành 10 phần bằng nhau, mỗi 1 phần là 1 đơn vị. Dùng chuột để kéo khung trắng để đo khoảng cách với đối thủ. Sau đây chúng tôi sẽ làm mẫu
 tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command7:Bây giờ sẽ đo thử khoảng cách với đối thủ là bao nhiêu.
 tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command9:Cách 5 đơn vị. Xem hiểu rồi chứ?
 tank.command.fightLibCommands.script.MeasureScree.EasyMeasureScreenScript.command10:Tiếp theo là phần tập luyện sơ cấp
@@ -1297,17 +1297,17 @@ tank.command.fightLibCommands.script.MeasureScree.DifficultMeasureScreenScript.c
 tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command1:Đầu tiên giới thiệu các vũ khí có thể bắn góc 20 độ: Túi vũ khí, phi tiêu, lu gạch, pháo, giỏ trái cây.
 tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command2:Ưu điểm của kiểu bắn góc 20 là ít chịu ảnh hưởng của gió. Khuyết điểm là chịu ảnh hưởng của địa hình, ảnh hưởng vị trí cao thấp tương đối lớn, có một vài vị trí không bắn được.
 tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command3: Chúng ta sẽ xem cách bắn góc 20 như thế nào.
-tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command4: Kết hợp bài học đo khoảng cách, nếu 1 đơn vị lực bán 10, 2 đơn vị lực bắn 19, nếu cách 10 đơn vị, lực bắn 54.
+tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command4: Kết hợp bài học đo khoảng cách, nếu 1 đơn vị lực bắn 10, 2 đơn vị lực bắn 19, nếu cách 10 đơn vị, lực bắn 54.
 tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command6:Đầu tiên chúng ta điều chỉnh đúng góc 20 rồi áp dụng theo lực  đã nói để bắn.
 tank.command.fightLibCommands.script.MeasureScree.EasyTwentyDegree.command7:Bắn trúng rồi, bây giờ bạn có thể bắt đầu chiến đấu hoặc xem lại bài học.
 tank.command.fightLibCommands.script.MeasureScree.NormalTwentyDegree.command1:Chào mừng đến bài học góc bắn 20 cự ly ngoài một màn hình.
 tank.command.fightLibCommands.script.MeasureScree.NormalTwentyDegree.command2: Tại đây ngoài yêu cầu nắm vững kiến thức về góc và lực bắn còn cần đến kỹ năng đo khoảng cách. Nếu đã chuẩn bị, hãy nhấp chọn nút luyện tập.
 tank.command.fightLibCommands.script.MeasureScree.DifficultTwentyDegree.command1:Chào mừng đến bài tập cao cấp của góc bắn 20.Nếu gặp phải cự ly không chính xác,phải làm như thế nào?
-tank.command.fightLibCommands.script.MeasureScree.DifficultTwentyDegree.command2:Chúng ta có thể tính toán cự ly trước rồi tính lực bắn gần đúng nhất với cự lý đó,sau đó điều chỉnh lực bắn.Nếu đã hiểu, chúng ta bắt đầu bài tập cao cấp nha!
+tank.command.fightLibCommands.script.MeasureScree.DifficultTwentyDegree.command2:Chúng ta có thể tính toán cự ly trước rồi tính lực bắn gần đúng nhất với cự ly đó,sau đó điều chỉnh lực bắn.Nếu đã hiểu, chúng ta bắt đầu bài tập cao cấp nha!
 tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command1:Đầu tiên giới thiệu các vũ khí có thể bắn góc cao
 tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command2: Ưu điểm cách bắn góc cao là chịu ảnh hưởng ít từ vị trí cao thấp, nhưng chịu ảnh hưởng nhiều từ lực gió.
-tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command3:Cách bắn góc cao là cách bắn không thay đổi nhiều về lực mà thay đổi nhiều về góc bắn. Khi gió 0, lực bắn 95, điều chính góc. Góc sẽ lấy góc 90- khoảng cách với đối thủ.
-tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command5: Điểu chỉnh góc 90 rồi áp dụng công thức tính góc để thao tác lực bắn
+tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command3:Cách bắn góc cao là cách bắn không thay đổi nhiều về lực mà thay đổi nhiều về góc bắn. Khi gió 0, lực bắn 95, điều chỉnh góc. Góc sẽ lấy góc 90- khoảng cách với đối thủ.
+tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command5: Điều chỉnh góc 90 rồi áp dụng công thức tính góc để thao tác lực bắn
 tank.command.fightLibCommands.script.HighThrow.EasyHighThrow.command6:Bắn trúng rồi, bây giờ bạn có thể bắt đầu chiến đấu hoặc xem lại bài học..
 tank.command.fightLibCommands.script.HighThrow.NormalHighThrow.command1: Tại đây chúng ta sẽ học cách chỉnh góc trong trường hợp có gió.
 tank.command.fightLibCommands.script.HighThrow.NormalHighThrow.command2: Nếu gió thuận theo hướng bắn, góc sẽ là
@@ -1323,12 +1323,12 @@ tank.command.fightLibCommands.script.SixtyDegree.EasySixtyDegreeScript.command6:
 tank.command.fightLibCommands.script.SixtyDegree.EasySixtyDegreeScript.command7:Bắn trúng rồi, bây giờ bạn có thể bắt đầu chiến đấu hoặc xem lại bài học..
 tank.command.fightLibCommands.script.SixtyDegree.NormalSixtyDegreeScript.command1:Chào mừng đến bài tập trung cấp bắn góc 65. Trong bài tập này, chúng ta học trong trường hợp có gió sẽ bắn như thế nào.
 tank.command.fightLibCommands.script.SixtyDegree.NormalSixtyDegreeScript.command2:Cụ thể như sau
-tank.command.fightLibCommands.script.HighGap.EasyHighGap.command1: Trước đâ chúng ta học qua cách bắn đều là vị trí băng nhau. Nhưng trong chiến đấu thường xảy ra tình huống vị trí cao thấp khác nhau. Lúc này cần nghĩ đến việc ảnh hưởng của vị trí.
+tank.command.fightLibCommands.script.HighGap.EasyHighGap.command1: Trước đây chúng ta học qua cách bắn đều là vị trí bằng nhau. Nhưng trong chiến đấu thường xảy ra tình huống vị trí cao thấp khác nhau. Lúc này cần nghĩ đến việc ảnh hưởng của vị trí.
 tank.command.fightLibCommands.script.HighGap.EasyHighGap.command2:Không có cách tính cụ thể cho vị trí cao thấp nhưng thông thường, đối thủ ở vị trí thấp hơn thì bạn cần bắn nhẹ hơn một chút.
-tank.command.fightLibCommands.script.HighGap.EasyHighGap.command3:Ngược lại nếu vị trí bạn thấp hơn thì phải bắmn mạnh hơn một chút. Nếu đã sẵn sàng thì nhấp chọn bắt đầu tập luyện.
+tank.command.fightLibCommands.script.HighGap.EasyHighGap.command3:Ngược lại nếu vị trí bạn thấp hơn thì phải bắn mạnh hơn một chút. Nếu đã sẵn sàng thì nhấp chọn bắt đầu tập luyện.
 tank.command.fightLibCommands.script.HighGap.NormalHighGap.command1:Khi đã sẵn sàng, hãy nhấp chọn bắt đầu tập luyện.
 tank.command.fightLibCommands.script.HighGap.DifficultHighGap.command1:Bài học này chúng ta luyện tập bài cao cấp bài bắn vị trí cao thấp..
-tank.command.fightLibCommands.script.ChallengeScript:Đến được đây đều là chiến sĩ ưu tú, tiếp theo bạn tiếp nhận nhiệm vụ muôn vàn khó khăn. Chuẩn bị chưa? Hãy nhấp chon bắt đầu nào! 
+tank.command.fightLibCommands.script.ChallengeScript:Đến được đây đều là chiến sĩ ưu tú, tiếp theo bạn tiếp nhận nhiệm vụ muôn vàn khó khăn. Chuẩn bị chưa? Hãy nhấp chọn bắt đầu nào! 
 tank.command.fightLibCommands.script.MeasureScree.startTrain:Bắt đầu tập luyện
 tank.command.fightLibCommands.script.MeasureScree.watchAgain:Xem lại lần nữa
 tank.command.fightLibCommands.script.MeasureScree.understood:Hiểu rồi
@@ -1354,7 +1354,7 @@ tank.view.common.newQuestion2:2. Pow và 3 tia có thể sử dụng cùng lúc 
 tank.view.common.newAnwser3:Có thể.
 tank.view.common.newAnwser4:Không thể.
 tank.view.im.IMController.issure:Xác nhận đưa người này vào danh sách đen?
-tank.consortia.myconsortia.frame.MyConsortiaTax.sure:Xác nhận công hiến tài sản?
+tank.consortia.myconsortia.frame.MyConsortiaTax.sure:Xác nhận cống hiến tài sản?
 tank.view.emailII.EmailIIStripView.delectEmail: Trong thư bạn xóa có kèm vật phẩm, sau khi xóa<br/>  không thể lấy lại vật phẩm, tiếp tục xóa?
 tank.gametrainer.data.TrainerModel.answer2: Nhấn phím mũi tên ←,→.
 tank.hotSpring.room.time.minute:phút
@@ -1428,9 +1428,9 @@ tank.view.effort.EffortPullDodnMenu.FULL:Toàn bộ
 tank.view.effort.EffortPullDodnMenu.ACQUIRE:Đã hoàn thành 
 tank.view.effort.EffortPullDodnMenu.INCOMPLETE:Chưa hoàn thành
 tank.view.rouletteview.close:Xác nhận thoát rương quay số
-tank.view.im.IMController.addBlackList:Danh sách đen vượt quá 100 người, hãy xóat bớt rồi thêm sau
+tank.view.im.IMController.addBlackList:Danh sách đen vượt quá 100 người, hãy xóa bớt rồi thêm sau
 tank.view.im.IMController.addFriend:Danh sách bạn vượt quá {0} người, hãy xóa bớt rồi thêm sau
-tank.consortia.myconsortia.MyConsortiaMemberList.tipArr.battle:Lục chiến thành viên
+tank.consortia.myconsortia.MyConsortiaMemberList.tipArr.battle:Lực chiến thành viên
 tank.consortia.myconsortia.MyConsortiaMemberList.tipArr.contribute:Tổng điểm cống hiến\n của thành viên
 tank.menu.fire:Khai trừ
 tank.consortia.myconsortia.systemWord:Nhấp vào đây để sửa thông báo guild
@@ -1446,7 +1446,7 @@ baglocked.SetPassFrame1.inputTextInfo4:Hãy ghi nhớ mật mã cấp 2!
 baglocked.SetPassFrame2.titText2:2/3 Thiết lập bảo vệ mật mã
 baglocked.SetPassFrame2.question1:Câu hỏi 1
 baglocked.SetPassFrame2.answer1:Đáp án 1
-baglocked.SetPassFrame2.inputTextInfo1:(Độ dài đáp án tối đa 40 ký dự)
+baglocked.SetPassFrame2.inputTextInfo1:(Độ dài đáp án tối đa 40 ký tự)
 baglocked.SetPassFrame2.textInfo2_7:Thông tin bên trên khi điền là không thể sửa hay xóa.Tránh trường hợp quên,cần điền thông tin thật, giúp ích khi tìm lại mật mã cấp 2. 
 baglocked.SetPassFrame2.question2:Câu hỏi 2
 baglocked.SetPassFrame2.answer2:Đáp án 2
@@ -1458,8 +1458,8 @@ baglocked.UpdatePassFrame.Text5:Mời nhập mật mã cũ
 baglocked.UpdatePassFrame.Text6:Mời nhập mật mã mới  
 baglocked.UpdatePassFrame.Text7:Nhập lại mật mã mới  
 baglocked.DelPassFrame.operationAlertInfo:Hôm nay bạn còn thực hiện {0} lần
-tank.view.chat.ChatFacePannel.face1:Cười mĩm
-tank.view.chat.ChatFacePannel.face2:Tội nghi
+tank.view.chat.ChatFacePannel.face1:Cười mỉm
+tank.view.chat.ChatFacePannel.face2:Tội nghiệp
 tank.view.chat.ChatFacePannel.face3:Yêu
 tank.view.chat.ChatFacePannel.face4:Ngạc nhiên
 tank.view.chat.ChatFacePannel.face5:Đắc ý
@@ -1487,7 +1487,7 @@ tank.view.chat.ChatFacePannel.face26:Choáng
 tank.view.chat.ChatFacePannel.face27:Bye
 tank.view.chat.ChatFacePannel.face28:No
 tank.view.chat.ChatFacePannel.face29:Lải nhải
-tank.view.chat.ChatFacePannel.face30:Thờ thẩn
+tank.view.chat.ChatFacePannel.face30:Thẫn thờ
 tank.view.chat.ChatFacePannel.face31:Nháy mắt
 tank.view.chat.ChatFacePannel.face32:Ói
 tank.view.chat.ChatFacePannel.face33:Hết hồn
@@ -1547,7 +1547,7 @@ feedback.view.infoDateText:Ví dụ:2010-09-17
 feedback.view.delPostsBtnText:Kết thúc
 feedback.view.continueSubmitBtnText:Tiếp tục
 feedback.view.submitAssessmentBtnText:Đánh giá
-feedback.view.explainTextAreaText:<p align="center"><b>Quy tắc đền bù</b></p><br><b>1.Thời hạn đền bù</b><br>a)Có thể phục hồi vật phẩm bị mất trong vòng 15 ngày gần nhất.<br>b)Mất vật phẩm quá 15 ngày có thể không được phục hồi.<br><br><b>2.Nội dùng phục hồi</b><br>a)Dựa theo đơn khiếu kiện,sau khi xác nật vật phẩm mất là khóa và tiến hành qua hợp thành hoặc cường hóa có thể đền bù.<br>b)Dựa theo đơn khiếu kiện,sau khi xác nhận KH từng sở hữu vật phẩm hiếm-khóa có thể đền bù.<br><br><b>3.Không thể phục hồi</b><br>a)Vật phẩm chưa khóa.<br>b)Vật phẩm được mua bán giao dịch hoặc gửi tặng.<br>c)Tiền trong game,gồm cả xu và lễ kim.<br>d)Vật phẩm tiêu hao trong game (như tài nguyên cường hóa, hợp thành, card,nớc kinh nghiệm, túi quà).<br><br><b>4.Có thể truy cứu</b><br>a)Xác định rõ tài khoản đã bị hack.<br>b)Tiến hành khóa tài khoản hack, tra cứu các vật phẩm có trong túi tiến hành trả lại cho người bị hack.<br><br><b>5.Phải đền bù toàn bộ</b><br>a)Do lỗi game dẫn đến việc KH bị mất vật phẩm,sau khi xác thực, tiến hành đền bù.
+feedback.view.explainTextAreaText:<p align="center"><b>Quy tắc đền bù</b></p><br><b>1.Thời hạn đền bù</b><br>a)Có thể phục hồi vật phẩm bị mất trong vòng 15 ngày gần nhất.<br>b)Mất vật phẩm quá 15 ngày có thể không được phục hồi.<br><br><b>2.Nội dung phục hồi</b><br>a)Dựa theo đơn khiếu kiện,sau khi xác nhận vật phẩm mất là khóa và tiến hành qua hợp thành hoặc cường hóa có thể đền bù.<br>b)Dựa theo đơn khiếu kiện,sau khi xác nhận KH từng sở hữu vật phẩm hiếm-khóa có thể đền bù.<br><br><b>3.Không thể phục hồi</b><br>a)Vật phẩm chưa khóa.<br>b)Vật phẩm được mua bán giao dịch hoặc gửi tặng.<br>c)Tiền trong game,gồm cả xu và lễ kim.<br>d)Vật phẩm tiêu hao trong game (như tài nguyên cường hóa, hợp thành, card,nước kinh nghiệm, túi quà).<br><br><b>4.Có thể truy cứu</b><br>a)Xác định rõ tài khoản đã bị hack.<br>b)Tiến hành khóa tài khoản hack, tra cứu các vật phẩm có trong túi tiến hành trả lại cho người bị hack.<br><br><b>5.Phải đền bù toàn bộ</b><br>a)Do lỗi game dẫn đến việc KH bị mất vật phẩm,sau khi xác thực, tiến hành đền bù.
 room.view.chooseMap.DungeonChooseMapView.dungeonModeDescription:Kiểu này gồm nhiều ải, đánh bại Boss cuối cùng có thể nhận được phần thưởng quý hiếm. 
 im.imList.blackTitle:Danh sách đen
 im.CMFriendList.title:Đã thêm vào DS bạn GN
@@ -1562,7 +1562,7 @@ ddt.room.boguTip:Bạn bắt đầu 1 cấp bậc mới
 ddt.room.boguNewEnemy:Kẻ thù mới
 ddt.room.boguBoss:Quốc Vương Gà
 ddt.room.boguMoreGoods:Cập nhật quà rơi
-ddt.room.boguGoods1:Khiêng gà
+ddt.room.boguGoods1:Khiên gà
 ddt.room.boguGoods2:Đá hợp thành 3
 ddt.room.boguGoods3:Nón gà
 ddt.room.boguGoods4:Châu báu cấp 5
@@ -1625,7 +1625,7 @@ im.IMView.inviteInfo1:chứa từ cấm,không thể gửi!
 tank.store.embedCell.close3:Lỗ cường hóa,mở khi cường hóa đạt cấp 3 
 tank.store.embedCell.close6:Lỗ cường hóa,mở khi cường hóa đạt cấp 6 
 tank.store.embedCell.close9:Lỗ cường hóa,mở khi cường hóa đạt cấp 9 
-tank.store.embedCell.close12:Lỗ cường hóa,mở khi cường hóa đạtcấp 12
+tank.store.embedCell.close12:Lỗ cường hóa,mở khi cường hóa đạt cấp 12
 tank.store.embedCell.closeOpenHole:Lỗ khóa,tiêu hao mũi khoan để thăng cấp
 tank.store.embedCell.attack:Lỗ khảm châu báu tấn công,bạn có thể khảm châu báu tấn công vào đây.
 tank.store.embedCell.attribute:Lỗ khảm châu báu thuộc tính, bạn có thể khảm châu báu thuộc tính vào đây.
@@ -1673,7 +1673,7 @@ store.showTips.compose.dontCompose:Bạn chưa cho trang bị và vũ khí vào!
 store.showTips.compose.dontComposeI:Bạn chưa cho trang bị và vũ khí vào!
 store.showTips.compose.dontComposeII:Bạn chưa cho đá hợp thành vào!
 store.showTips.transfer.dontTransferI:Bạn chưa cho trang bị và vũ khí vào!
-store.showTips.transfer.dontTransferIII:Bạn chưa cho trang bị hoặc vữ khi gốc vào!
+store.showTips.transfer.dontTransferIII:Bạn chưa cho trang bị hoặc vũ khí gốc vào!
 store.showTips.transfer.dontTransferIIII:Bạn chưa cho trang bị hoặc vũ khí đích vào!
 store.showTips.transfer.dontTransferII:Trang bị không có thuộc tính để di chuyển!
 store.showTips.strength.dontStrengthI:Bạn chưa cho trang bị và vũ khí vào!
@@ -1724,9 +1724,9 @@ ddt.vip.vipView.checkOtherInput0:Số nhập không được là 0
 ddt.vip.vipView.vipLevel.explain:<b>A.Thành viên VIP:</b><br/>Sự ra đời VIP là nhằm phục vụ và quan tâm nhiều hơn đến người chơi VIP<br/>,cấp bậc càng cao,quyền lợi càng nhiều.<br/><br/><b>B.Hệ thống VIP Gunny có quy tắc:</b><br/>1.Cấp bậc VIP gồm 9 cấp từ VIP1- VIP9,thời hạn kích hoạt cho<br/> 1 tháng là 31 ngày.<br/>2. Sau khi kích hoạt VIP,biểu tượng VIP sẽ sáng.Điểm kinh nghiệm VIP tăng 10 đ/ngày,tích lũy đạt số nhất định có thể thăng cấp VIP <br/>VIP9.<br/>3. Khi là người chơi thường,biểu tượng VIP sẽ tắt,người chơi không thể tiếp tục hưởng<br/> quyền lợi,điểm kinh nghiệm VIP giảm 5đ/ngày, khi bằng 0,sẽ bị xuống cấp VIP1.<br/><br/><b>C.Phân nhóm tăng trưởng VIP:</b><br/>Điểm tăng trưởng do kích hoạt/tiếp phí VIP và điểm kinh nghiệm thường:<br/><FONT COLOR='#FF0000'>Điểm tăng trưởng=điểm kinh nghiệm khi kích hoạt/tiếp phí+điểm kinh nghiệm thường</FONT>
 ddt.vip.loadVip.error:Tải thông tin VIP thất bại !
 ddt.vip.dueTime.tip:Còn {0} ngày tăng lên VIP{1}
-ddt.vip.vipFrame.upValue1:Điểm tăng trưởng :10đểm/ngày
-ddt.vip.vipFrame.upValue2:Điểm tăng trưởng :-5đểm/ngày
-ddt.vip.vipFrame.upValue3:Điểm tăng trưởng :0đểm/ngày
+ddt.vip.vipFrame.upValue1:Điểm tăng trưởng :10 điểm/ngày
+ddt.vip.vipFrame.upValue2:Điểm tăng trưởng :-5 điểm/ngày
+ddt.vip.vipFrame.upValue3:Điểm tăng trưởng :0 điểm/ngày
 ddt.vip.vipFrame.youarenovip:Bạn chưa phải là VIP
 ddt.vip.vipView.checkOtherInput:Cần nhập số nhỏ hơn 24
 ddt.vip.vipView.cueDateScript:Bạn đã nhận túi VIP của tuần này,thời gian nhận tiếp phải sau tháng {0} ngày {1}, 00:00
@@ -1772,7 +1772,7 @@ ddt.view.academyCommon.graduate.MasterGraduate.title:Chúc mừng đệ tử c�
 ddt.view.academyCommon.graduate.MasterGraduate.explain:Bạn có thể nhận thêm 01 đệ tử tối đa được 3 đệ tử!
 ddt.manager.showAcademyPreviewFrame.masterFree:Phúc lợi sư đồ
 ddt.manager.AcademyManager.warning:Khi thu nạp đệ tử, buộc phải lớn hơn đệ tử 5 cấp
-ddt.manager.AcademyManager.warningI:Khu bái sư buộc phải nhỏ hơn sư phụ 5 cấp
+ddt.manager.AcademyManager.warningI:Khi bái sư buộc phải nhỏ hơn sư phụ 5 cấp
 ddt.manager.AcademyManager.warningII:Cấp bậc phải lớn hơn 5 mới có thể thu nhận
 ddt.manager.AcademyManager.warningIII:Đệ tử phải nhỏ hơn cấp 20
 ddt.manager.AcademyManager.warningIIII:Chỉ khi đạt cấp 20 trở lên mới có thể thu nhận đệ tử
@@ -1784,7 +1784,7 @@ ddt.manager.AcademyManager.WarningApprenticeState:Bạn đã có sư phụ rồi
 ddt.manager.AcademyManager.WarningMasterFullState:Chỉ khi ít hơn 3 đệ tử mới có thể tiếp tục thu nhận, có thể từ bỏ bớt đệ tử!
 im.IMView.myAcademyBtnTips:Sư đồ
 ddt.view.academyCommon.recommend.RecommendPlayerCellView.tips:Nhấp chọn để xem trang bị
-ddt.manager.academyManager.Freezes:Sau khi từ sư phụ 24h mới có thể tiếp tục bái sư!
+ddt.manager.academyManager.Freezes:Sau khi từ bỏ sư phụ 24h mới có thể tiếp tục bái sư!
 ddt.manager.academyManager.FreezesII:Sau khi từ bỏ đệ tử 48h mới có thể tiếp tục thu nhận đệ tử mới!
 ddt.manager.playerManager.masterState:Sư phụ [{0}] online rồi
 ddt.manager.playerManager.ApprenticeState:Đệ tử [{0}] online rồi
@@ -1849,7 +1849,7 @@ ddt.cardSystem.CardCell.cannotMoveCard.Same:Thẻ bài này đã có trong trang
 ddt.cardSystem.CardCell.cannotMoveCardMain:Thẻ bài này không thể chuyển đến vị trí chính
 ddt.cardSystem.CardCell.cannotMoveCardOther:Thẻ bài này không thể chuyển đến vị trí phụ
 ddt.cardSystem.CardCell.notOpen:Vị trí thẻ bài này chưa được giải phong ấn
-ddt.cardSystem.CardCell.differentSets:Thẻ bài không thể di chuyến đến bộ thẻ không phải của nó
+ddt.cardSystem.CardCell.differentSets:Thẻ bài không thể di chuyển đến bộ thẻ không phải của nó
 ddt.cardSystem.loadfail.setsSortRule:Tải quy tắc sắp xếp bộ thẻ thất bại!
 ddt.cardSystem.loadfail.setsProperties:Tải thuộc tính bộ thẻ thất bại!
 ddt.cardSystem.loadfail.PropertyList:Tải thuộc tính chi tiết bộ thẻ thất bại!
@@ -1909,7 +1909,7 @@ ddt.storeLimitTip:Hoàn thành nhiệm vụ “Viễn chinh lần đầu" là c�
 ddt.room.cantOpenMuti:Đạt cấp 6 có thể nhấp tại đây để tăng số lượng người trong phòng của phe mình
 ddt.playerManager.addFriend.isRefused:Bạn bè đã thiết lập từ chối kết bạn!
 room.view.roomView.MatchRoomView.roundTimeTip:Thời gian đếm ngược trong chiến đấu giảm thành 10s
-room.view.roomView.MatchRoomView.challengeTip:Đã mở tính năng khiêu chiến,có thể chọn phòng trong phòng game hoặc  chọn\n tên người khác rời chọn "khiêu chiến"
+room.view.roomView.MatchRoomView.challengeTip:Đã mở tính năng khiêu chiến,có thể chọn phòng trong phòng game hoặc  chọn\n tên người khác rồi chọn "khiêu chiến"
 shop.manager.ShopBuyManager.textImg:Số lượng mua
 shop.view.ShopRankingView.NoSearchResults:Không tìm thấy kết quả
 im.playerState.awayReply:Hiện tôi vắng mặt, xin liên lạc lại sau.
@@ -2013,7 +2013,7 @@ tank.calendar.NoneActivity:không có hoạt động
 tank.calendar.title:phần thưởng điểm danh(S)	
 tank.calendar.activity.time:{0}～{1}	
 tank.calendar.sign.title:nhận quà tích luỹ điểm danh	
-tank.calendar.DailyAward:bạn đã nhận phần thưởng hằng ngày, ngay mai mới được nhận tiếp	
+tank.calendar.DailyAward:bạn đã nhận phần thưởng hằng ngày, ngày mai mới được nhận tiếp	
 tank.calendar.grid.month0:JAN	
 tank.calendar.grid.month1:FEB	
 tank.calendar.grid.month2:MAR	
@@ -2027,7 +2027,7 @@ tank.calendar.grid.month9:OCT
 tank.calendar.grid.month10:NOV	
 tank.calendar.grid.month11:DEC	
 tank.calendar.grid.today:Năm {0} tháng {1} ngày {2} 	
-tank.calendar.grid.week0:chủ nhât	
+tank.calendar.grid.week0:chủ nhật	
 tank.calendar.grid.week1:thứ 2	
 tank.calendar.grid.week2:thứ 3	
 tank.calendar.grid.week3:thứ 4	
@@ -2188,12 +2188,12 @@ tank.game.BuffTip251:Bắt đầu vượt ải sẽ tự động thêm {0} đi�
 tank.game.BuffTip252:Bắt đầu vượt ải sẽ tự động thêm {0} điểm POW 
 tank.game.BuffTip253:Bắt đầu vượt ải sẽ tự động thêm {0} điểm POW 
 tank.game.BuffTip254:Bắt đầu vượt ải sẽ tự động thêm {0} điểm POW
-tank.game.BuffTip256:Mỗi lượt trúng "phỏng" sẽ giảm sát thương {0} điểm.
-tank.game.BuffTip257:Mỗi lượt trúng "phỏng" sẽ giảm sát thương {0} điểm.
-tank.game.BuffTip258:Mỗi lượt trúng "phỏng" sẽ giảm sát thương {0} điểm.
-tank.game.BuffTip259:Dưới sức đẩy của Tà Diệm Long không xuy xuyển,lại tăng toàn thuộc tính {0} điểm.
-tank.game.BuffTip261:Dưới sức đẩy của Tà Diệm Long không xuy xuyển,lại tăng toàn thuộc tính {0} điểm.
-tank.game.BuffTip262:Dưới sức đẩy của Tà Diệm Long không xuy xuyển,lại tăng toàn thuộc tính {0} điểm.  
+tank.game.BuffTip256:Mỗi lượt trúng "bỏng" sẽ giảm sát thương {0} điểm.
+tank.game.BuffTip257:Mỗi lượt trúng "bỏng" sẽ giảm sát thương {0} điểm.
+tank.game.BuffTip258:Mỗi lượt trúng "bỏng" sẽ giảm sát thương {0} điểm.
+tank.game.BuffTip259:Dưới sức đẩy của Tà Diệm Long không suy suyển,lại tăng toàn thuộc tính {0} điểm.
+tank.game.BuffTip261:Dưới sức đẩy của Tà Diệm Long không suy suyển,lại tăng toàn thuộc tính {0} điểm.
+tank.game.BuffTip262:Dưới sức đẩy của Tà Diệm Long không suy suyển,lại tăng toàn thuộc tính {0} điểm.  
 tank.game.BuffTip263:Phòng ngự tăng {0}%。
 tank.game.BuffTip264:Phòng ngự tăng {0}%。
 tank.game.BuffTip265:Phòng ngự tăng {0}%。
@@ -2424,7 +2424,7 @@ socialContact.microcobol.succeed:chia sẻ thành công
 socialContact.microcobol.infoTextTooLong:số chữ vượt quá giới hạn	
 journal.view.JournalItem.content1:nhận được vật phẩm: {0}{1}{2}{3}nhận được vật phẩmnhận được vật phẩmnhận được vật phẩmnhận được vật phẩmnhận được vật phẩmnhận được vật phẩmnhận được vật phẩm!	
 journal.view.JournalItem.content2:XX thành công cường hóa đến cấp{0}!	
-journal.view.JournalItem.content3:kết hôn với {0},trờ thành đội vợ chồng ngọt ngào!	
+journal.view.JournalItem.content3:kết hôn với {0},trở thành đôi vợ chồng ngọt ngào!	
 journal.view.JournalItem.content4:cùng {0} tổ chức hôn lễ ở lễ đường!	
 journal.view.JournalItem.content5:trở thành chủ guild {1}!	
 journal.view.JournalItem.content6:trở thành VIP có đặc quyền!	
@@ -2439,9 +2439,9 @@ journal.view.JournalItem.content14:nhận được {0} phần quà!
 journal.view.JournalItem.content15:quen được {0} người bạn mới!	
 journal.view.JournalItem.content16:hoàn thành nhiệm vụ chính:{0} nhiệm vụ!	
 journal.view.JournalItem.content17:hoàn thành nhiệm vụ phụ:{0} nhiệm vụ!	
-journal.view.JournalItem.content18:hoàn thành nhiệm vụ hằng ngày:{0} nhiệm vu!	
+journal.view.JournalItem.content18:hoàn thành nhiệm vụ hằng ngày:{0} nhiệm vụ!	
 journal.view.JournalItem.content19:hoàn thành nhiệm vụ hoạt động:{0} nhiệm vụ!	
-journal.view.JournalItem.content20:hoàn thành nhiệm vụ VIP:{0} nhiệm vu!	
+journal.view.JournalItem.content20:hoàn thành nhiệm vụ VIP:{0} nhiệm vụ!	
 journal.view.JournalItem.content21:đệ tử {0} tốt nghiệp rồi!	
 journal.view.JournalItem.content22:bái {0} làm sư phụ!	
 journal.view.JournalItem.content23:nhận {0} làm đệ tử!	
@@ -2483,11 +2483,11 @@ room.roomPlayerActionKey.SAD:huhuhu|hix|hixhix|hic
 room.roomPlayerActionKey.SARROWFUL:huhuhuhu|huhuhu|hichic	
 room.roomPlayerActionKey.LOOK_AWRY:hứ|xìiii|hừ~	
 room.roomPlayerActionKey.ANGRY:gruuuuu|giận|aa|thay ghe|gruuuu|giết	
-room.roomPlayerActionKey.SULK:hừ|phiền|phiến chết đi|phiền chết đi được!|phiền quá đi!|buồn bã	
+room.roomPlayerActionKey.SULK:hừ|phiền|phiền chết đi|phiền chết đi được!|phiền quá đi!|buồn bã	
 room.roomPlayerActionKey.COLD:lạnh|sợ lạnh|lạnh|lạnh ghê|lạnh quá à	
 room.roomPlayerActionKey.DIZZY:ngất|xỉu|té|yun|hun|dao	
 room.roomPlayerActionKey.SUPRISE:cái này……|hả|ơ|ặk……|ak…|a…|ơ|orz|arz	
-room.roomPlayerActionKey.SICK:ghê|kinh!|ghe tởm…|ọe……|xì|xi!|xìxì!	
+room.roomPlayerActionKey.SICK:ghê|kinh!|ghê tởm…|ọe……|xì|xi!|xìxì!	
 room.roomPlayerActionKey.SLEEPING:phù……|zzz…|zzz|zzz……	
 room.roomPlayerActionKey.OH_MY_GOD:trời!|trời ơi|trời đất!|omg|wa|wawawa|wa	
 room.roomPlayerActionKey.LOVE:muah|chụtchụt|chụt|kiss|chut chut|muahmuah~|muahmuah～|mỹ nữ|em ơi|chàng đẹp trai～|đẹp trai|lợi hại!|lợi hại quá!|rất lợi hại	
@@ -2506,7 +2506,7 @@ ddt.dailyRecord.content1:nhận được vật phẩm:<FONT COLOR='#b51609'><B>{
 ddt.dailyRecord.content2:<FONT COLOR='#b51609'><B>{0}</B></FONT>cường hóa thành công đến cấp<FONT COLOR='#b51609'><B>{1}</B></FONT>!<br/>	
 ddt.dailyRecord.content3:kết hôn với<FONT COLOR='#b51609'><B>{0}</B></FONT>,trở thành đôi vợ chồng ngọt ngào!<br/>	
 ddt.dailyRecord.content4:cùng<FONT COLOR='#b51609'><B>{0}</B></FONT>cử hành hôn lễ ở lễ đường!<br/>	
-ddt.dailyRecord.content5:trờ thành chủ guild<FONT COLOR='#b51609'><B>{0}</B></FONT>!<br/>	
+ddt.dailyRecord.content5:trở thành chủ guild<FONT COLOR='#b51609'><B>{0}</B></FONT>!<br/>	
 ddt.dailyRecord.content6:nhận đặc quyền<FONT COLOR='#b51609'><B>VIP</B></FONT>thành công!<br/>	
 ddt.dailyRecord.content7:nhận được danh hiệu:<FONT COLOR='#b51609'><B>{0}</B></FONT>!<br/>	
 ddt.dailyRecord.content8:đạt được thành tựu:<FONT COLOR='#b51609'><B>{0}</B></FONT>!<br/>	
@@ -2517,9 +2517,9 @@ ddt.dailyRecord.content12:nhận được <FONT COLOR='#b51609'><B>{0}</B></FO
 ddt.dailyRecord.content13:nhận được công trạng<FONT COLOR='#b51609'><B>{0}</B></FONT>!<br/>	
 ddt.dailyRecord.content14:nhận được<FONT COLOR='#b51609'><B>{0}</B></FONT>phần quà!<br/>	
 ddt.dailyRecord.content15:quen được bạn<FONT COLOR='#b51609'><B>{0}</B></FONT>!<br/>	
-ddt.dailyRecord.content16:hoàn thành nhiệm vụ chính:<FONT COLOR='#b51609'><B>{0}</B></FONT>nhiệm vu!<br/>	
+ddt.dailyRecord.content16:hoàn thành nhiệm vụ chính:<FONT COLOR='#b51609'><B>{0}</B></FONT>nhiệm vụ!<br/>	
 ddt.dailyRecord.content17:hoàn thành nhiệm vụ phụ:<FONT COLOR='#b51609'><B>{0}</B></FONT>nhiệm vụ!<br/>	
-ddt.dailyRecord.content18:hoàn thành nhiệm vụ hằng ngày:<FONT COLOR='#b516090'><B>{0}</B></FONT>nhiệm vu!<br/>	
+ddt.dailyRecord.content18:hoàn thành nhiệm vụ hằng ngày:<FONT COLOR='#b516090'><B>{0}</B></FONT>nhiệm vụ!<br/>	
 ddt.dailyRecord.content19:hoàn thành nhiệm vụ sự kiện:<FONT COLOR='#b51609'><B>{0}</B></FONT>nhiệm vụ!<br/>	
 ddt.dailyRecord.content20:tổng cộng hoàn thành:<FONT COLOR='#b51609'><B>{0}</B></FONT> nhiệm vụ VIP!<br/>	
 ddt.dailyRecord.content21:tốt nghiệp rồi!<br/>	
@@ -2831,7 +2831,7 @@ ddt.petsBag.eatPets.pleaseChoosePets:Vui lòng chọn thú cưng
 ddt.petsBag.eatPets.tipsNameLv:{0}  Lv.{1}
 ddt.petsBag.eatpets.petDesTitle: Thú cưng 3 sao hoặc trên 3 sao có thể manh hóa 
 ddt.petsBag.eatpets.eatAllPets: Manh hóa toàn bộ thú cưng 3 sao hoặc trên 3 sao, tiếp tục?
-ddt.petsBag.eatpets.eatGreatPets: Trong lần manh hóa này có thú cưng cao cấp, tiếp tục? \n <font color='#ff0000'>Thú cưng sau khi manh hoa sẽ bị xóa</font> 
+ddt.petsBag.eatpets.eatGreatPets: Trong lần manh hóa này có thú cưng cao cấp, tiếp tục? \n <font color='#ff0000'>Thú cưng sau khi manh hóa sẽ bị xóa</font> 
 ddt.petsBag.eatPets.maxLevel:Cấp độ đã đạt tối đa
 ddt.petsBag.isOpen:Cấp {0} sẽ được kích hoạt
 ddt.loader.PetsAdvancedDataFail:Tải tăng cấp sao pet thất bại
@@ -2905,7 +2905,7 @@ ddt.labyrinth.LabyrinthBoxIconTips.labelII:Chưa mở 3
 ddt.labyrinth.LabyrinthBoxIconTips.content:Chiến hồn đơn,vàng mê cung
 ddt.labyrinth.LabyrinthBoxIcon.floor:Tầng 
 ddt.labyrinth.LabyrinthFrame.text4:Tầng hiện tại
-ddt.labyrinth.LabyrinthFrame.text5:Exp tính lũy
+ddt.labyrinth.LabyrinthFrame.text5:Exp tích lũy
 ddt.labyrinth.LabyrinthFrame.text6:Xác nhận thiết lập lại?
 ddt.labyrinth.LabyrinthShopFrame.text1:Vàng mê cung
 ddt.labyrinth.LabyrinthShopFrame.text3:Xu khóa
@@ -2969,9 +2969,9 @@ game.objects.TransmissionGate.tipsII:Qua ải tiếp theo
 tnak.game.tryagain.titleII:Chọn tiếp tục để khiêu chiến lại ải trước đó  
 ddt.storeIIStrength.startStrengthClickTimerMsg:Bạn nhấp quá nhanh, vui lòng đợi 1 giây rồi thử lại.
 petsBag.petPropButtonTipSignTxt:Tiến hóa
-pet.eatPet.tips:Thú cưng sau khi manh hoa sẽ bị xóa
+pet.eatPet.tips:Thú cưng sau khi manh hóa sẽ bị xóa
 tank.view.bagII.GoodsTipPanel.setPurpleHtmlTxt:<FONT COLOR='FF9933'>{0}</FONT><FONT COLOR='E82EFE'>{1}</FONT><FONT COLOR='FF9933'>{2}</FONT>
-ShowForeView.NoLevelTip:Cần đạt Lv20 trở lên mới có thê sử dụng chức năng này!
+ShowForeView.NoLevelTip:Cần đạt Lv20 trở lên mới có thể sử dụng chức năng này!
 ddt.pets.releaseCannotTxt:Không thể thả thú cưng cấp sao cao
 ddt.pets.releaseTransformTxt:Chuyển
 ddt.pets.releaseDirectTxt:Thả
@@ -3234,7 +3234,7 @@ ddt.goFarm.need20:Mở nông trại Lv25!
 ddt.farm.farmHouse.click:Tính năng kho chưa mở		
 ddt.farm.farmHouse.click:Tính năng kho chưa mở		
 ddt.farms.fieldBlockSeedTips:Đang mở tính năng trợ giúp nông trại		
-ddt.farm.petguide1:Sở trưởng bảo vệ bản thân và đồng đội, kỹ năng  hồi phục, sở hữu các tính năng hồi phục mạnh.		
+ddt.farm.petguide1:Sở trường bảo vệ bản thân và đồng đội, kỹ năng  hồi phục, sở hữu các tính năng hồi phục mạnh.		
 ddt.farm.petguide2:Tấn công kiêm phòng thủ, đặc biệt chú ý đến phòng thủ bản thân, nếu ở địa hình có lợi thì sẽ phát huy uy lực		
 ddt.farm.petguide3:Sinh lực và phòng ngự hơi cao, là con pet có sở trường về phòng ngự và phản kích, cho dù bị đánh hội đồng cũng không sợ		
 ddt.farm.petguide4:Có thể tăng thêm lực chiến cho bản thân và đồng đội, cũng có kỹ năng khôi phục sinh lực		
@@ -3337,7 +3337,7 @@ worldboss.money.buffBtn.tip:Tốn {0} xu tăng sát thương cơ bản {1}
 worldboss.buffIcon.tip.title:Sát thương thuộc tính tăng {0}
 worldboss.buffIcon.tip.desc:Chỉ có hiệu quả khi chiến BOSS thế giới, có thể cộng dồn
 worldboss.buyBuff.confirmFrame.title:Mua BUFF
-worldboss.buyBuff.confirmFrame.desc:Lần này tiêu {0} xu,sát thương cơ bản tăng {1}\nBạn có thẻ click 20 lần,sát thương cơ bản sẽ đươc \ntăng tích lũy.
+worldboss.buyBuff.confirmFrame.desc:Lần này tiêu {0} xu,sát thương cơ bản tăng {1}\nBạn có thể click 20 lần,sát thương cơ bản sẽ được \ntăng tích lũy.
 worldboss.buyBuff.confirmFrame.desc2:\nTốn {0} xu tăng sát thương cơ bản {1}
 worldboss.buyBuff.confirmFrame.noAlert:Hôm nay không nhắc lại
 worldbosshelper.title:Trợ thủ chiến đấu Boss thế giới

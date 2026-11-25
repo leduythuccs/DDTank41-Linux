@@ -140,7 +140,7 @@
   <item ID="1139" Name="Thú cưng công kích Lv2 (rồng chuyên dùng)" EffectPic="" Description="x% sát thương của thú cưng công kích" Pic="-1" />
   <item ID="1149" Name="Thú cưng công kích Lv3 (rồng chuyên dùng)" EffectPic="" Description="x% sát thương của thú cưng công kích" Pic="-1" />
   <item ID="1150" Name="Đạn Rồng Lửa Lv1" EffectPic="effect042" Description="Giảm 1% HP, duy trì 3 turn" Pic="14" />
-  <item ID="1151" Name="Đạn Rồng Lửa Lv2" EffectPic="effect042" Description="Gảm 2% HP, duy trì 3 turn" Pic="14" />
+  <item ID="1151" Name="Đạn Rồng Lửa Lv2" EffectPic="effect042" Description="Giảm 2% HP, duy trì 3 turn" Pic="14" />
   <item ID="1152" Name="Đạn Rồng Lửa Lv3" EffectPic="effect042" Description="Giảm 3% HP, duy trì 3 turn" Pic="14" />
   <item ID="1153" Name="Hiệp Ước Tà Long Lv1" EffectPic="effect039" Description="Sát thương cơ bản tăng 15%, hộ giáp giảm 500" Pic="13" />
   <item ID="1154" Name="Hiệp Ước Tà Long Lv2" EffectPic="effect039" Description="Sát thương cơ bản tăng 25%, hộ giáp giảm 650" Pic="13" />
@@ -1668,8 +1668,8 @@
   <item ID="3227" Name="Thức-Rồng Gầm" EffectPic="" Description="Sát thương toàn màn hình" Pic="-1" />
   <item ID="3228" Name="Diệt Nhanh" EffectPic="" Description="12% sẽ diệt nhanh" Pic="-1" />
   <item ID="3229" Name="Sức Mạnh Cực Hàn" EffectPic="" Description="Mỗi tốn 1 Nộ, tăng 15% sát thương" Pic="116" />
-  <item ID="3230" Name="Thức-Băng SươngChắn" EffectPic="effect109" Description="Khiên Chắn" Pic="-1" />
-  <item ID="3231" Name="Thức-Băng SươngChắn" EffectPic="" Description="Khiên Chắn + Giảm Thương" Pic="117" />
+  <item ID="3230" Name="Thức-Băng Sương Chắn" EffectPic="effect109" Description="Khiên Chắn" Pic="-1" />
+  <item ID="3231" Name="Thức-Băng Sương Chắn" EffectPic="" Description="Khiên Chắn + Giảm Thương" Pic="117" />
   <item ID="3232" Name="Thức-Hàn Băng Phẫn Nộ" EffectPic="" Description="Nộ +" Pic="-1" />
   <item ID="3233" Name="Nộ +1" EffectPic="" Description="Nộ +1" Pic="-1" />
   <item ID="3235" Name="Nhận Kỹ Năng" EffectPic="" Description="Nhận Kỹ Năng" Pic="-1" />

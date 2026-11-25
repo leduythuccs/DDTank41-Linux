@@ -134,7 +134,7 @@
   </Item>
   <Item ID="5035" AchievementPoint="50" AchievementType="1" CanHide="true" Detail="Hoàn thành 10000 trận chiến liên server" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="38" PlaceID="4" PreAchievementID="5034," StartDate="2000-01-01 00:00:00" Title="Bình thiên hạ">
     <Item_Condiction AchievementID="5035" CondictionID="1" CondictionType="73" Condiction_Para1="0" Condiction_Para2="2000" />
-    <Item_Reward AchievementID="5035" RewardValueId="35" RewardCount="1" RewardType="1" RewardPara="Mĩm cười" />
+    <Item_Reward AchievementID="5035" RewardValueId="35" RewardCount="1" RewardType="1" RewardPara="Mỉm cười" />
   </Item>
   <Item ID="5034" AchievementPoint="40" AchievementType="0" CanHide="true" Detail="Hoàn thành 5000 trận chiến liên server" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="38" PlaceID="4" PreAchievementID="5033," StartDate="2000-01-01 00:00:00" Title="Chiến đầu vì màu cờ sắc áo">
     <Item_Condiction AchievementID="5034" CondictionID="1" CondictionType="73" Condiction_Para1="0" Condiction_Para2="1000" />
@@ -145,7 +145,7 @@
   <Item ID="5032" AchievementPoint="20" AchievementType="0" CanHide="true" Detail="Hoàn thành 1000 trận chiến liên server" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="38" PlaceID="4" PreAchievementID="5031," StartDate="2000-01-01 00:00:00" Title="Vượt long môn">
     <Item_Condiction AchievementID="5032" CondictionID="1" CondictionType="73" Condiction_Para1="0" Condiction_Para2="300" />
   </Item>
-  <Item ID="5031" AchievementPoint="10" AchievementType="0" CanHide="true" Detail="Hoàn thành 500 trận chiến liên server" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="38" PlaceID="4" PreAchievementID="0," StartDate="2000-01-01 00:00:00" Title="Vuợt vũ môn">
+  <Item ID="5031" AchievementPoint="10" AchievementType="0" CanHide="true" Detail="Hoàn thành 500 trận chiến liên server" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="38" PlaceID="4" PreAchievementID="0," StartDate="2000-01-01 00:00:00" Title="Vượt vũ môn">
     <Item_Condiction AchievementID="5031" CondictionID="1" CondictionType="73" Condiction_Para1="0" Condiction_Para2="100" />
   </Item>
   <Item ID="5030" AchievementPoint="50" AchievementType="1" CanHide="true" Detail="Hoàn thành 10000 trận chiến" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="37" PlaceID="4" PreAchievementID="5029," StartDate="2000-01-01 00:00:00" Title="Chiến đấu ngoan cường">
@@ -212,7 +212,7 @@
     <Item_Condiction AchievementID="5007" CondictionID="1" CondictionType="14" Condiction_Para1="0" Condiction_Para2="1000" />
     <Item_Reward AchievementID="5007" RewardValueId="31" RewardCount="1" RewardType="1" RewardPara="Chiến sĩ siêu cấp" />
   </Item>
-  <Item ID="5006" AchievementPoint="10" AchievementType="0" CanHide="true" Detail="Trong trận chiến tự do chiến thắng 500 lần" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="33" PlaceID="4" PreAchievementID="0," StartDate="2000-01-01 00:00:00" Title="Tả xung hửu đột">
+  <Item ID="5006" AchievementPoint="10" AchievementType="0" CanHide="true" Detail="Trong trận chiến tự do chiến thắng 500 lần" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="33" PlaceID="4" PreAchievementID="0," StartDate="2000-01-01 00:00:00" Title="Tả xung hữu đột">
     <Item_Condiction AchievementID="5006" CondictionID="1" CondictionType="14" Condiction_Para1="0" Condiction_Para2="500" />
   </Item>
   <Item ID="5005" AchievementPoint="50" AchievementType="1" CanHide="true" Detail="Đánh bại 10000 người chơi" EndDate="2050-01-01 00:00:00" IsActive="1" IsOther="1" IsShare="true" NeedMaxLevel="100" NeedMinLevel="0" PicID="32" PlaceID="4" PreAchievementID="5004," StartDate="2000-01-01 00:00:00" Title="Truyền nhân">

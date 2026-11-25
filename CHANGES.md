@@ -123,3 +123,7 @@ The original GameAdmin site (WebForms) runs again on .NET 8 (`GameAdmin.Web`), w
 - **Linux and the browser:** every server runs on .NET 8 on Linux. Tank.Web serves the site, the client's
   HTTP API and the art files, and passes the game socket through a WebSocket, because Ruffle cannot open raw
   TCP sockets.
+- **Vietnamese spelling:** about 150 kinds of typo fixed in the server messages, the client text, the login page and
+  the game data (items, quests, pet skills, maps, events), e.g. "sử lý" → "xử lý", "thàng công" → "thành công",
+  "hổ trợ" → "hỗ trợ", "tỉ xuất" → "tỉ suất". The database text is fixed in `Database/mariadb/Project_Game34.data.sql`,
+  and the client XMLs in Tank.Request carry the same text.

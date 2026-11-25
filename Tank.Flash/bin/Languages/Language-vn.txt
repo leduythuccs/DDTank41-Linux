@@ -7,7 +7,7 @@ AddAgilityEffect.msg:灵敏
 AddAttackEffect.msg:Cường kích
 AddBombEquipEffect.msg:Liên kích
 AddDamageEffect.msg:Thương nặng
-AddDanderEquipEffect.msg:Phẩn nộ
+AddDanderEquipEffect.msg:Phẫn nộ
 AddDefenceEffect.msg:Thạch phu
 AddLuckyEffect.msg:Ban phúc
 AddTurnEquipEffect.msg:Thần tốc
@@ -18,12 +18,12 @@ AtomBombEquipEffect.msg:Hạt nhân
 AvoidDamageEffect.msg:Giảm thương
 ContinueReduceBaseDamageEquipEffect.msg:Nhược hóa
 ContinueReduceBloodEquipEffect.msg:Bỏng
-FatalEffect.msg:Dẩn dắt
+FatalEffect.msg:Dẫn dắt
 IceFronzeEquipEffect.msg:Hàn băng
 LockDirectionEquipEffect.msg:Xích
 MakeCriticalEffect.msg:Bạo kích
-NoHoleEquipEffect.msg:Miển kháng
-RecoverBloodEffect.msg:Hổi phục
+NoHoleEquipEffect.msg:Miễn kháng
+RecoverBloodEffect.msg:Hồi phục
 ReduceStrengthEquipEffect.msg:Mệt
 ReduceDamageEffect.msg:Kiên cố
 ReflexDamageEquipEffect.msg:反射
@@ -43,7 +43,7 @@ ConsortiaApplyLoginHandler.ADD_Success:Xin phép thành công.
 ConsortiaApplyLoginHandler.ADD_Failed:Xin phép thất bại.
 ConsortiaApplyLoginHandler.DELETE_Success:Xóa xin phép thành công.
 ConsortiaApplyLoginPassHandler.Failed:Phê chuẩn lời mời thất bại.
-ConsortiaApplyLoginPassHandler.Success:Phe chuẩn lời mời thành công.
+ConsortiaApplyLoginPassHandler.Success:Phê chuẩn lời mời thành công.
 ConsortiaChangeChairmanHandler.Failed:Chuyển nhượng hội trưởng thất bại.
 ConsortiaChangeChairmanHandler.Success1:Nhượng hội trưởng cho <
 ConsortiaChangeChairmanHandler.Success2:>.
@@ -224,7 +224,7 @@ Game.Service.actions.ShutDown2: phút, hãy nhanh chóng thoát khỏi.
 
 ActiveBussiness.Msg0:Nhận lãnh thành công, vật phẩm đã gửi đến thư người dùng.
 ActiveBussiness.Msg1:Lỗi không xác định.
-ActiveBussiness.Msg2:Tên người dùngkhông tồn tại.
+ActiveBussiness.Msg2:Tên người dùng không tồn tại.
 ActiveBussiness.Msg3:Nhận vật phẩm  thất bại.
 ActiveBussiness.Msg4:Số này không tồn tại, hãy kiểm tra lại.
 ActiveBussiness.Msg5:Số này đã nhận thưởng, không thể nhận nữa.
@@ -473,7 +473,7 @@ Game.Server.SceneGames.Protect: Người này sử dụng card chống đá.
 ItemStrengthenHandler.Fail: Cường hóa thất bại
 ItemStrengthenHandler.congratulation:Chúc mừng! [{0}] cường hóa {1} thành công lên cấp {2}, năng lực vượt trội.
 ItemStrengthenHandler.congratulation2:Chúc mừng! [{0}] thăng cấp {1} thành công lên cấp {2}, năng lực vượt trội.
-OpenHoleHandler.congratulation:Chúc mừng! [{0}] đục lổ khe cắm số {1} [{2}] thành công lên cấp  {3}, năng lực vượt trội.
+OpenHoleHandler.congratulation:Chúc mừng! [{0}] đục lỗ khe cắm số {1} [{2}] thành công lên cấp  {3}, năng lực vượt trội.
 OpenBeadHandler.congratulation:Chúc mừng! [{0}] thăng cấp {1} thành công lên cấp {2}, năng lực vượt trội.
 
 OpenHoleHandler.Complete: 
@@ -534,7 +534,7 @@ HymenealCommand.NoBride: Cô dâu vắng mặt, không thể hành lễ
 HymenealCommand.Sender: Thư hệ thống
 
 
-HymenealCommand.Succeed: Hôn lễ cùa [{0}]và[{1}] bắt đầu 
+HymenealCommand.Succeed: Hôn lễ của [{0}]và[{1}] bắt đầu 
 
 LargessCommand.Content: {0} tặng bạn {1}lễ kim
 LargessCommand.Title: Lễ kim do {0} tặng
@@ -696,7 +696,7 @@ UserBuyItemHandler.Failed: thiếu tiền để mua không
 friendnotinthesameserver.Room: cầu thủ trong một phòng khác. 
 
 # 2009/12/07 
-Game.Server.Quests.FinishQuest.RewardGiftToken: {0} Xu khoa
+Game.Server.Quests.FinishQuest.RewardGiftToken: {0} Xu khóa
 Game.Server.Quests.FinishQuest.Medal: {0} Huy chương 
 
 # 2010/01/14 
@@ -1290,7 +1290,7 @@ PVPGame.SendGameOVer.Msg1:Bạn nhận được {0}  Xu
 PVPGame.SendGameOVer.Msg2:Bạn nhận được {0}  Lệnh bài từ event chiến thần.
 PVPGame.SendGameOVer.Msg3:Kết thúc trận đấu: Chiến thắng, được {0}  danh vọng.
 PVPGame.SendGameOVer.Msg4:Kết thúc trận đấu: Thất bại, được {0}  danh vọng.
-PVPGame.SendGameOVer.Msg5:Dữ liệu server bị lổi.
+PVPGame.SendGameOVer.Msg5:Dữ liệu server bị lỗi.
 PVPGame.SendGameOVer.Msg6:Kết thúc trận đấu: Chiến thắng, được {0}  Lệnh bài.
 PVPGame.SendGameOVer.Msg7:Kết thúc trận đấu: Thất bại, được {0}  Lệnh bài.
 AvatarColection.GoldNotEnough:Vàng không đủ!
@@ -1300,9 +1300,9 @@ AvatarColection.Msg3:Bộ sưu tập không thể gia hạn.
 AvatarColection.Msg4:Vinh dự không đủ!
 AvatarColection.Msg5:Bộ sưu tập không tìm thấy, thao tác thất bại.
 FastIinviteCall.Msg1:Chỉ thao tác mổi 15s một lần!
-GameRoomCreate.Msg1:Bạn đã hết lượt khiêu chến hôm nay!
+GameRoomCreate.Msg1:Bạn đã hết lượt khiêu chiến hôm nay!
 GameRoomCreate.Msg2:Tốc độ client quá nhanh, vui lòng đợi {0}s.
-ExploreMagicStone.Msg1:Lổi ServerConfig ID 402!
+ExploreMagicStone.Msg1:Lỗi ServerConfig ID 402!
 ExploreMagicStone.Msg2:Túi Ma thạch đã đầy!
 MovePlace.Msg1:Không thể trang bị cùng lúc 2 loại đá ma thạch thường cùng thuộc tính.
 ActivityPackageHandler.Msg1:Cấp độ chưa đủ, thao tác thất bại.
@@ -1310,28 +1310,28 @@ ActivityPackageHandler.Msg2:Nhận quà thất bại.
 ActivityPackageHandler.Msg3:Nhận quà thành công.
 AuctionAddHandler.Msg11:Số lượng không có thực, thao tác thất bại!
 AuctionAddHandler.Msg12:Cấp {0} trở lên mới có thể đấu giá vật phẩm.
-AuctionAddHandler.Msg13:Dữ liệu server lổi.
+AuctionAddHandler.Msg13:Dữ liệu server lỗi.
 AuctionUpdateHandler.Msg:Cấp {0} trở lên mới có thể đấu giá vật phẩm.
-BeadHandle.Msg1:Xảy ra lổi, chuyển kênh và thử lại.
+BeadHandle.Msg1:Xảy ra lỗi, chuyển kênh và thử lại.
 BeadHandle.Msg2:Cấp {0} mở
 BeadHandle.Msg3:Cấp châu báu và cấp lỗ không khớp.
 BeadHandle.Msg4:Rương đã đầy không thể di chuyển!
 BeadHandle.Msg5:Trang bị không phù hợp.
 BeadHandle.Msg6:Quá nhiều thao tác!
 BeadHandle.Msg7:Điều kiện không đủ!
-BeadHandle.Msg8:Mủi khoan không đủ!
+BeadHandle.Msg8:Mũi khoan không đủ!
 BeadHandle.Msg9:Rương đã đầy không thể mở thêm!
-BeadHandle.Msg10:Dữ liệu server lổi.
+BeadHandle.Msg10:Dữ liệu server lỗi.
 BeadHandle.Msg11:Bạn nhận được {0} lv{1}.
 BigBugleHandler.Msg:Chỉ thao tác mổi 15s một lần!
-CardResetHandler.Msg1:Xảy ra lổi, chuyển kênh và thử lại.
+CardResetHandler.Msg1:Xảy ra lỗi, chuyển kênh và thử lại.
 CardResetHandler.Msg2:Thẻ hồn không đủ
 CardResetHandler.Msg3:Tẩy điểm thành công!
 CardResetHandler.Msg4:Cập nhật thay đổi thành công!
 CardUseHandler.ManyAction:Quá nhiều thao tác!
 CBugleHandler.Msg:Chỉ thao tác mổi 30s một lần!
-Consortia.Msg1:Dữ liệu server lổi.
-Consortia.Msg2:Skill này chưa hổ trợ.
+Consortia.Msg1:Dữ liệu server lỗi.
+Consortia.Msg2:Skill này chưa hỗ trợ.
 Consortia.Msg3:Guild cập nhật kỹ năng Guild, thành công!
 Consortia.Msg4:Thao tác thành công.
 Consortia.Msg5:Level Guild chưa đủ.
@@ -1339,12 +1339,12 @@ Consortia.Msg6:Điều kiện không đủ, thao tác thất bại.
 Consortia.Msg7:Guild của bạn đã thay đổi huy hiệu mới!
 Consortia.Msg8:Không tìm thấy Guild, thao tác thất bại!
 Consortia.Msg9:Guild cấp 3 trở lên mới có thể triệu hồi boss.
-Consortia.Msg10:Dữ liệu server lổi, thao tác thất bại!
+Consortia.Msg10:Dữ liệu server lỗi, thao tác thất bại!
 Consortia.Msg11:Tài sản Guild không đủ, tạo boss thất bại!
 Consortia.Msg12:Tài sản Guild không đủ, thêm thời gian thất bại!
 DailyAwardHandler.Msg1:Nhận được Thẻ x2 kinh nghiệm 60 phút
 DailyAwardHandler.Msg2:Bạn đã nhận 1 lần hôm nay!
-DailyAwardHandler.Msg3:Sảy ra lổi hảy thử lại sau.
+DailyAwardHandler.Msg3:Xảy ra lỗi, hãy thử lại sau.
 DailyAwardHandler.Msg4:Bạn đã nhận 1 lần hôm nay!
 DailyAwardHandler.Msg5:Điểm danh thành công!
 DefyAfficheHandler.Msg:Xu không đủ!
@@ -1358,7 +1358,7 @@ EnterFarmHandler.Msg1:Cấp chưa đủ không thể vào!
 EnterFarmHandler.Msg2:Thu hoạch thất bại!
 EnterFarmHandler.Msg3:Thu hoạch thành công!
 EnterFarmHandler.Msg4:Thao tác thành công.
-EnterFarmHandler.Msg5:Không thể chộm nửa.
+EnterFarmHandler.Msg5:Không thể trộm nữa.
 EnterFarmHandler.Msg6:Kích hoạt trợ thủ thất bại!
 EnterFarmHandler.Msg7:Xu không đủ!
 EnterFarmHandler.Msg8:Xu khóa không đủ!
@@ -1368,7 +1368,7 @@ EnterFarmHandler.Msg11:Mở rộng thành công!
 CardDataHander.Msg1:Không tìm thấy thẻ này, thử lại sau.
 CardDataHander.Msg2:Thẻ này đã trang bị!
 CardDataHander.Msg3:Trang bị thành công!
-CardDataHander.Msg4:Hộp thẻ {0} bài lổi!
+CardDataHander.Msg4:Hộp thẻ {0} bài lỗi!
 CardDataHander.Msg5:Bạn nhận được {0} điểm thẻ hồn, {1} Thẻ bài.
 CardDataHander.Msg6:Bạn nhận được {0} điểm thẻ hồn.
 CardDataHander.Msg7:Số lần sử dụng thẻ hồn hôm nay đã hết.
@@ -1378,7 +1378,7 @@ CardDataHander.Msg10:Bạch kim
 CardDataHander.Msg11:Đồng
 FigSpiritUpGradeHandler.Msg:Chiến hồn không đủ!
 GoodsExchangeHandler.Msg1:{0} không đủ!
-GoodsExchangeHandler.Msg2:Lổi phần thưởng liên hệ admin!
+GoodsExchangeHandler.Msg2:Lỗi phần thưởng liên hệ admin!
 FriendAddHandler.Ofline: Người chơi không online.
 ItemAdvanceHandler.Msg1:Đặt đá tăng cấp và trang bị cần tăng cấp vào!
 ItemAdvanceHandler.Msg2:Level đã đạt cấp độ cao nhất, không thể thăng cấp!
@@ -1394,14 +1394,14 @@ OpenOneTotemHandler.Msg2:Danh vọng không đủ.
 PetHandler.Msg1:Xu không đủ!
 PetHandler.Msg2:Level chưa đủ, không thể mở.
 PetHandler.Msg3:Số lượng pet đã đạt giới hạn!
-PetHandler.Msg4:Dữ liệu server lổi.
+PetHandler.Msg4:Dữ liệu server lỗi.
 PetHandler.Msg5:Người chơi [{0}] thật ghê gớm mở trứng được {1} {2} sao.
 PetHandler.Msg6:Bạn nhận được {0} {1} sao
 PetHandler.Msg7:Phục hồi thất bại!
 PetHandler.Msg8:Phục hồi thành công!
-PetHandler.Msg9:Xảy ra lổi, chuyển kênh và thử lại.
-PetHandler.Msg10:Ðộ vui vẻ tang thêm {0}
-PetHandler.Msg11:Ðộ vui vẻ đã đạt mức tối da
+PetHandler.Msg9:Xảy ra lỗi, chuyển kênh và thử lại.
+PetHandler.Msg10:Độ vui vẻ tăng thêm {0}
+PetHandler.Msg11:Độ vui vẻ đã đạt mức tối đa
 PetHandler.Msg12:Chúc phúc thần gà giúp bạn tiết kiệm {0}xu.
 PetHandler.Msg13:Xu khóa không đủ. Thao tác thất bại.
 PetHandler.Msg14:Xu không đủ. Thao tác thất bại.
@@ -1419,13 +1419,13 @@ PetHandler.Msg24:Nhận phúc lợi Bậc thầy luyện thú!
 PetHandler.Msg25:Tiến hóa đã đạt cấp cao nhất.
 LotteryOpenBoxHandler.Msg1:Rương đang hoạt động!
 LotteryOpenBoxHandler.Msg2:Rương đã đầy không thể mở thêm!
-LotteryOpenBoxHandler.Msg3:Sảy ra lổi hảy thử lại sau.
+LotteryOpenBoxHandler.Msg3:Xảy ra lỗi, hãy thử lại sau.
 LotteryOpenBoxHandler.Msg4:{0} không đủ.
 LotteryOpenBoxHandler.Msg5:Bạn nhận được {0}
 PropBuyHandler.SystemNotSell:Hệ thống không bán vật phẩm này!
 QuickBuyGoldBoxHandler.Msg:Bạn nhận được  {0} vàng.
 SmallBugleHandler.Msg:Chỉ thao tác mổi 15s một lần!
-texpSystem.Error:Xảy ra lổi, chuyển kênh và thử lại.
+texpSystem.Error:Xảy ra lỗi, chuyển kênh và thử lại.
 TreasureHandler.Msg1:Bạn nhận được {0} x{1}
 TreasureHandler.Msg2:Số lần đào hôm nay đã hết.
 UserBuyItemHandler.ActiveMoneyNotEnough:Xu năng động không đủ mua {0}, Hiện tại bạn có {1} Xu năng động. 
@@ -1439,7 +1439,7 @@ UserSendMailHandler.Msg1:Đặt item cần gửi vào!
 UserSendMailHandler.Msg2:Số lượng không có thực, thao tác thất bại!
 UserSendMailHandler.Msg3:Không thể gửi cho nhân vật nhỏ hơn cấp {0}
 UserSendMailHandler.Msg4:Cấp {0} trở lên mới có thể gởi file đính kèm.
-WishBeadEquipHandler.Msg1:Lổi vật phẩm.
+WishBeadEquipHandler.Msg1:Lỗi vật phẩm.
 WishBeadEquipHandler.Msg2:Châu báu chúc phúc không đủ.
 EnterRoomAction.Msg1:Không có phòng game nào!
 EnterRoomAction.Msg2:Phòng đang sử dụng!
@@ -1451,29 +1451,29 @@ LargessCommand.Msg:Cấp {0} trở lên mới có thể tặng xu.
 GamePlayer.Msg1:Hệ thống vừa thêm vào {0} Xu năng động , nâng Xu năng động lên {1} Xu
 GamePlayer.Msg2:Bạn vừa tiêu hao {0} Xu năng động, còn lại {1} Xu năng động
 GamePlayer.Msg3:Max level kinh nghiệm quy đổi thành {0} công trạng
-GamePlayer.Msg4:Vàng đã đạt gới hạn.
-GamePlayer.Msg5:Xu đã đạt gới hạn.
+GamePlayer.Msg4:Vàng đã đạt giới hạn.
+GamePlayer.Msg5:Xu đã đạt giới hạn.
 GamePlayer.Msg6:Vượt ải thành công, hệ thống trừ {0} điểm hoạt bát.
-GamePlayer.Msg7:Tích luỹ đã đạt gới hạn.
+GamePlayer.Msg7:Tích luỹ đã đạt giới hạn.
 GamePlayer.Msg8:Xu năng động không đủ. Hiện tại bạn có {0} Xu năng động
-GamePlayer.Msg9:Xu năng động đã đạt gới hạn, không thể nhận thêm.
+GamePlayer.Msg9:Xu năng động đã đạt giới hạn, không thể nhận thêm.
 GamePlayer.Msg10:Thẻ hồn đã đạt giới hạn cao nhất, không thể nhận thêm.
 GamePlayer.Msg11:Tích lũy đã đạt giới hạn cao nhất, không thể nhận thêm.
 GamePlayer.Msg12:Tích lũy đã đạt giới hạn cao nhất, không thể nhận thêm.
-GamePlayer.Msg13:Số lượng quá lớn hảy nhập lại. Số lượng tối đa là {0}.
-GamePlayer.Msg14:Số lượng Xu quá lớn hảy nhập lại. Tối đa là {0}.
+GamePlayer.Msg13:Số lượng quá lớn hãy nhập lại. Số lượng tối đa là {0}.
+GamePlayer.Msg14:Số lượng Xu quá lớn hãy nhập lại. Tối đa là {0}.
 GamePlayer.Msg15:Số lần tham gia đấu giá hôm nay đã hết. Tối đa là {0}.
 GamePlayer.Msg16:Số lần gửi mail hôm nay đã hết. Tối đa là {0}.
 GamePlayer.Msg17:Xu khóa không đủ, thao tác thất bại.
 GamePlayer.Msg18:Hành trang đã đầy, vật phẩm chuyển vào -Túi ẩn- Vui lòng chờ 15p để nhận lại vật phẩm qua thư.
 GamePlayer.Msg19:Hành trang đã đầy. Gửi vào thư.
 GamePlayer.Msg20:Số lần tặng quà hôm nay đã hết. Tối đa là {0}.
-Living.Msg1:{0} trong lúc nguy nan sử đụng Rơm cứu mạng hồi phục {1} máu.
+Living.Msg1:{0} trong lúc nguy nan sử dụng Rơm cứu mạng hồi phục {1} máu.
 Player.Msg1:Ma Pháp không đủ.
 PVEGame.Msg1:Bạn nhận được {0} x{1}, trong lần tấn công này.
 PVPGame.SendGameOVer.Msg8:, {0}  Xu khóa
 PVPGame.SendGameOVer.Msg9:Bạn nhận x{0} exp từ Event thuyền rồng (Đắp tượng).
-GameRoomRoomSetupChange.Msg1:Dữ liệu server lổi.
+GameRoomRoomSetupChange.Msg1:Dữ liệu server lỗi.
 GameRoomRoomSetupChange.Msg2:Chúc phúc thần gà giúp bạn tiết kiệm {0}xu.
 GameRoomRoomSetupChange.Msg3:đã tham gia hôm nay.
 GameRoomRoomSetupChange.Msg4:Bạn
@@ -1482,9 +1482,9 @@ PlayerDice.GetLevelAward:Bạn nhận được {0}
 PlayerExtra.TakeCard:Lượt lật thẻ đã hết!
 UpHorse.Msg:Nhận phúc lợi Bậc thầy luyện thú!
 UpSkill.Msg1:Thăng cấp thành công, nhận {0} exp
-UpSkill.Msg2:Dữ liệu server lổi, code: {0}
+UpSkill.Msg2:Dữ liệu server lỗi, code: {0}
 ConverScore.Msg1:Tích lũy không đủ.
-MagicStone.LevelUp:Chưa đặt Ma thạch vào ô năng cấp.
+MagicStone.LevelUp:Chưa đặt Ma thạch vào ô nâng cấp.
 ActiveSystemHandler.Msg1:Hết thời gian, bạn phải trả phí để tiếp tục.
 ActiveSystemHandler.Msg2:Thao tác thành công!
 ActiveSystemHandler.Msg3:Số lượng ma, thao tác thất bại.
@@ -1493,8 +1493,8 @@ ActiveSystemHandler.Msg5:Tích lũy 3 người tuyết để nhận quà
 ActiveSystemHandler.Msg6:Số lần nhận thưởng đã hết.
 ActiveSystemHandler.Msg7:Không đủ người tuyết, thao tác thất bại.
 ActiveSystemHandler.Msg8:Không đủ điều kiện, thao tác thất bại.
-ActiveSystemHandler.Msg9:Dữ liệu server lổi.
-ActiveSystemHandler.Msg10:Tải dử liệu thất bại. Vui lòng thử lại sau.
+ActiveSystemHandler.Msg9:Dữ liệu server lỗi.
+ActiveSystemHandler.Msg10:Tải dữ liệu thất bại. Vui lòng thử lại sau.
 ActiveSystemHandler.Msg11:Bạn nhận được {0} x{1}.
 ActiveSystemHandler.Msg12:Thật may bạn được lên tầng tiếp theo.
 ActiveSystemHandler.Msg13:Thật may bạn nhận thêm 10 điểm tích lũy.
@@ -1505,7 +1505,7 @@ ActiveSystemHandler.Msg17:Thật may bạn nhận thêm 10% điểm tích lũy.
 ActiveSystemHandler.Msg18:Kim tự tháp
 ActiveSystemHandler.Msg19:Thật may bạn nhận thêm {0} điểm tích lũy.
 BuyTransnationalGoodsHandler.Msg1:Tích lũy không đủ.
-ChickenBoxHandler.Msg1:Dữ liệu server lổi.
+ChickenBoxHandler.Msg1:Dữ liệu server lỗi.
 ChickenBoxHandler.Msg2:Số lần xuyên thấu vòng này đã hết.
 ChickenBoxHandler.Msg3:Tiêu hao Xu, tạo mới thành công.
 ChickenBoxHandler.Msg4:Tạo mới miễn phí thành công.
@@ -1525,27 +1525,27 @@ QuestOneKeyFinishHandler.Msg:Số lần hoàn thành nhanh đã dùng hết
 SearchGoods.Msg1:Thao tác thành công! 
 SearchGoods.Msg2:Kho báu đã đạt cấp cao nhất!
 UseConsortiaReworkNameHandler.Msg1:Guild Không tồn tại.
-UseConsortiaReworkNameHandler.Msg2:Chủ Giuld mới có thể đổi tên.
+UseConsortiaReworkNameHandler.Msg2:Chủ Guild mới có thể đổi tên.
 UseConsortiaReworkNameHandler.Msg3:Tên Guild đã được sử dụng.
 UseReworkNameHandler.Msg:Thay đổi Nickname thất bại
-KingBlessHandler.Msg1:Kích hoạt Bật thầy luyện thú thành công!
-KingBlessHandler.Msg2:Gia hạn Bật thầy luyện thú thành công!
+KingBlessHandler.Msg1:Kích hoạt Bậc thầy luyện thú thành công!
+KingBlessHandler.Msg2:Gia hạn Bậc thầy luyện thú thành công!
 KingBlessHandler.Msg3:Gói kích hoạt Chúc phúc thần gà không phù hợp!
 KingBlessHandler.Msg4:Bạn bè không tồn tại!
-KingBlessHandler.Msg5:Gia hạn Chúc phúc thần gà cho {0} thàng công!
-KingBlessHandler.Msg6:Kích hoạt Chúc phúc thần gà cho {0} thàng công!
+KingBlessHandler.Msg5:Gia hạn Chúc phúc thần gà cho {0} thành công!
+KingBlessHandler.Msg6:Kích hoạt Chúc phúc thần gà cho {0} thành công!
 KingBlessHandler.Msg7:Kích hoạt Chúc phúc thần gà thành công!
 KingBlessHandler.Msg8:Gia hạn Chúc phúc thần gà thành công!
 KingBlessHandler.Msg9:Kích hoạt Chúc phúc thần gà cho {0} thành công!
-KingBlessHandler.Msg10:{0}, Kích hoạt Chúc phúc thần gà cho bạn thàng công!
-KingBlessHandler.Msg11:Gia hạn Chúc phúc thần gà cho {0} thàng công!
+KingBlessHandler.Msg10:{0}, Kích hoạt Chúc phúc thần gà cho bạn thành công!
+KingBlessHandler.Msg11:Gia hạn Chúc phúc thần gà cho {0} thành công!
 KingBlessHandler.Msg12:{0}, gia hạn Chúc phúc thần gà cho bạn thành công!
 OpenVipHandler.Msg1:Kích hoạt VIP thành công!
-OpenVipHandler.Msg2:Tiếp phí VIP cho {0} thàng công!
+OpenVipHandler.Msg2:Tiếp phí VIP cho {0} thành công!
 OpenVipHandler.Msg3:Gia hạn VIP thành công!
-OpenVipHandler.Msg4:Kích hoạt VIP cho {0} thàng công!
+OpenVipHandler.Msg4:Kích hoạt VIP cho {0} thành công!
 OpenVipHandler.Msg5:{0}, tiếp phí VIP cho bạn thành công!
-OpenVipHandler.Msg6:Gia hạn VIP cho {0} thàng công!
+OpenVipHandler.Msg6:Gia hạn VIP cho {0} thành công!
 OpenVipHandler.Msg7:{0}, gia hạn VIP cho bạn thành công!
 MissionEnergyHandler.Msg1:Thao tác thành công.
 MissionEnergyHandler.Msg2:Số lần mua trong ngày đã đạt tối đa!
@@ -1563,9 +1563,9 @@ BaseRingStationChallenges.Msg1:Khiêu chiến
 BaseRingStationChallenges.Msg2:Ngon thì tới đây…
 Lightriddle.Msg1:5 Chiến Hồn Đơn, 10.000 EXP và 29 điểm tích lũy
 Lightriddle.Msg2:1 Chiến Hồn Đơn và 1.000 EXP.
-Lightriddle.Msg3:Hệ thống Nguyên Tiêu lổi.
+Lightriddle.Msg3:Hệ thống Nguyên Tiêu lỗi.
 Lightriddle.Msg4:5 Chiến Hồn Đơn, 10.000 EXP và 58 điểm tích lũy
-PicCherishInfo.Msg1:Phụ kiện lổi, thao tác thất bại
+PicCherishInfo.Msg1:Phụ kiện lỗi, thao tác thất bại
 PicCherishInfo.Msg2:Kích hoạt phụ kiện {0} thành công!
 #2014/11/14
 ChangeHorse.Msg1:Thu hồi thành công!
@@ -1573,7 +1573,7 @@ ChangeHorse.Msg2:Sử dụng thành công!
 BaseRoom.Msg1:Chưa lựa chọn?
 BaseRoom.Msg2:<Mời tham gia Phó bản>
 BaseRoom.Msg3:<Mời tham gia đấu đội>
-BaseRoom.Msg4: (Dể)
+BaseRoom.Msg4: (Dễ)
 BaseRoom.Msg5: (Thường)
 BaseRoom.Msg6: (Khó)
 BaseRoom.Msg7: (Anh hùng)
@@ -1583,7 +1583,7 @@ GamePlayer.Msg20:Lần tấn công này nhận {0} danh vọng và {1} điểm v
 GamePlayer.Msg21:Lần tấn công này nhận {0} cống hiến và {1} điểm vinh dự.
 GamePlayer.Msg22:Phần thưởng tham gia Đảo hải tặc đợt {0}
 GamePlayer.Msg23:Phần thưởng vượt địa ngục hạng {0} độ khó {1} sao
-CryptBossHandler.NotAvable: Dữ liệu server lổi thao tác thất bại.
+CryptBossHandler.NotAvable: Dữ liệu server lỗi thao tác thất bại.
 CryptBossHandler.Done: Số lần khiêu chiến hôm nay đã hết.
 CryptBossHandler.NotEnoughLevel: Cấp sao chưa đủ.
 SystermSender.Msg: Hệ thống
@@ -1611,7 +1611,7 @@ AccumulAtiveLoginAward.Success:Quà đăng nhập {0}
 #2014/12/12
 ItemEnchant.NoHaveSoulstone: Chưa đặt Đá linh hồn vào.
 ItemEnchant.NoHaveItem:Trang sức +5 mới có thể phụ ma.
-ItemEnchant.DataError:Dữ liệu server lổi.
+ItemEnchant.DataError:Dữ liệu server lỗi.
 ItemEnchant.AddExpSuccess:Phụ ma thành công, nhận {0} exp.
 MagicHouse.Full:Kho báu đã đầy.
 itemtransferhandler.IsMagic:Trang sức đã phụ ma không thể di chuyển.
@@ -1631,7 +1631,7 @@ MagicHouseOpenFreeBox.Empty:Số lần mở miễn phí hôm nay đã hết.
 MagicHouseChargeBox.Empty:Số lượt quay hôm nay đã hết.
 ChangeSexHandlerHandler.Success:Đổi giới tính thành công. Đăng nhập lại để cập nhật thông tin.
 ChangeSexHandlerHandler.Fail:Đổi giới tính thất bại.
-RingStation.signMsg:Này này, có giám đấu với ta không...
+RingStation.signMsg:Này này, có dám đấu với ta không...
 RingStation.RankAward:Phần thưởng xếp hạng Lôi đài
 Ringstasion.BattleLost:Thua trận lôi đài nhận {0} lệnh bài.
 Ringstasion.BattleWin:Lôi đài chiến thắng nhận {0} lệnh bài.
@@ -1646,7 +1646,7 @@ MagicHouseUpdateMessage.Junior:Chưa kích hoạt Học việc, thao tác thất
 MagicHouseUpdateMessage.Mid:Chưa kích hoạt Tập sự, thao tác thất bại.
 AddGift.RemoveNewbie:Vượt cấp thành công, Tạo phòng thi đấu hoặc phó bản để cập nhật tính năng game.
 CreateRank.Newbie:Bé tập chơi
-LoadFromDb.ErrorItem:Vật phẩm không hổ trợ. Gửi hỗ trợ đổi vật phẩm khác.
+LoadFromDb.ErrorItem:Vật phẩm không hỗ trợ. Gửi hỗ trợ đổi vật phẩm khác.
 UpdateLabyrinth.Exp:Bạn nhận được {0} kinh nghiệm
 UpdateLabyrinth.GoldLaby:, Vàng mê cung x
 DragonBoatAward.Curr:Phần thưởng Thuyền rồng hạng {0}
@@ -1657,14 +1657,14 @@ PVPGame.SendGameOVer.DisibleBonusMoneyHour:Không tặng xu chiến đấu từ 
 PVPGame.SendGameOVer.GoldHour: Giờ vàng nhận thêm {0} xu.
 PVPGame.SendGameOVer.SameIp:Bạn chơi quá nhiều tài khoản trên 1 máy, không thể nhận xu, điểm tích lũy.
 PVPGame.SendGameOVer.DragonBoatOpen:, Nhận được {0} tích lũy thường và tích lũy xếp hạng thuyền rồng(Tượng)
-PVPGame.SendGameOVer.Exp:Nhận thêm khinh nghiệm thưởng {0} exp
-CardUseHandler.MaxExp:Max level khinh nghiệm quy đổi thành {0} công trạng
+PVPGame.SendGameOVer.Exp:Nhận thêm kinh nghiệm thưởng {0} exp
+CardUseHandler.MaxExp:Max level kinh nghiệm quy đổi thành {0} công trạng
 TreasurePuzzleEnter.LoadDataFail:Tải dữ liệu thất bại
 TreasurepuzzleUsePice.HaveNotPice:Mảnh ghép không đủ.
 TreasurepuzzleUsePice.UseSuccess:Dùng mảnh ghép thành công.
 TreasurepuzzleUsePice.FullSlot:Ô này đã đầy
 TreasurePuzzleEnter.GetAwardFail: Nhận thưởng thất bại.
-TreasurePuzzleEnter.GetAwardFail2:Phần thưởng lổi, nhận thưởng thất bại.
+TreasurePuzzleEnter.GetAwardFail2:Phần thưởng lỗi, nhận thưởng thất bại.
 TreasurePuzzleEnter.GetAwardTrue:Nhận thưởng thành công. Vui lòng, kiểm tra thư.
 TreasurePuzzleEnter.Title:Phần thưởng Ghép hình.
 TreasurePuzzleEnter.PiceNotEnought:Mảnh ghép chưa đủ.
@@ -1677,11 +1677,11 @@ BoguAdventureReviveGame.EndGame:Đã hoàn tất cuộc hành trình hôm nay.
 BoguAdventureReviveGame.FreeReset:Miễn phí tạo lại thành công.
 BoguAdventureReviveGame.Reset:Tạo lại thành công.
 BoguAdventureReviveGame.Revive:Hồi sinh thành công.
-BoguAdventureAcquireAward.Title:Gà con mạo hiễm gói {0}.
+BoguAdventureAcquireAward.Title:Gà con mạo hiểm gói {0}.
 BoguAdventureAcquireAward.Newbie:Tân thủ
 BoguAdventureAcquireAward.Pro:Chuyên gia
 BoguAdventureAcquireAward.Master:Đại Sư
-BoguAdventureUpdateCell.AwardError:Lổi phần thưởng mã {0}.
+BoguAdventureUpdateCell.AwardError:Lỗi phần thưởng mã {0}.
 BoguAdventureUpdateCell.GotAward:Chưa đủ điều kiện không thể nhận thưởng.
 BoguAdventureUpdateCell.GetAwardSuccess:Nhận thưởng thành công.
 LuckyStarTopTenAward.GetAward:Phần thưởng hạng {0} hoạt động Sao may mắn
@@ -1700,7 +1700,7 @@ SendCloudBuyLotteryRandomReward.Notice:Chúc mừng! [{0}] trong sự kiện "T�
 CloudBuyLotteryGetAwards.Fail:Số lần tụ bảo đã hết
 CloudBuyLotteryBuyGoods.Fail:Sự kiện đã kết thúc
 CloudBuyLotteryBuyGoods.Success:Mua thành công! Nhận được {0} tụ bảo.
-GameRoomRoomSetupChange.UseKingBless:Chúc phúc vua gà giúp bạn tiếc kiệm được {0} Minh chứng dũng sĩ
+GameRoomRoomSetupChange.UseKingBless:Chúc phúc vua gà giúp bạn tiết kiệm được {0} Minh chứng dũng sĩ
 GameRoomRoomSetupChange.ConditionFail:Minh chứng dũng sĩ không đủ.
 
 PetHandler.EatPetNotEnoughtCount:Số lượng không đủ.
@@ -1712,12 +1712,12 @@ CatchInsectGetPrize.Success:Nhận thưởng thành công
 Function.OpenSoon:Sẽ ra mắt trong nay mai.
 MagpieBridgeBuyCount.Success:Thao tác thành công.
 MagpieBridgeRollDice.Fail:Lực hành động không đủ.
-CatchInsect.AddScore:Bẳt bọ hung thành công, nhận được {0} điểm hè.
-CatchInsect.AddSmallScore: Bẳt được 
+CatchInsect.AddScore:Bắt bọ hung thành công, nhận được {0} điểm hè.
+CatchInsect.AddSmallScore: Bắt được 
 
 GypsyShopPlayerInfo.LoadDataFail:Tải dữ liệu thất bại.
 GypsyShopRefresh.Success:Tạo mới thành công.
-GypsyShopRefresh.Fail:Vinh dự không đủ. Làm mới lần này cần {0} cinh dự
+GypsyShopRefresh.Fail:Vinh dự không đủ. Làm mới lần này cần {0} vinh dự
 GypsyShopBuy.Success:Mua thành công.
 GypsyShopBuy.Fail:Mua thất bại.
 GypsyShopBuy.OutOfDate:Đã mua vật phẩm này.
@@ -1780,11 +1780,11 @@ HomeBarDrink.CDTime:Thời gian chờ chưa hết
 UpGradeHouse.MaxLevel:Đã đạt cấp tối đa.
 UpGradeHouse.NotEnoughtItem:Nguyên liệu không đủ
 BuyAndActive.Success:Mua thành công.
-HotSpringRoom.RoomName:Thư giản và tán gẩu!
-HotSpringRoom.RoomIntroduction:Hãy vào thư giản và tán gẩu nào!
+HotSpringRoom.RoomName:Thư giãn và tán gẫu!
+HotSpringRoom.RoomIntroduction:Hãy vào thư giãn và tán gẫu nào!
 HotSpringEnterConfirmHandler.RoomNotExit:Phòng này không tồn tại
 HotSpringEnterConfirmHandler.RoomFull:Phòng đã đầy
-HotSpringRoomPlayerRemoveHandler.Msg1:Bạn đã rồi phòng số {0}.
+HotSpringRoomPlayerRemoveHandler.Msg1:Bạn đã rời phòng số {0}.
 HotSpringRoomPlayerRemoveHandler.Msg2:Chiến hữu [{0}] đã rời phòng.
 HotSpringEnterConfirmHandler.RoomFullAll:Không còn phòng trống.
 HotSpringRoomEnterDataHandler.NotEmoughtGold:Vàng không đủ.
@@ -1796,11 +1796,11 @@ Present.FailByPermission:Tặng quà thất bại.
 FishBegin.LoadDbFail:Tải thông tin thất bại.
 FishBegin.EndGame:Lượt chơi hôm nay đã hết.
 FishEnd.FishTip:Đang câu cá.
-FishEnd.LoadDbFail:Dữ liệu server lổi
+FishEnd.LoadDbFail:Dữ liệu server lỗi
 FishBroadcast.Notice: Người chơi [{0}] tại Hồ cá câu được {1}, quá dzữ!
 UserBuyItemHandler.FailByFishScore:Vui lòng đổi vật phẩm tại Hồ cá.
 UserBuyItemHandler.FishScore:Tích lũy hồ cá không đủ.
-SpeedUp.GetFail:Dữ liệu lổi, vui lòng thử lại sau.
+SpeedUp.GetFail:Dữ liệu lỗi, vui lòng thử lại sau.
 SpeedUp.Success:Tăng tốc thành công.
 Pick.Success:Hái trái thành công. Bạn nhận được {0}.
 SendRedPackage.Fail:Lì xì không đủ.
@@ -1835,8 +1835,8 @@ EquipBringUpHandler.Update.Success1:Bồi dưỡng thành công, nhận {0}exp!
 EquipBringUpHandler.Update.Success2:Bồi dưỡng thành công, {0} tiến cấp lên {1}!
 EquipBringUpHandler.Update.Fail:Bồi dưỡng thất bại.
 EquipBringUpHandler.congratulation:Chúc mừng! [{0}] Bồi dưỡng thành công {1}, năng lực vượt trội.
-PetHandler.ProtectItem.NotEnought: {0} đủ. Tối thiếu cần {1} {0}
-PetHandler.PetBreak.ErrorData:Dữ liệu server lổi, cấp đột phá {0} không khớp.
+PetHandler.ProtectItem.NotEnought: {0} không đủ. Tối thiểu cần {1} {0}
+PetHandler.PetBreak.ErrorData:Dữ liệu server lỗi, cấp đột phá {0} không khớp.
 PetHandler.BreakItemInfo.ErrorData1:Không tìm thấy nguyên liệu trong túi của bạn.
 PetHandler.BreakItemInfo.ErrorData2:Nguyên liệu không đủ.
 PetHandler.ProtectItem.ErrorData:Không tìm thấy bùa bảo vệ trong túi của bạn.
@@ -1850,17 +1850,17 @@ FigSpiritUpGradeHandler.WrongPlace: Vị trí không khớp.
 UseLoveChocolateHandler.UseFail:Số lần sử dụng đạo cụ hôm nay đã hết.
 NewTitleCardHandler.ItemNotFound:Vật phẩm không tồn tại.
 NewTitleCardHandler.TitleNotFound:Danh hiệu chưa mở.
-NewTitleCardHandler.RemoveItemError:Sử lý dữ liệu lổi. Vui lòng thử lại sau.
+NewTitleCardHandler.RemoveItemError:Xử lý dữ liệu lỗi. Vui lòng thử lại sau.
 NewTitleCardHandler.Success:Chúc mừng, bạn đã nhận được danh hiệu {0}.
 UseLoveChocolateHandler.UnMerry:Bạn phải kết hôn để dùng chức năng này.
 AddPetEquip.WrongItem:Trang bị không phù hợp
 AddPetEquip.Success:Trang bị thành công!
 AddPetEquip.Fail:Trang bị thất bại!
 FeedPet.Success: {0} thăng cấp {1}!
-PetRisingStar.PetNotFound:Lổi hệ thống vui lòng thử lại sau.
+PetRisingStar.PetNotFound:Lỗi hệ thống vui lòng thử lại sau.
 PetRisingStar.ItemNotFound:Nguyên liệu không phù hợp
-PetRisingStar.UnSupport:Hệ thống chưa hổ trợ pet này.
-ToyGrapple.ErroPrice:Lổi hệ thống, vui lòng liên hệ hổ trợ!
+PetRisingStar.UnSupport:Hệ thống chưa hỗ trợ pet này.
+ToyGrapple.ErroPrice:Lỗi hệ thống, vui lòng liên hệ hỗ trợ!
 ToyGrapple.ErroAward:Hệ thống chưa cập nhật phần thưởng, vui lòng quay lại sau!
 BuyBadgeHandler.Success:Mua huy hiệu thành công!
 BuyBadgeHandler.Fail:Mua huy hiệu thất bại!
@@ -1873,11 +1873,11 @@ RingStation.Msg:Thách đấu lôi đài thành công! Bắt đầu chiến đ�
 CreateInstanceFail:Phó bản bạn chọn chưa cập nhật.
 SurvivalModeClose:Đấu trường 1vs5 đã đóng.
 HomeTemple.Handle.Immolation.ItemNotEnough:Nguyên liệu không đủ.
-HomeTemple.Handle.Immolation.ErrorData:Lổi dữ liệu vui lòng thử lại sau.
+HomeTemple.Handle.Immolation.ErrorData:Lỗi dữ liệu vui lòng thử lại sau.
 HomeTemple.Handle.Immolation.MaxLevel:Miếu thần đã đạt cấp tối đa.
 EquipBringUpHandler.ItemNotFound: Không tìm thấy vật phẩm. Vui lòng thử lại sau.
-EquipBringUpHandler.DoNotSuport:Hệ thống chưa hổ trợ vật phẩm này
-GuardCore.Handle.Equip.DataError:Lổi dữ liệu. Vui lòng thử lại sau.
+EquipBringUpHandler.DoNotSuport:Hệ thống chưa hỗ trợ vật phẩm này
+GuardCore.Handle.Equip.DataError:Lỗi dữ liệu. Vui lòng thử lại sau.
 GuardCore.Handle.Equip.PlayerLevelNotEngough:Cấp nhân vật chưa đủ.
 GuardCore.Handle.Equip.GuardGradeNotEnough:Cấp bảo vệ chưa đủ.
 GuardCore.Handle.Equip.Success:Trang bị bảo vệ thành công!
@@ -1886,7 +1886,7 @@ GuardCore.Handle.LevelUp.GoldNotEnough:Vàng không đủ.
 GuardCore.Handle.LevelUp.GPNotEnough:Kinh nghiệm nhân vật không đủ.
 GuardCore.Handle.LevelUp.Success:Tăng cấp bảo vệ thành công.
 GuardCore.Handle.LevelUp.ItemNotEnough:{0} không đủ.
-Systerm.DDTMoney.NotOpen:Hệ thống xu khóa chưa mở. Vui lòng gửi hổ trợ để mở chức năng này.
+Systerm.DDTMoney.NotOpen:Hệ thống xu khóa chưa mở. Vui lòng gửi hỗ trợ để mở chức năng này.
 CardResetHandler.CardsoulNotEnough:Điểm thẻ bài không đủ.
 IMListLoad.Friend:Bạn bè
 IMListLoad.BadFriend:D.sách đen
@@ -1905,15 +1905,15 @@ GuardCore.Handle.LevelUp.MaxLevel:Hồn bảo vệ đã đạt cấp tối đa.
 PetHandler.PetAwaken.NoFound:Bạn chưa đặt trang bị pet vào ô.
 PetHandler.PetAwaken.NoFoundStone:Đá thức tỉnh không đủ.
 PetHandler.PetAwaken.NoFoundTemplate:Lỗi dữ liệu, vui lòng thử lại sau.
-BeadHandle.RuneAdvanceTemplate.notFound:Châu báu bạn đổi không hổ trợ.
+BeadHandle.RuneAdvanceTemplate.notFound:Châu báu bạn đổi không hỗ trợ.
 BeadHandle.RuneAdvanceTemplate.notFound2:Không tìm thấy nguyên liệu chính.
 BeadHandle.RuneAdvanceTemplate.notFound3:Nguyên liệu không phù hợp
-BeadHandle.RuneAdvanceTemplate.notFound4:Dữ liệu server lổi.
+BeadHandle.RuneAdvanceTemplate.notFound4:Dữ liệu server lỗi.
 BeadHandle.RuneAdvanceTemplate.Success:Tăng cấp thành công.
 
 #2016.11.1
 DDTKingGradeUp.Maxlevel:Cấp vua gà đã đạt cấp tối đa.
-DDTKingGradeUp.DataError:Lổi dữ liệu vui lòng thử lại sau.
+DDTKingGradeUp.DataError:Lỗi dữ liệu vui lòng thử lại sau.
 DDTKingGradeUp.CostNotEnought:Điểm không đủ.
 DDTKingGradeUp.NọtHaveProp:Không có thuộc tính để tái tạo lại.
 DDTKingGradeUp.Success:Tái tạo thành công!
@@ -1921,8 +1921,8 @@ MailGetAttachHandler.LimitAttachMoney:Cấp {0} mới có thể nhận thư đí
 LargessCommand.TankHandle.Msg:Cấp {0} mới có thể tặng xu.
 AddTemplate.Notice:Bạn nhận được {0}x{1}.
 UseReworkNameHandler.HasSpecialCharacters:Nickname mới có chứa ký tự không hợp lệ.
-OpenOneTotemHandler.Maxlevel: Đã đặt cấp tối đa.
-OpenOneTotemHandler.ErrorData:Lổi dữ liệu. Không thể nâng cấp
+OpenOneTotemHandler.Maxlevel: Đã đạt cấp tối đa.
+OpenOneTotemHandler.ErrorData:Lỗi dữ liệu. Không thể nâng cấp
 GoodsExchangeHandler.ItemsExchangeNotEnought:Nguyên liệu không đủ.
 StartGameAction.WaitingPveRestart:Hệ thống phó bản đang khởi động lại vui lòng chờ trong giây lát.
 BeadHandler.Notice:Người chơi {3}-[{0}] tăng cấp nhận được châu báu: {1} Lv{2}. Năng lực tăng lên một bậc.
@@ -1944,7 +1944,7 @@ BombKing.Msg.Step3Completed2:Giải đấu chí tôn: Vòng Chung Kết đấu l
 BombKing.Msg.Step3Completed3:Giải đấu chí tôn: Vòng Chung Kết đấu loại trực tiếp: vòng bán kết đã kết thúc. Các Gunner nhanh chóng chuẩn bị cho vòng chung kết sẽ bắt đầu sau 1 phút nữa.
 BombKing.Msg.CompletedAll:Giải đấu chí tôn: Vòng chung kết đã kết thúc.
 BombKing.Msg.Battle.NotAllowJoin:Bạn không có tư cách tham gia!
-BombKing.Msg.Battle.NoStart:Giải đâu chí tôn chưa bắt đầu!
+BombKing.Msg.Battle.NoStart:Giải đấu chí tôn chưa bắt đầu!
 BombKing.Msg.Mail.Title.Award.Step1:Phần thưởng hạng {0} vòng loại
 BombKing.Msg.Mail.Title.Award.Step2:Phần thưởng hạng {0} vòng tiến cấp
 BombKing.Msg.Mail.Title.Award.Step3:Phần thưởng hạng {0} vòng chung kết
@@ -2038,7 +2038,7 @@ EquipAmuletActivate.NotFoundAmulet:Chưa trang bị bùa hộ thân.
 EquipAmuletActivate.StiveNotEnough:Bụi không đủ.
 GodCardExchange.Success: Đổi thưởng thành công, bạn nhận được {0}x{1}.
 GodCardOperateCard.Success: Nghiền thành công, bạn nhận được {0}.
-GodCardOperateCard.Success2:Nghép thẻ thành công, bạn nhận được {0}x{1}.
+GodCardOperateCard.Success2:Ghép thẻ thành công, bạn nhận được {0}x{1}.
 GodCardOperateCard.Fail:Thẻ không tồn tại.
 GodCardExchange.End:Số lần đổi thưởng đã hết.
 OffHandEvolutionHandler.MaxLevel: Tiến hóa đã đạt cấp tối đa.
@@ -2053,7 +2053,7 @@ GameServer.CampBattle.PVEEnding.Notice:Trận đấu chuẩn bị kết thúc kh
 GameServer.CampBattle.PVE.EnterRoom.Error:Không thể vào trận đấu. Vui lòng liên hệ GM!
 GameServer.CampBattle.PVPFight.Error:Không thể bắt cặp với người chơi.
 HorseAmuletMove.ItemNotFound:Lỗi dữ liệu vui lòng thử lại sau.
-HorseAmuletMove.CanNotEquip:Vật phẫm này không thể trang bị.
+HorseAmuletMove.CanNotEquip:Vật phẩm này không thể trang bị.
 HorseAmuletMove.WrongEquip:Chỉ được trang bị 3 bùa cùng loại.
 HorseAmuletMove.MaxPutInEquip:Đã trang bị số lượng bùa tối đa.
 HorseAmuletSmash.Success:Bạn nhận được {0} bụi.
