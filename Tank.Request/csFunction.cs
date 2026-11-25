@@ -83,8 +83,9 @@ namespace Tank.Request
 
         public static string CreateCompressXml(HttpContext context, XElement result, string file, bool isCompress)
         {        
-            string path = context.Server.MapPath("~"); ;
-            return CreateCompressXml(path, result, file, isCompress);
+            // Not context.Server.MapPath("~"): under Tank.Web (SystemWebAdapters, virtual path "/Request/")
+            // it gives <RequestRoot>/Request, a folder that does not exist, so every XML rebuild failed.
+            return CreateCompressXml(StaticsMgr.CurrentPath, result, file, isCompress);
         }
 
         public static string CreateCompressXml(XElement result, string file, bool isCompress)

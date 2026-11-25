@@ -114,35 +114,31 @@ namespace Game.Server.Quests
 			bool result = false;
 			if (this.CanCompleted(player))
 			{
-				int num = this.m_info.NotMustCount;
+				// Required conditions are always finished. Optional ones (e.g. "hand in one of these item sets")
+				// are finished only while more are needed, and only when fully met, so a claim never takes
+				// a partial set or more sets than the quest asks for.
+				int need = this.m_info.NotMustCount;
 				foreach (BaseCondition baseCondition in this.m_list)
 				{
-					if(this.m_info.NotMustCount > 0)
-                    {
-						
-						if (!baseCondition.Finish(player))
+					if (baseCondition.Info.isOpitional)
+					{
+						if (need <= 0 || !baseCondition.IsCompleted(player))
 						{
-							if (!baseCondition.Info.isOpitional)
-								return false;
+							continue;
 						}
-						else
-						{
-							num--;
-						}
-
-						result = (num <= 0);
-					} else
-                    {
-						result = true;
 						if (!baseCondition.Finish(player))
 						{
 							return false;
 						}
+						need--;
 					}
-					
+					else if (!baseCondition.Finish(player))
+					{
+						return false;
+					}
 				}
 
-				if (!result)
+				if (need > 0)
 				{
 					return false;
 				}
