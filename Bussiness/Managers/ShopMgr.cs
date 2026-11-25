@@ -135,6 +135,17 @@ namespace Bussiness.Managers
             }
         }
 
+        /// <summary>The template ids of every item the shops sell.</summary>
+        public static HashSet<int> GetShopTemplateIDs()
+        {
+            HashSet<int> ids = new HashSet<int>();
+            foreach (ShopItemInfo item in m_shop.Values)
+            {
+                ids.Add(item.TemplateID);
+            }
+            return ids;
+        }
+
         public static bool CheckInShopGoodsCanBuy(int iTemplateID)
         {
             return m_ShopGoodsCanBuy.ContainsKey(iTemplateID);

@@ -948,10 +948,98 @@ namespace Game.Server.RingStation
             return m_vplayers.Count > Math.Abs(count / 2);
         }
 
+        /// <summary>A bot look: a random sex, weapon and outfit (hat, glasses, hair, makeup, clothes, face,
+        /// costume, wings) from the items the shops sell. Weapons are limited to ones that fire normal bombs.</summary>
         public static VirtualPlayerInfo GetVirtualPlayerInfo()
         {
-            int i = rand.Next(m_vplayers.Count);
-            return m_vplayers[i];
+            VirtualPlayerInfo baseInfo = m_vplayers[rand.Next(m_vplayers.Count)];
+            Dictionary<(int, bool), List<ItemTemplateInfo>> outfits = GetOutfitItems();
+            if (outfits.Count == 0)
+            {
+                return baseInfo;
+            }
+            bool male;
+            string Pick(int category)
+            {
+                if (!outfits.TryGetValue((category, male), out List<ItemTemplateInfo> items) || items.Count == 0)
+                {
+                    return "";
+                }
+                ItemTemplateInfo item = items[rand.Next(items.Count)];
+                return $"{item.TemplateID}|{item.Pic}";
+            }
+            lock (rand)
+            {
+                male = rand.Next(2) == 0;
+                ItemTemplateInfo weapon = outfits.TryGetValue((7, male), out List<ItemTemplateInfo> weapons) && weapons.Count > 0
+                    ? weapons[rand.Next(weapons.Count)]
+                    : ItemMgr.FindItemTemplate(baseInfo.Weapon);
+                string weaponStyle = weapon == null ? "" : $"{weapon.TemplateID}|{weapon.Pic}";
+                // A costume covers the clothes and hair, so give one to only half of the bots.
+                string suit = rand.Next(2) == 0 ? Pick(13) : "";
+                // Style slots: head, glasses, hair, makeup, clothes, face, weapon, costume, wings, then unused ones.
+                string style = $"{Pick(1)},{Pick(2)},{Pick(3)},{Pick(4)},{Pick(5)},{Pick(6)},{weaponStyle},{suit},{Pick(15)},,,,,,,,";
+                return new VirtualPlayerInfo { Style = style, Weapon = weapon?.TemplateID ?? baseInfo.Weapon, Sex = male };
+            }
+        }
+
+        private static Dictionary<(int, bool), List<ItemTemplateInfo>> m_outfitItems;
+
+        /// <summary>True when every bomb of the weapon exists and is a plain damage bomb (not freeze, fly, heal...):
+        /// the bot aims and fires the same way with any of them. A weapon without BallConfig would break the fight.</summary>
+        private static bool FiresNormalBombs(int weaponId)
+        {
+            BallConfigInfo config = Game.Logic.BallConfigMgr.FindBall(weaponId);
+            if (config == null)
+            {
+                return false;
+            }
+            foreach (int ballId in new[] { config.Common, config.Special, config.CommonAddWound, config.CommonMultiBall })
+            {
+                if (Game.Logic.BallMgr.FindBall(ballId) == null || Game.Logic.BallMgr.GetBallType(ballId) != Game.Logic.Phy.Object.BombType.Normal)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>Outfit items the shops sell, by (category, male); an item for both sexes is in both lists.</summary>
+        private static Dictionary<(int, bool), List<ItemTemplateInfo>> GetOutfitItems()
+        {
+            if (m_outfitItems != null)
+            {
+                return m_outfitItems;
+            }
+            int[] categories = { 1, 2, 3, 4, 5, 6, 7, 13, 15 };
+            HashSet<int> sold = ShopMgr.GetShopTemplateIDs();
+            Dictionary<(int, bool), List<ItemTemplateInfo>> result = new Dictionary<(int, bool), List<ItemTemplateInfo>>();
+            foreach (ItemTemplateInfo item in ItemMgr.GetAllTemplates())
+            {
+                if (!categories.Contains(item.CategoryID) || !sold.Contains(item.TemplateID) || string.IsNullOrEmpty(item.Pic))
+                {
+                    continue;
+                }
+                if (item.CategoryID == 7 && !FiresNormalBombs(item.TemplateID))
+                {
+                    continue;
+                }
+                foreach (bool male in new[] { true, false })
+                {
+                    // NeedSex: 0 = both, 1 = male, 2 = female.
+                    if (item.NeedSex == 0 || item.NeedSex == (male ? 1 : 2))
+                    {
+                        if (!result.TryGetValue((item.CategoryID, male), out List<ItemTemplateInfo> list))
+                        {
+                            result[(item.CategoryID, male)] = list = new List<ItemTemplateInfo>();
+                        }
+                        list.Add(item);
+                    }
+                }
+            }
+            log.InfoFormat("AutoBot outfits: {0} items to pick from", result.Values.Sum(l => l.Count));
+            m_outfitItems = result;
+            return result;
         }
 
         public static int CreateRingStationChallenge(UserRingStationInfo player, int roomtype, int gametype)
@@ -1017,7 +1105,7 @@ namespace Game.Server.RingStation
                     NickName = _names[rand.Next(_names.Length)] + npcId + x,
                     GP = player.PlayerCharacter.GP > MaxValue ? MaxValue : Convert.ToInt32(player.PlayerCharacter.GP),
                     Grade = player.PlayerCharacter.Grade,
-                    Attack = player.PlayerCharacter.Attack * 4 / 8,
+                    Attack = player.PlayerCharacter.Attack, // full Attack: Attack/10 is part of the turn delay
                     Defence = player.PlayerCharacter.Defence * 4 / 8,
                     Luck = player.PlayerCharacter.Luck * 2 / 8,
                     Agility = player.PlayerCharacter.Agility,
@@ -1030,6 +1118,7 @@ namespace Game.Server.RingStation
                 };
                 VirtualPlayerInfo vp = GetVirtualPlayerInfo();
                 rp.Style = vp.Style;
+                rp.Sex = vp.Sex;
                 rp.Colors = ",,,,,,,,,,,,,,,";
                 rp.Hide = 1111111111;
                 rp.TemplateID = vp.Weapon;
@@ -1083,6 +1172,7 @@ namespace Game.Server.RingStation
                 VirtualPlayerInfo vp = GetVirtualPlayerInfo();
 
                 rp.Style = vp.Style;
+                rp.Sex = vp.Sex;
                 rp.Colors = ",,,,,,,,,,,,,,,";
                 rp.Hide = 1111111111;
                 rp.TemplateID = vp.Weapon;
@@ -1160,7 +1250,7 @@ namespace Game.Server.RingStation
                 typeVIP = 1,
                 VIPLevel = 1,
                 Grade = 25,
-                Sex = false,
+                Sex = NormalPlayer.Sex,
                 Style = NormalPlayer.Style,
                 Colors = ",,,,,,,,,,,,,,,",
                 Skin = "",

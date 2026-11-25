@@ -2168,9 +2168,12 @@ namespace Game.Logic.Phy.Object
 
         public void PrepareShoot(byte speedTime)
         {
-            int turnWaitTime = m_game.GetTurnWaitTime();
-            int num2 = ((speedTime > turnWaitTime) ? turnWaitTime : speedTime);
-            AddDelay(num2 * 20);
+            if (!(GameProperties.BotMatchIgnoreAimTime && m_game is PVPGame pvp && pvp.HasAutoBot))
+            {
+                int turnWaitTime = m_game.GetTurnWaitTime();
+                int num2 = ((speedTime > turnWaitTime) ? turnWaitTime : speedTime);
+                AddDelay(num2 * 20);
+            }
             TotalShootCount++;
         }
 

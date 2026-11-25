@@ -65,6 +65,13 @@ namespace Bussiness.Managers
 			return null;
         }
 
+        /// <summary>A snapshot of every item template.</summary>
+        public static List<ItemTemplateInfo> GetAllTemplates()
+        {
+            Dictionary<int, ItemTemplateInfo> items = _items;
+            return items == null ? new List<ItemTemplateInfo>() : new List<ItemTemplateInfo>(items.Values);
+        }
+
         public static ItemTemplateInfo FindItemTemplate(int templateId)
         {
 			if (_items == null)

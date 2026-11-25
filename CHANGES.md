@@ -22,6 +22,7 @@ once.
 | `TexpNoDailyLimit` | No daily Tu luyện limit. | off |
 | `FreeMatchCountsAsGuildWar` | Every free match, even played alone, counts as a guild war for quests and guild tasks. | off |
 | `SkipCheckCode` | The anti-bot captcha ("pick the number") never shows. It used to appear now and then when starting a ranked match, moving items into the store or disbanding a guild. | off |
+| `BotMatchIgnoreAimTime` | In matches against bots, the time spent aiming does not delay your next turn (bots never paid it). | off |
 
 ### Accounts and new characters
 
@@ -40,6 +41,11 @@ once.
 - **How many bots:** in the PvP room, the host chooses with the **"Đấu với: N bot"** button how many bots
   (1-4) matchmaking falls back to.
 - **The player always takes the first turn** against bots.
+- **Bots have your full Attack** (the original gave them half). Attack slows turns (+1 delay per 10 Attack), so
+  with half Attack a bot got about one extra turn every three of yours.
+- **Every bot looks different:** random gender, outfit (hat, glasses, hair, makeup, clothes, face, costume,
+  wings) and weapon, all from items the shops sell. Weapons are limited to ones that fire normal bombs (no
+  freeze, fly or heal bombs), so the bot aims the same way. The original gave every bot the same look.
 - **Win rate** is shown in battles (it was always 0%).
 
 ### Items and upgrades

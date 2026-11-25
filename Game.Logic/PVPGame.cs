@@ -592,10 +592,13 @@ namespace Game.Logic
         /// In a game against bots (IsAutoBot players), a human player always has the first turn: the one with the
         /// lowest delay. Returns null in games without bots, which keep the normal delay/random order.
         /// </summary>
+        /// <summary>True when a matchmaking bot (AutoBot) plays in this game.</summary>
+        public bool HasAutoBot => TurnQueue.Any(l => l is Player p && p.PlayerDetail.PlayerCharacter.IsAutoBot);
+
         private TurnedLiving FindFirstHumanAgainstBot()
         {
             List<TurnedLiving> livings = FindAllTurnLiving();
-            if (!livings.Any(l => l is Player p && p.PlayerDetail.PlayerCharacter.IsAutoBot))
+            if (!HasAutoBot)
             {
                 return null;
             }

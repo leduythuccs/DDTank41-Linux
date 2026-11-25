@@ -85,6 +85,9 @@ namespace Bussiness
         [ConfigProperty("FreeMatchCountsAsGuildWar", "Every free PvP match also counts as a guild war for quests and guild tasks", false)]
 		public static bool FreeMatchCountsAsGuildWar;
 
+        [ConfigProperty("BotMatchIgnoreAimTime", "In matches against bots, the time spent aiming does not delay the next turn", false)]
+		public static bool BotMatchIgnoreAimTime;
+
         [ConfigProperty("SkipCheckCode", "Never show the anti-bot captcha (pick the number) to players", false)]
 		public static bool SkipCheckCode;
 
