@@ -4136,3 +4136,7 @@ ActiveBussiness.Msg6:Bạn đã nhận phần thưởng này rồi.
 ActiveBussiness.Msg7:Hoạt động chưa bắt đầu.
 ActiveBussiness.Msg8:Hoạt động đã quá hạn.
 ActiveBussiness.Msg9:Nhận thưởng thất bại.
+Tank.Flash.auth.register.NoUsername:Vui lòng nhập tên tài khoản!
+Tank.Flash.auth.register.BadUsername:Tên tài khoản không hợp lệ!
+Tank.Flash.auth.register.NoPassword:Vui lòng nhập mật khẩu!
+Tank.Flash.auth.register.Fail:Đăng ký thất bại, vui lòng thử lại!

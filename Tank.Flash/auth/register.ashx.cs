@@ -1,97 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Configuration;
-using Bussiness;
-using System.Web.Security;
-using System.Web.SessionState;
-using log4net;
 using System.Reflection;
+using System.Web;
+using Bussiness;
+using log4net;
 
 namespace Tank.Flash.auth
 {
     /// <summary>
-    /// Summary description for register
+    /// "Đăng ký nhanh" on the login page: creates an account from a username and a password only (no email,
+    /// no password confirmation, no captcha). Answers "ok", "exit" (the username is taken) or an error message.
     /// </summary>
-    public class register : IHttpHandler, IRequiresSessionState
+    public class register : IHttpHandler
     {
         protected static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        private const int MaxUsernameLength = 50;
 
         protected string SiteTitle
         {
             get
             {
-                return ((ConfigurationManager.AppSettings["SiteTitle"] == null) ? "DanDanTang" : ConfigurationManager.AppSettings["SiteTitle"]);
-            }
-        }
-        private string code;
-        private string email;
-        private string message;
-        private string password;
-        private string repassword;
-        private bool sex = false;
-        private string username;
-
-        protected bool CheckPara(HttpContext context, ref string message)
-        {  
-            if (context.Session["CheckCode"] == null || code.ToLower() != context.Session["CheckCode"].ToString().ToLower())
-            {
-                message = "Sai mã bảo mật!";
-                return false;
-            }
-            using (MemberShipBussiness db = new MemberShipBussiness())
-            {
-                if (db.ExistsUsername(username))
-                {
-                    message = "exit";
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        protected bool CreateUsername(HttpContext context, ref string message)
-        {
-           password = Bussiness.Interface.BaseInterface.md5(password);
-            using (MemberShipBussiness db = new MemberShipBussiness())
-            {
-                return db.CreateUsername(SiteTitle, username, password, email, "1", "MD5", sex);
+                return ConfigurationManager.AppSettings["SiteTitle"] ?? "DanDanTang";
             }
         }
 
         public void ProcessRequest(HttpContext context)
         {
-             
-            //if (context.Request.Form.Count > 0)
-            //{
-                username = context.Request["username"];
-                password = context.Request["password"];
-                repassword = context.Request["repassword"];
-                email = context.Request["email"];
-                code = context.Request["code"];
-                message = "";
-               
-                if (CheckPara(context, ref message) && CreateUsername(context, ref message))
+            string username = (context.Request["username"] ?? "").Trim();
+            string password = context.Request["password"] ?? "";
+            string message;
+            if (username.Length == 0)
+            {
+                message = LanguageMgr.GetTranslation("Tank.Flash.auth.register.NoUsername");
+            }
+            else if (username.Length > MaxUsernameLength || username.Contains(","))
+            {
+                message = LanguageMgr.GetTranslation("Tank.Flash.auth.register.BadUsername");
+            }
+            else if (password.Length == 0)
+            {
+                message = LanguageMgr.GetTranslation("Tank.Flash.auth.register.NoPassword");
+            }
+            else
+            {
+                try
                 {
-                    /*
-                    try
+                    using MemberShipBussiness db = new MemberShipBussiness();
+                    if (db.ExistsUsername(username))
                     {
-                        using (PlayerBussiness db = new PlayerBussiness())
-                        {
-                            db.RegisterUser(username, username, password, sex, 0, 0, 0);
-                        }
+                        message = "exit";
                     }
-                    catch (Exception e)
+                    else if (db.CreateUsername(SiteTitle, username, Bussiness.Interface.BaseInterface.md5(password), "", "1", "MD5", false))
                     {
-                        if (log.IsErrorEnabled)
-                            log.Error("Init CheckEmailIsValid", e);
+                        message = "ok";
                     }
-                     */ 
-                    message = "ok";
+                    else
+                    {
+                        message = LanguageMgr.GetTranslation("Tank.Flash.auth.register.Fail");
+                    }
                 }
-                context.Response.Write(message);
-            //}
+                catch (Exception e)
+                {
+                    log.Error("register", e);
+                    message = LanguageMgr.GetTranslation("Tank.Flash.auth.register.Fail");
+                }
+            }
+            context.Response.ContentType = "text/plain";
+            context.Response.Write(message);
         }
 
         public bool IsReusable

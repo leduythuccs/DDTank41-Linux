@@ -22,7 +22,7 @@
 	width:366px;
 	display:none;
 }
-#TB_overlayBG,#Div1 
+#TB_overlayBG 
 {
 	display:none;
     position: fixed;
@@ -60,16 +60,6 @@
 				color:green;
 				padding-top: 19px;
 }
-#codeContent
-{    
-    z-index: 200001;
-    padding-top: 10px;
-	background-color:#fff;
-	min-height:70px;
-	width:345px;
-	display:none;
-}
-#ReLoad{height:23px;width:25px;background:url(images/iconRe.gif) no-repeat;text-indent:-9999px;display:block;overflow:hidden;}
 
             .auto-style1
             {
@@ -217,117 +207,50 @@
                             </form>
                         </div>
                         <script>
+                            // "Đăng ký nhanh": only a username and a password (auth/register.ashx answers "ok",
+                            // "exit" when the username is taken, or an error message), then log in with them.
                             function xmlhttpPostReg() {
-                                //showObj();
                                 $.ajax({
-                                    type: 'GET',
+                                    type: 'POST',
                                     url: 'auth/register.ashx',
-                                    data: getregquerystring(),
+                                    data: {
+                                        username: $("#usernamesignup").val(),
+                                        password: $("#passwordsignup").val()
+                                    },
                                     success: function (data_revert) {
                                         if (data_revert == "ok") {
                                             xmlhttpPost("checkuser.ashx", 2);
-                                            hideCode();
                                         }
-                                        if (data_revert == "exit") {
-                                            showError('Tài khoản đã được sử dụng！');
-                                            hideCode();
+                                        else if (data_revert == "exit") {
+                                            showError('Tài khoản đã được sử dụng!');
                                         }
-                                        else {                                            
+                                        else {
                                             showError(data_revert);
                                         }
+                                    },
+                                    error: function () {
+                                        showError('Đăng ký thất bại, vui lòng thử lại!');
                                     }
                                 });
                             }
-                            
+
                             function getquerydonereg() {
                                 var username = $("#usernamesignup").val();
                                 var password = MD5($("#passwordsignup").val());
                                 qstr = 'username=' + escape(username) + '&password=' + escape(password);
                                 return qstr;
                             }
-                            function getregquerystring() {
-                                var username = $("#usernamesignup").val();
-                                var password = $("#passwordsignup").val();
-                                var repassword = $("#passwordsignup_confirm").val();
-                                var email = $("#emailsignup").val();
-                                var code = $("#code").val();
-                                qstr = 'username=' + escape(username) + '&password=' + escape(password)
-                                + '&repassword=' + escape(repassword) + '&email=' + escape(email)
-                                + '&code=' + escape(code);
-                                return qstr;
-                            }
-                            function href() {
-                                var randomnum = Math.random();
-                                var getimagecode = document.getElementById("ImageCode");
-                                getimagecode.src = "auth/validatecode.ashx? " + randomnum;
-                                $("#code").val("");
-                            }
-                            function IsEmail(email) {
-                                var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                                if (!regex.test(email)) {
-                                    return false;
-                                } else {
-                                    return true;
-                                }
-                            }
-                            function checkCode() {
-                                if ($("#code").val() == '') {
-                                    showError('Vui lòng nhập mã bảo mật!');
-                                    return false;
-                                }
-                                else{
-                                    xmlhttpPostReg();
-                                }                                
-                                return false;
-                            }
                             function checkForm() {
-                                var err = 0;
-                                if ($("#usernamesignup").val() == '') {
+                                if ($.trim($("#usernamesignup").val()) == '') {
                                     showError('Vui lòng nhập tên tài khoản!');
-                                    err++;
                                 }
                                 else if ($("#passwordsignup").val() == '') {
                                     showError('Vui lòng nhập mật khẩu!');
-                                    err++;
                                 }
-                                else if ($("#passwordsignup_confirm").val() == '') {
-                                    showError('Vui lòng nhập xác nhận mật khẩu!');
-                                    err++;
-                                }
-                                else if ($("#emailsignup").val() == '') {
-                                    showError('Vui lòng nhập Email!');
-                                    err++;
-                                }
-                                else if ($("#passwordsignup_confirm").val() != $("#passwordsignup").val()) {
-                                    showError('Mật khuẩu không trùng nhau!');
-                                    err++;
-                                }                                
-                                else if (!IsEmail($("#emailsignup").val())) {
-                                    showError('Email không hợp lệ!');
-                                    err++;
-                                }
-                                //else if ($("#code").val() == '') {
-                                //    showError('Vui lòng nhập mã bảo mật!');
-                                //    err++;
-                                //}
-                                if (err == 0) {
-                                    $('#codeContent').corner("keep");
-                                    $("#checkCode").button();
-                                    $("#Div1").fadeIn();
-                                    $("#codeContent").fadeIn();
-                                    var top = Math.max($(window).height() / 2 - $("#codeContent")[0].offsetHeight / 2, 0);
-                                    var left = Math.max($(window).width() / 2 - $("#codeContent")[0].offsetWidth / 2, 0);
-                                    $("#codeContent").css('top', top + "px");
-                                    $("#codeContent").css('left', left + "px");
-                                    $("#codeContent").css('position', 'fixed');
-                                    //xmlhttpPostReg();
+                                else {
+                                    xmlhttpPostReg();
                                 }
                                 return false;
-                            }
-                            function hideCode() {
-                                href();
-                                $("#Div1").fadeOut('slow');
-                                $("#codeContent").fadeOut('slow');//.css({ display: "none" });
                             }
                             
                         </script>
@@ -339,16 +262,8 @@
                                     <input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="vd. myaccount" />
                                 </p>
                                 <p> 
-                                    <label for="emailsignup" class="youmail" data-icon="e" > Email</label>
-                                    <input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="vd. mymail@mail.com"/> 
-                                </p>
-                                <p> 
                                     <label for="passwordsignup" class="youpasswd" data-icon="p">Mật khẩu </label>
                                     <input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="vd. X8df!90EO"/>
-                                </p>
-                                <p> 
-                                    <label for="passwordsignup_confirm" class="youpasswd" data-icon="p">Xác nhận mật khẩu </label>
-                                    <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="vd. X8df!90EO"/>
                                 </p>
                                 <p class="signin button"> 
 									<input type="submit" value="Đăng ký"  onclick="return checkForm();"/> 
@@ -377,29 +292,7 @@
         </div>               		
 	</div>
 
-    <div id="codeContent">
-         <table style="width:100%;">
-        <tr>
-            <td class="auto-style1">
-                <img id="ImageCode" src="auth/validatecode.ashx" height="32" width ="127" alt="" />  
-            </td>
-            <td style="text-align: center" >
-                 <input type="text"  style="font-size: 14px;width: 120px" name="code" placeholder="Nhập mã bảo vệ" id="code"/>
-            </td>
-            <td>
-                <a id="ReLoad" title="" href="javascript:href()" style="font-size: 12px; color: blue">Tải lại</a>  
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3" style="text-align: center;">
-                <input id="checkCode"  style="font-size: 14px;" type="submit" value="Xác nhận"  onclick="return checkCode();"/>
-            </td>
-        </tr>
-    </table>     		
-	</div>
 <div id="TB_overlayBG">
-</div>
-<div id="Div1">
 </div>
     </body>
 </html>
