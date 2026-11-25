@@ -305,9 +305,21 @@ namespace Game.Server.RingStation.Battle
             base.OnDisconnect();
         }
 
+        private readonly object m_queueLock = new object();
+        private System.Threading.Tasks.Task m_queueTail = System.Threading.Tasks.Task.CompletedTask;
+
+        /// <summary>
+        /// Handles packets off the socket thread but one at a time, in the order the fight server sent them.
+        /// The bots depend on that order: the GAME_LOAD that makes a bot report loading 100 comes right after
+        /// the packets that set its GamePlayerId (33) and its room's game (66). Handled out of order, the bot's
+        /// loading reply is dropped and it stays at 0 in the loading screen.
+        /// </summary>
         public override void OnRecvPacket(GSPacketIn pkg)
         {
-            ThreadPool.QueueUserWorkItem(AsynProcessPacket, pkg);
+            lock (m_queueLock)
+            {
+                m_queueTail = m_queueTail.ContinueWith(_ => AsynProcessPacket(pkg), System.Threading.Tasks.TaskScheduler.Default);
+            }
         }
 
         public void SendAddRoom(BaseRoomRingStation room)
