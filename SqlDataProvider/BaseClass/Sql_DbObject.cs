@@ -11,7 +11,7 @@ using MySqlConnector;
 namespace SqlDataProvider.BaseClass
 {
     /// <summary>
-    /// Runs the game's stored procedures on MariaDB (see tools/DbMigrate for how they were translated).
+    /// Runs the game's stored procedures on MariaDB (translated from the original T-SQL, see Database/mariadb).
     /// The callers still build SqlParameter objects ("@Name", output and return-value directions); they are mapped
     /// onto the translated procedure's parameters:
     ///   @Name                          -> p_Name

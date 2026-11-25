@@ -10,7 +10,4 @@ deploy
 !deploy/docker/start.sh
 Database
 Source Flash/src
-Source Launcher
-tools
-packages
 **/__pycache__

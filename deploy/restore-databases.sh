@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Creates the game databases in the ddtank-mariadb container (deploy/mariadb/docker-compose.yml) from the scripts in
-# ../Database/mariadb: <Db>.schema.sql, <Db>.data.sql and <Db>.routines.sql (generated from the SQL Server backups
-# by tools/DbMigrate), and the application login "ddtank" (password DDTANK_DB_PASSWORD in deploy/.env).
+# ../Database/mariadb: <Db>.schema.sql, <Db>.data.sql and <Db>.routines.sql (translated from the original SQL Server
+# backups), and the application login "ddtank" (password DDTANK_DB_PASSWORD in deploy/.env).
 # Usage: ./restore-databases.sh [--force]   (--force drops and recreates databases that already exist)
 set -euo pipefail
 cd "$(dirname "$0")"

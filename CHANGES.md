@@ -112,8 +112,8 @@ The original GameAdmin site (WebForms) runs again on .NET 8 (`GameAdmin.Web`), w
 
 - **Database moved to MariaDB:** SQL Server needs about 2 GB of RAM and has no ARM build. The
   procedures were translated to MariaDB (see [Database](README.md#database)).
-- **Old code, newer database:** some stored procedures in the restored database expect different
-  parameters than this code sends. `deploy/patch-procedures.py` patches them when the database is restored.
+- **Old code, newer database:** some stored procedures in the original database expected different
+  parameters than this code sends. They were patched before the translation to MariaDB.
 - **Linux and the browser:** every server runs on .NET 8 on Linux. Tank.Web serves the site, the client's
   HTTP API and the art files, and passes the game socket through a WebSocket, because Ruffle cannot open raw
   TCP sockets.

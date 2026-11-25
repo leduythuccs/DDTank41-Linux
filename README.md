@@ -98,13 +98,11 @@ The game was written for SQL Server: about 550 stored procedures in T-SQL. This 
 - `Database/mariadb/<Db>.schema.sql`, `.data.sql` and `.routines.sql` create the tables, the starting data
   and the procedures. Docker loads them on the first start; `deploy/restore-databases.sh` does the same for
   [Development without Docker](#development-without-docker).
-- These scripts were generated from the SQL Server backups in `Database/*.bak` by `tools/DbMigrate`, which
-  translates the T-SQL procedures to MariaDB. A few procedures are written by hand in
-  `Database/mariadb/manual/`.
+- These scripts were translated from the original SQL Server backups, T-SQL procedures included; a few
+  procedures are written by hand in `Database/mariadb/manual/`. They are now the source of the database:
+  change them directly.
 - `SqlDataProvider` talks to MariaDB through MySqlConnector, and gives the game code the same value types
   SQL Server did.
-- `tools/DbTest` runs the game's database layer against MariaDB without the game client, to check the
-  procedures quickly (see its README).
 
 To back up the data of the Docker setup, from `deploy/docker`:
 
@@ -112,9 +110,6 @@ To back up the data of the Docker setup, from `deploy/docker`:
 docker compose exec mariadb sh -c 'MYSQL_PWD="$MARIADB_ROOT_PASSWORD" mariadb-dump -uroot -P16207 --routines \
   --databases Project_Player34 Project_Game34 Db_Membership' > ddtank-backup.sql
 ```
-
-`deploy/docker-compose.yml` (SQL Server) and `deploy/patch-procedures.py` are only needed to regenerate
-the scripts from the backups.
 
 ## Game art
 
