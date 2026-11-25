@@ -1,35 +1,17 @@
 # DDTank 4.1 (Gunny) on Linux
 
-A DDTank / Gunny 4.1 private server ported to **.NET 8 on Linux**, with the Flash client running in
-the browser through [Ruffle](https://ruffle.rs). No Windows, IIS or Flash Player needed.
-
-
-
-> **Stable version:** this branch runs on **MariaDB** and is new. The version that has been played the
-> most is on the [`version-1.0`](../../tree/version-1.0) branch, which needs **SQL Server**. If you want
-> the stable one, use that branch and follow its README:
->
-> ```bash
-> git clone -b version-1.0 <this repo>
-> ```
+A DDTank / Gunny 4.1 private server ported to Linux, with the Flash client running in
+the browser through [Ruffle](https://ruffle.rs)
 
 Disclamer: I have no idea how this code works, all I did was ask claude do port to Linux, then I do the testing & ask
-Claude to fix any bug I found while playing
+Claude to fix any bug I found while playing. I migrate the database to mariadb because it require less resource to run.
 
-- All servers (Center, Fighting, Road and the web site/API) run as .NET 8 processes.
-- The databases run in MariaDB 11.4, created from the SQL scripts in `Database/mariadb/`
-  (converted from the original SQL Server backups, see [Database](#database)).
-- The game client is the original SWF, patched where Ruffle behaves differently from Flash Player
-  (see [Client patches](#client-patches)).
-- A small admin site sends mail, items and money to characters, and switches game options on and off.
+Game resources/art/sound files ... are NOT in this repo, the code get the resource from VNG CDN. More on it in [game-art](#game-art)
 
 ## Quick start (Docker)
 
-You need [Docker](https://docs.docker.com/engine/install/) with the compose plugin (`docker compose`).
-Nothing else: the image builds the servers itself. It runs on x86_64 and arm64 (tested on x86_64).
-
 ```bash
-git clone <this repo> && cd DDTank41/deploy/docker
+git clone https://github.com/leduythuccs/DDTank41-Linux.git && cd DDTank41/deploy/docker
 
 # 1. Init the env with random passwords
 ./init-env.sh http://127.0.0.1:16200
@@ -44,14 +26,8 @@ Open `http://127.0.0.1:16200/index.htm`, click **Đăng ký nhanh** to create an
 Only port **16200** has to be reachable from the internet (open it in the firewall). The game socket goes
 through the web site, so no other port is needed.
 
-Everyday commands, from `deploy/docker`:
 
-| What | Command |
-|---|---|
-| Stop / start | `docker compose stop` / `docker compose start` (players are saved on stop) |
-| Update after `git pull` | `docker compose up -d --build` |
-| Logs | `docker compose logs -f game`, or the files in `deploy/docker/data/logs/` |
-| Delete everything, including all accounts | `docker compose down -v` |
+That's all you need to do to spin up a server
 
 ### Settings (deploy/docker/.env)
 
@@ -59,7 +35,7 @@ Everyday commands, from `deploy/docker`:
 
 | Variable | Meaning |
 |---|---|
-| `DDTANK_PUBLIC_URL` | The address players open, e.g. `http://127.0.0.1:16200`, or a domain: `http://example.com` |
+| `DDTANK_PUBLIC_URL` | The address players open, e.g. `http://127.0.0.1:16200`, or a domain: `https://example.com` |
 | `DDTANK_ADMIN_PASSWORD` | Admin site password. |
 | `MARIADB_ROOT_PASSWORD`, `DDTANK_DB_PASSWORD` | MariaDB `root` and the `ddtank` user the servers use. Read only when the databases are created: changing them later does not change the database. |
 | `DDTANK_RESOURCE_UPSTREAM` | Where art and sound files are downloaded from when they are not cached. Default to VNG CDN |
@@ -139,12 +115,16 @@ the scripts from the backups.
 
 ## Game art
 
-The art and sound files (about 1 GB) are **not in this repository**. They are third-party assets. Tank.Web
-downloads each file from `DDTANK_RESOURCE_UPSTREAM` the first time it is needed and keeps it in
-`deploy/docker/data/resource-cache/` (`resource-cache/` without Docker). A local resource pack in `resource/`
-is used first, if you have one.
+The art and sound files (about 1 GB) are **not in this repository**. When the client ask for a file, we download it from
+`DDTANK_RESOURCE_UPSTREAM` (default to VNG CDN: `http://gunny.vcdn.vn/`), put it in a cache at `deploy/docker/data/resource-cache/`. 
 
-To download everything ahead of time, run this while the servers run without Docker (with Docker, copy a
+If you have your own resource files, put it in `deploy/docker/data/resource`. The order of lookup is:
+1. Check if file is in `/resource`
+2. Check if file is in `/resource-cache`
+3. Get file from `DDTANK_RESOURCE_UPSTREAM`
+
+
+Instead of get the file on demain, you could download everything ahead of time, run this while the servers run without Docker (with Docker, copy a
 filled `resource-cache/` into `deploy/docker/data/resource-cache/` instead). It works out the file names from
 the database and skips files that are already cached or known to be missing, so you can stop it and run it
 again:
@@ -152,8 +132,6 @@ again:
 ```bash
 python3 deploy/prefetch-resources.py --jobs 2 --delay 0.2
 ```
-
-If the upstream site goes away, only the files already cached will work.
 
 ## Admin site
 
@@ -173,7 +151,7 @@ the `docker` group), the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotn
 PATH, or `~/.dotnet/dotnet`) and Python 3. The servers then use the original ports (8080, 8081, 9500...),
 all on `127.0.0.1`.
 
-1. Create `deploy/.env` (git-ignored, it holds passwords) with `MARIADB_ROOT_PASSWORD`, `DDTANK_DB_PASSWORD`,
+1. Create `deploy/.env` with `MARIADB_ROOT_PASSWORD`, `DDTANK_DB_PASSWORD`,
    `DDTANK_RUFFLE_URL=https://unpkg.com/@ruffle-rs/ruffle@0.8.0/ruffle.js` and
    `DDTANK_RESOURCE_UPSTREAM=http://gunny.vcdn.vn/`.
 2. Start MariaDB, create the databases and write the service configs:
